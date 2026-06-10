@@ -47,6 +47,25 @@ button{font-family:var(--sans);cursor:pointer}
 .qbody input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;color:var(--ink);font-family:var(--sans);font-size:17px;padding:15px 16px;outline:none}
 .qbody input[type=text]:focus{border-color:var(--gold)}
 .qfoot{padding:0 22px 26px}
+.qhint{font-size:13.5px;color:var(--gold);line-height:1.5;margin:6px 0 0;min-height:21px}
+
+/* respiro / reconforto */
+.respiro-ico{font-size:36px;margin-bottom:14px}
+.respiro-t{font-family:var(--serif);font-style:italic;font-size:23px;color:var(--gold);line-height:1.35;margin:0 0 12px}
+.respiro-p{font-size:15.5px;color:var(--dim);line-height:1.65;max-width:300px;margin:0 auto}
+
+/* pacto */
+.pacto-box{border:1px solid rgba(232,200,122,.5);border-radius:16px;background:rgba(232,200,122,.05);padding:22px 20px;font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.55;color:#f0e9d6;text-align:left;max-width:320px;margin-top:18px}
+.pacto-ref{margin-top:14px;font-size:12px;color:var(--mute);font-family:var(--sans);font-style:normal}
+
+/* oferta extra */
+#scr-oferta .center{justify-content:flex-start;padding-top:26px;overflow-y:auto}
+.anc{font-size:13.5px;color:var(--mute);max-width:310px;line-height:1.55;margin:12px 0 0}
+.anc b{color:var(--dim)}
+.faq{width:100%;max-width:310px;text-align:left;margin-top:16px}
+.faq p{font-size:13px;color:var(--mute);margin:0 0 8px;line-height:1.5}
+.faq b{color:var(--dim)}
+.linkfree{background:none;border:none;color:var(--mute);text-decoration:underline;font-size:13.5px;padding:10px;width:100%}
 
 /* analise / diag / revela / oferta */
 .center{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 26px}
@@ -160,7 +179,7 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
     <span class="mini" style="color:var(--gold)">O Códice · 60 dias</span>
     <h2 class="diag-h" style="font-size:26px;margin-top:10px">Ler a Bíblia virou <span class="gk">peso</span> pra você?</h2>
     <p class="diag-p">Obrigação. Culpa. Distância. Se a leitura te cansa em vez de te transformar, o problema não é você — é o jeito que te ensinaram a ler.</p>
-    <p class="diag-p" style="color:var(--ink);font-weight:500">Responda 7 perguntas rápidas e receba seu diagnóstico.</p>
+    <p class="diag-p" style="color:var(--ink);font-weight:500">2 minutos pra descobrir como você lê a Bíblia — e o que isso explica.</p>
   </div>
   <div class="qfoot">
     <button class="btn gold" id="introBtn" onclick="iniciarQuiz()">Começar meu diagnóstico</button>
@@ -187,46 +206,66 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
 
 <!-- ===== DIAGNÓSTICO ===== -->
 <section id="scr-diag" class="wrap hidden">
-  <div class="center">
+  <div class="center" style="justify-content:flex-start;padding-top:26px;overflow-y:auto">
     <div id="diagHero"></div>
-    <span class="mini" style="color:var(--gold);margin-top:14px">Seu diagnóstico</span>
+    <span class="mini" style="color:var(--gold);margin-top:10px">Seu diagnóstico</span>
     <h2 class="diag-h" id="diagH"></h2>
-    <p class="diag-p">Suas respostas mostram obrigação, culpa e distância. Não é falta de fé — é uma leitura que te ensinaram errado.</p>
+    <p class="diag-p" id="diagP" style="max-width:320px;text-align:left;font-size:15px"></p>
   </div>
-  <div class="qfoot"><button class="btn" onclick="show('scr-revela');renderRevela()">Ver meu plano</button></div>
+  <div class="qfoot"><button class="btn gold" onclick="show('scr-revela');renderRevela()">Ver meu plano →</button></div>
 </section>
 
 <!-- ===== REVELAÇÃO ===== -->
 <section id="scr-revela" class="wrap hidden">
   <div class="center">
     <span class="mini" style="color:var(--gold)">Plano pronto</span>
-    <h2 class="diag-h" style="margin-top:8px">Seus 60 dias do <span class="gk">escravo</span> ao <span class="gk">herdeiro</span></h2>
+    <h2 class="diag-h" style="margin-top:8px" id="revTit">Plano do Herdeiro</h2>
+    <p class="diag-p" id="revCita" style="font-size:14px"></p>
     <div class="tl" id="tlBox"></div>
-    <div class="facts glass" style="padding:11px 15px">
-      <span>≈ 7 min/dia</span><span>começa hoje</span>
-    </div>
+    <div class="facts glass" style="padding:11px 15px" id="revFacts"></div>
   </div>
-  <div class="qfoot"><button class="btn gold" onclick="abrirOferta('padrao')">Quero começar</button></div>
+  <div class="qfoot"><button class="btn gold" onclick="irPacto()">Quero começar</button></div>
+</section>
+
+<!-- ===== PACTO ===== -->
+<section id="scr-pacto" class="wrap hidden">
+  <div class="center">
+    <span class="mini" style="color:var(--gold)">Antes do seu plano</span>
+    <h2 class="diag-h" style="margin-top:8px">Faça o pacto.</h2>
+    <div class="pacto-box" id="pactoTxt"></div>
+    <p class="pacto-ref">"Recebestes o espírito de adoção" — Romanos 8:15</p>
+  </div>
+  <div class="qfoot"><button class="btn gold" onclick="assinarPacto()">Assinar meu pacto ✍️</button></div>
 </section>
 
 <!-- ===== OFERTA ===== -->
 <section id="scr-oferta" class="wrap hidden" style="position:relative">
-  <button class="xclose" onclick="fecharOferta()" aria-label="Continuar sem comprar">✕</button>
   <div class="center">
-    <h2 class="diag-h" id="ofH">Destrave seus <span class="gk">60 dias</span>.</h2>
-    <p class="diag-p" id="ofSub" style="margin-top:6px">Pagamento único. Acesso pra sempre. Sem mensalidade.</p>
+    <span class="mini" style="color:var(--gold)">Plano pronto</span>
+    <h2 class="diag-h" id="ofH">Seu Plano do Herdeiro está pronto.</h2>
+    <p class="diag-p" id="ofSub" style="margin-top:6px">60 dias. 1 mudança de identidade: de escravo a filho.</p>
+    <p class="anc">Apps de oração como Hallow e Glorify custam <b>R$300+ por ano — todo ano</b>. O Códice é diferente:</p>
+    <div style="margin-top:14px"><span class="price-old">R$ 97</span><span class="price" id="ofPreco">R$ 67</span>
+      <span style="display:block;font-size:13px;color:var(--gold);margin-top:3px">uma única vez · preço de fundador</span></div>
+    <p class="diag-p" style="font-size:13.5px;margin-top:8px"><b>Sem assinatura. Sem renovação. Seu pra sempre.</b><br>Pouco mais de R$1 por dia — e depois do dia 60, continua seu.</p>
     <div class="inclui">
       <p><b>✦</b> A jornada completa de 60 dias</p>
       <p><b>✦</b> O códice que evolui com você</p>
       <p><b>✦</b> Ranking da sua turma</p>
       <p><b>✦</b> Todas as atualizações da Jornada 1</p>
     </div>
-    <div style="margin-top:10px"><span class="price-old">R$ 97</span><span class="price" id="ofPreco">R$ 67</span></div>
-    <p class="diag-p" style="font-size:13px;margin-top:6px">Preço de fundador. Quando o Códice virar assinatura, quem comprou agora mantém o acesso pra sempre.</p>
+    <p class="anc">🤲 Parte de cada Códice mantém o acesso aberto pra quem não pode pagar. Sua compra patrocina a caminhada de outro filho.</p>
+    <p class="anc"><b>Garantia de 7 dias:</b> leia a primeira semana inteira. Se não sentir diferença na sua leitura, devolvemos os R$67. Sem perguntas.</p>
+    <div class="faq">
+      <p><b>É assinatura?</b> Não — pagamento único.</p>
+      <p><b>Funciona no meu celular?</b> Sim. É um app web — não precisa instalar nada.</p>
+      <p><b>E se eu falhar um dia?</b> O plano espera você. Filho não perde o lugar na mesa.</p>
+    </div>
   </div>
   <div class="qfoot">
-    <button class="btn gold" id="ofBtn" onclick="comprar()">Destravar minha jornada — R$ 67</button>
-    <p class="legal">Pagamento único pela loja de aplicativos. Sem renovação, sem surpresa.</p>
+    <button class="btn gold" id="ofBtn" onclick="comprar()">Destravar meu plano de 60 dias →</button>
+    <p class="legal">Pagamento único e seguro. Sem renovação, sem surpresa.</p>
+    <button class="linkfree" onclick="fecharOferta()">Quero começar só com o Dia 1 grátis</button>
   </div>
 </section>
 
@@ -310,16 +349,57 @@ function codiceSVG(stage, size){
   return `<svg viewBox="0 0 260 230" width="${size||260}" height="${(size||260)*0.885}" role="img" aria-label="Códice, estágio ${stage+1} de 5">${defs}<circle cx="130" cy="120" r="${[88,94,102,108,114][stage]}" fill="url(#cbloom)"/>${bodies[stage]}</svg>`;
 }
 
-/* ================= QUIZ ================= */
-const QUIZ = [
-  {q:'Quando você lê a Bíblia, o que sente com mais frequência?', sub:'Seja honesto — ninguém vê suas respostas.', opts:['Obrigação — leio porque "tenho que ler"','Culpa — por não ler como deveria','Confusão — leio e não entendo o que aquilo tem a ver comigo','Prazer — mas quero ir mais fundo']},
-  {q:'Quantos planos de leitura você já começou e abandonou?', opts:['Nenhum, esse é meu primeiro','Um ou dois','Perdi a conta','Eu termino os planos que começo']},
-  {q:'Complete: "Quando eu oro, eu me sinto mais como..."', opts:['Um servo pedindo favor','Um devedor pedindo desculpa','Um estranho falando com alguém distante','Um filho falando com o Pai']},
-  {q:'O que mais te afasta de uma rotina com Deus?', opts:['Falta de tempo','Falta de constância — começo e paro','Sinceramente? Acho a leitura difícil e seca','Vergonha de voltar depois de tanto tempo longe']},
-  {q:'Se a Bíblia te chamasse de herdeiro — com direito a tomar posse — isso mudaria o jeito como você a lê?', opts:['Mudaria tudo','Talvez, se eu entendesse o que isso significa','Não sei se acredito nisso pra mim']},
-  {q:'Quanto tempo por dia você consegue separar, de verdade?', opts:['5 minutos','10 minutos','15+ minutos']},
-  {q:'Qual o melhor horário pra gente te lembrar?', opts:['Ao acordar','Almoço','Noite']},
-  {q:'Última coisa: como podemos te chamar?', sub:'Seu diagnóstico sai personalizado.', input:true}
+/* ================= QUIZ — arquitetura validada (ver pesquisa-funil-concorrentes.md) ================= */
+const FLUXO = [
+  {t:'q', k:'motivo', q:'O que você mais quer na sua vida com Deus hoje?', sub:'Não tem resposta errada.', opts:[
+    '🔥 Me aproximar de verdade — não só "cumprir tabela"',
+    '📖 Finalmente entender o que leio',
+    '🕊️ Paz — orar sem ansiedade e sem culpa',
+    '⚓ Constância — um hábito que não morre na 2ª semana']},
+  {t:'q', k:'sentimento', q:'Sendo honesto: o que você mais sente quando senta pra ler a Bíblia?', sub:'Ninguém vê suas respostas.', opts:[
+    '😮‍💨 Obrigação — leio porque "tenho que ler"',
+    '😔 Culpa — lembro de quantas vezes falhei',
+    '😕 Confusão — leio e não sei o que aquilo tem a ver comigo',
+    '🙂 Prazer — é o melhor momento do meu dia',
+    '🤷 Sinceramente? Quase não leio']},
+  {t:'q', k:'frequencia', q:'E com que frequência você termina a leitura se sentindo pior do que começou?', opts:[
+    'Quase sempre','Às vezes','Raramente','Nunca reparei']},
+  {t:'respiro', ico:'📖', tit:'Você não está sozinho.', p:'7 em cada 10 cristãos que abandonam planos de leitura descrevem exatamente o que você marcou. Isso tem causa — e tem nome. Já chegamos lá.'},
+  {t:'multi', k:'tentou', q:'Quais dessas coisas você já tentou pra criar o hábito?', sub:'Marque todas que se aplicam.', opts:[
+    '📖 Plano de leitura "a Bíblia em 1 ano"',
+    '📱 App de versículo do dia',
+    '⛪ Promessa de ano novo / campanha da igreja',
+    '🎧 Devocionais no YouTube ou podcast',
+    '📚 Livro devocional (tipo Café com Deus Pai)',
+    '😶 Nunca tentei nada estruturado']},
+  {t:'respiro', ico:'🤲', tit:'Obrigado pela honestidade.', p:'Se você já tentou e parou, saiba: isso é mais comum do que você imagina — e não é falta de fé. É que ninguém te ensinou a ler de outro jeito.'},
+  {t:'q', k:'oracao', q:'Quando você ora, no fundo você se sente como...', opts:[
+    '🧎 Um servo pedindo um favor ao patrão',
+    '📋 Um devedor prestando contas',
+    '🚪 Um estranho falando com alguém distante',
+    '👨‍👦 Um filho conversando com o Pai',
+    '🤐 Sinceramente, não sei o que sentir']},
+  {t:'multi', k:'afasta', q:'E o que mais te afasta hoje?', sub:'Pode marcar mais de uma.', opts:[
+    '⏰ Falta de tempo — a rotina engole',
+    '📵 Distração — pego o celular e a Bíblia perde',
+    '😔 Culpa — de tanto falhar, nem tento mais',
+    '🥀 Sequidão — leio e não sinto nada',
+    '😟 Ansiedade — minha cabeça não para nem pra orar',
+    '😴 Cansaço — chego no fim do dia sem energia']},
+  {t:'q', k:'tom', q:'Como você prefere que a verdade chegue até você?', sub:'Seu diagnóstico vai respeitar isso.', opts:[
+    '🗡️ Direta — me confronta, eu aguento',
+    '🤲 Mansa — me acolhe primeiro']},
+  {t:'q', k:'tempo', q:'Quanto tempo por dia você consegue separar, de verdade?', sub:'Prometa só o que dá pra cumprir.', opts:['🕐 5 minutos','🕑 10 minutos','🕒 15 minutos ou mais'], hint:[
+    'Com 5 min/dia, em 60 dias você terá passado 5 horas ouvindo o Pai — mais do que a maioria passa em um ano.',
+    'Com 10 min/dia, em 60 dias você terá passado 10 horas ouvindo o Pai — mais do que a maioria passa em um ano.',
+    'Com 15 min/dia, em 60 dias você terá passado 15 horas ouvindo o Pai — mais do que a maioria passa em um ano.']},
+  {t:'q', k:'horario', q:'Todo encontro marcado tem hora. Qual vai ser a sua com o Pai?', opts:[
+    '☕ De manhã, antes de tudo (com o café)',
+    '🌤️ Na pausa do almoço',
+    '🌙 À noite, antes de dormir']},
+  {t:'q', k:'yes1', q:'Se existisse um jeito de ler a Bíblia onde você se sente esperado — e não cobrado — você ia querer conhecer?', opts:['Sim, quero ✅','Talvez... me mostra']},
+  {t:'q', k:'yes2', q:'Você costuma terminar o que começa quando alguém caminha junto com você?', opts:['Sim','Preciso de ajuda com constância (por isso estou aqui)']},
+  {t:'nome', q:'Como você se chama?', sub:'Suas respostas estão sendo analisadas. O resultado é pessoal — e merece ser entregue pelo nome.'}
 ];
 
 /* ================= CONTEÚDO ================= */
@@ -426,46 +506,97 @@ function recalcStreak(){
 }
 
 /* ================= ROTEADOR ================= */
-const SCREENS=['scr-splash','scr-intro','scr-quiz','scr-analise','scr-diag','scr-revela','scr-oferta','app'];
+const SCREENS=['scr-splash','scr-intro','scr-quiz','scr-analise','scr-diag','scr-revela','scr-pacto','scr-oferta','app'];
 function show(id){ SCREENS.forEach(s=>document.getElementById(s).classList.toggle('hidden', s!==id)); window.scrollTo(0,0); }
 
-/* ================= QUIZ ================= */
-let qi=0;
-function renderQuiz(){
-  const Q=QUIZ[qi], body=document.getElementById('qBody');
-  document.getElementById('qFill').style.width=((qi)/QUIZ.length*100)+'%';
-  document.getElementById('qStep').textContent=(qi+1)+'/'+QUIZ.length;
-  let h=`<h2>${Q.q}</h2>`+(Q.sub?`<p class="sub">${Q.sub}</p>`:'<p class="sub"></p>');
-  if(Q.input){ h+=`<input type="text" id="qIn" placeholder="Seu nome" maxlength="30" value="${S.quiz[qi]||''}">`; }
-  else Q.opts.forEach((o,j)=>{ h+=`<button class="opt ${S.quiz[qi]===j?'sel':''}" onclick="pick(${j})">${o}</button>`; });
+/* ================= QUIZ (engine) ================= */
+let fi=0;
+const R = S.resp || (S.resp = {});
+function renderFluxo(){
+  const P=FLUXO[fi], body=document.getElementById('qBody'), btn=document.getElementById('qNext');
+  document.getElementById('qFill').style.width=(fi/FLUXO.length*100)+'%';
+  document.getElementById('qStep').textContent=(fi+1)+'/'+FLUXO.length;
+  btn.textContent = P.t==='nome' ? 'Ver meu diagnóstico' : 'Continuar';
+  if(P.t==='respiro'){
+    body.innerHTML=`<div style="text-align:center"><div class="respiro-ico">${P.ico}</div><p class="respiro-t">${P.tit}</p><p class="respiro-p">${P.p}</p></div>`;
+    btn.disabled=false; return;
+  }
+  if(P.t==='nome'){
+    body.innerHTML=`<h2>${P.q}</h2><p class="sub">${P.sub}</p><input type="text" id="qIn" placeholder="Seu primeiro nome" maxlength="30" value="${S.nome||''}">`;
+    const inp=document.getElementById('qIn');
+    btn.disabled=inp.value.trim().length<2;
+    inp.oninput=()=>btn.disabled=inp.value.trim().length<2;
+    setTimeout(()=>inp.focus(),120); return;
+  }
+  let h=`<h2>${P.q}</h2><p class="sub">${P.sub||''}</p>`;
+  P.opts.forEach((o,j)=>{
+    const sel = P.t==='multi' ? (R[P.k]||[]).includes(j) : R[P.k]===j;
+    h+=`<button class="opt ${sel?'sel':''}" onclick="pick(${j})">${o}</button>`;
+  });
+  if(P.hint) h+=`<p class="qhint">${R[P.k]!=null?P.hint[R[P.k]]:''}</p>`;
   body.innerHTML=h;
-  const btn=document.getElementById('qNext');
-  if(Q.input){ const inp=document.getElementById('qIn'); btn.disabled=!inp.value.trim(); inp.oninput=()=>btn.disabled=!inp.value.trim(); inp.focus(); }
-  else btn.disabled = S.quiz[qi]===undefined;
-  btn.textContent = qi===QUIZ.length-1 ? 'Ver meu diagnóstico' : 'Continuar';
+  btn.disabled = P.t==='multi' ? !(R[P.k]||[]).length : R[P.k]==null;
 }
-function pick(j){ S.quiz[qi]=j; renderQuiz(); }
-function iniciarQuiz(){ show('scr-quiz'); renderQuiz(); }
+function pick(j){
+  const P=FLUXO[fi];
+  if(P.t==='multi'){ const a=R[P.k]||(R[P.k]=[]); const i=a.indexOf(j); if(i>=0)a.splice(i,1); else a.push(j); }
+  else R[P.k]=j;
+  save(); renderFluxo();
+}
+function iniciarQuiz(){ fi=0; show('scr-quiz'); renderFluxo(); }
 document.getElementById('qNext').onclick=()=>{
-  if(QUIZ[qi].input){ S.nome=document.getElementById('qIn').value.trim(); }
-  if(qi===6) S.lembrete=['manhã','almoço','noite'][S.quiz[6]]||'';
-  save();
-  if(qi<QUIZ.length-1){ qi++; renderQuiz(); } else iniciarAnalise();
+  const P=FLUXO[fi];
+  if(P.t==='nome'){ S.nome=document.getElementById('qIn').value.trim(); S.lembrete=['manhã','almoço','noite'][R.horario]||''; save(); iniciarAnalise(); return; }
+  fi++; save();
+  if(fi<FLUXO.length) renderFluxo(); else iniciarAnalise();
 };
-document.getElementById('qBack').onclick=()=>{ if(qi>0){ qi--; renderQuiz(); } };
+document.getElementById('qBack').onclick=()=>{ if(fi>0){ fi--; renderFluxo(); } };
 
 function iniciarAnalise(){
   show('scr-analise');
-  const frases=['Lendo suas respostas...','Cruzando com a jornada...','Pronto.'];
-  let i=0; const el=document.getElementById('analiseTxt');
+  const frases=['Lendo suas respostas...','Cruzando com a jornada...','Pronto, '+(S.nome||'amigo')+'.'];
+  let i=0; const el=document.getElementById('analiseTxt'); el.textContent=frases[0];
   const t=setInterval(()=>{ i++; if(i<frases.length) el.textContent=frases[i];
     else { clearInterval(t); renderDiag(); show('scr-diag'); } }, 1100);
 }
+
+/* ================= DIAGNÓSTICO A/B (tom escolhido no quiz) ================= */
+const L_SENT=['obrigação','culpa','confusão','prazer','distância'];
+const L_ORA=['um servo pedindo favor ao patrão','um devedor prestando contas','um estranho falando com alguém distante','um filho conversando com o Pai','sem saber o que sentir'];
+const L_AFASTA=['a falta de tempo','a distração','a culpa','a sequidão','a ansiedade','o cansaço'];
+const L_TEMPO=[5,10,15];
 function renderDiag(){
-  document.getElementById('diagHero').innerHTML=codiceSVG(0,210);
-  document.getElementById('diagH').innerHTML=`${S.nome||'Amigo'}, hoje você lê a Bíblia como <span class="gk">escravo</span>.`;
+  document.getElementById('diagHero').innerHTML=codiceSVG(0,190);
+  const n=S.nome||'Amigo';
+  const sent=L_SENT[R.sentimento??0], ora=L_ORA[R.oracao??0];
+  const nTent=(R.tentou||[]).filter(j=>j<5).length;
+  if(R.tom!==1){ /* Versão A — confronto bíblico + absolvição */
+    document.getElementById('diagH').textContent=n+', suas respostas revelam algo.';
+    document.getElementById('diagP').innerHTML=
+      `Você marcou que sente <b>${sent}</b> quando abre a Bíblia. Que ora como <b>${ora}</b>.`+
+      (nTent?` Que já tentou <b>${nTent} ${nTent>1?'métodos':'método'}</b> — e carregou a culpa de cada um.`:'')+
+      `<br><br>A Bíblia tem um nome pra isso. Paulo chamou de <b>espírito de escravidão</b>:`+
+      `<br><br><i>"Não recebestes o espírito de escravidão, para viverdes outra vez com medo..."</i> — Romanos 8:15`+
+      `<br><br><b style="color:var(--gold)">Você lê a Bíblia como escravo. E a culpa não é sua.</b>`+
+      `<br><br>Ninguém te ensinou a ler de outro jeito. Te apresentaram a Palavra como cobrança, meta e dívida — e nenhum escravo aguenta muito tempo na casa do patrão. Por isso os planos não duraram. Não foi falta de fé. Foi excesso de peso.`+
+      `<br><br>Mas o mesmo verso continua: <i>"...recebestes o espírito de adoção, pelo qual clamamos: Aba, Pai."</i>`+
+      `<br><br><b>Existe um jeito de filho ler. E dá pra aprender em 60 dias.</b>`;
+  } else { /* Versão B — identidade revelada */
+    document.getElementById('diagH').textContent=n+', a análise das suas respostas está pronta.';
+    document.getElementById('diagP').innerHTML=
+      `Você não tem um problema de disciplina. Suas respostas mostram outra coisa: <b style="color:var(--gold)">um coração de filho preso numa rotina de escravo.</b>`+
+      `<br><br>Você sente o chamado — por isso ${nTent?`já tentou ${nTent} ${nTent>1?'vezes':'vez'}`:'chegou até aqui'}. Mas te entregaram a Bíblia como obrigação, e obrigação nenhuma sobrevive 60 dias.`+
+      `<br><br>A Escritura diz quem você realmente é: <i>"Já não és escravo, porém filho; e, se filho, também herdeiro."</i> — Gálatas 4:7`+
+      `<br><br><b>Seu perfil: herdeiro que ainda lê como escravo.</b> Nos próximos 60 dias, o Códice te ensina a ler do lugar que já é seu: a mesa do Pai.`;
+  }
 }
 function renderRevela(){
+  const n=S.nome||'';
+  document.getElementById('revTit').textContent='Plano do Herdeiro'+(n?' — 60 dias de '+n:'');
+  const alvos=(R.afasta||[]).slice(0,2).map(j=>L_AFASTA[j]);
+  document.getElementById('revCita').textContent = alvos.length
+    ? 'Seus primeiros 7 dias atacam exatamente o que você marcou: '+alvos.join(' e ')+'.'
+    : 'Um dia de cada vez, esse livro se abre pra você.';
   const marcos=[['Dia 1 · As correntes','Você descobre o que te prende',1],
     ['Dia 20 · Servo da Casa','As primeiras correntes caem',.7],
     ['Dia 40 · Filho em Formação','O livro se abre pra você',.45],
@@ -475,23 +606,36 @@ function renderRevela(){
       <span class="dot" style="${i===0?'background:var(--gold)':'border:2px solid rgba(232,200,122,'+m[2]+');background:#000'}"></span>
       ${i<3?'<span class="stem"></span>':''}</div>
       <div><p class="tit">${m[0]}</p><p class="des">${m[1]}</p></div></div>`).join('');
+  const min=L_TEMPO[R.tempo??1]||10;
+  const fim=new Date(Date.now()+59*864e5).toLocaleDateString('pt-BR',{day:'numeric',month:'long'});
+  document.getElementById('revFacts').innerHTML=`<span>${min} min/dia</span><span>dia 60: ${fim}</span>`;
 }
+
+/* ================= PACTO ================= */
+function irPacto(){
+  const min=L_TEMPO[R.tempo??1]||10;
+  document.getElementById('pactoTxt').innerHTML=
+    `Eu, <b style="color:var(--gold)">${S.nome||'_____'}</b>, decido parar de ler a Bíblia como escravo e aprender a ler como filho.<br><br>Pelos próximos 60 dias, abro o Códice por ${min} minutos por dia.`;
+  show('scr-pacto');
+}
+function assinarPacto(){ S.pacto=true; save(); abrirOferta('padrao'); }
 
 /* ================= OFERTA / COMPRA ================= */
 function abrirOferta(modo){
+  const n=S.nome?', '+S.nome:'';
   document.getElementById('ofH').innerHTML = modo==='pos1'
-    ? 'As primeiras correntes <span class="gk">se mexeram</span>.'
-    : 'Destrave seus <span class="gk">60 dias</span>.';
+    ? 'As primeiras correntes <span class="gk">se mexeram</span>'+n+'.'
+    : 'Seu Plano do Herdeiro está pronto'+n+'.';
   document.getElementById('ofSub').textContent = modo==='pos1'
-    ? 'Faltam 59 dias. Pagamento único, acesso pra sempre.'
-    : 'Pagamento único. Acesso pra sempre. Sem mensalidade.';
+    ? 'Faltam 59 dias. Não deixa a corrente assentar de novo.'
+    : '60 dias. 1 mudança de identidade: de escravo a filho.';
   show('scr-oferta');
 }
 function fecharOferta(){ S.funil=true; save(); entrarApp(); }
 function comprar(){
   if(CONFIG.MODO_TESTE){ S.pago=true; S.funil=true; save(); entrarApp();
-    alert('Compra simulada (MODO_TESTE). No app empacotado, este botão chama o RevenueCat.'); return; }
-  /* PRODUÇÃO (Capacitor): Purchases.purchaseStoreProduct(...) → webhook → tabela compras */
+    alert('Compra simulada (MODO_TESTE). Na venda real, este botão abre o checkout da Kiwify.'); return; }
+  /* PRODUÇÃO: window.location.href = CONFIG.KIWIFY_URL (checkout R$67) → webhook → tabela compras */
 }
 
 /* ================= APP ================= */
@@ -614,7 +758,7 @@ function vConfig(){
     <div class="cfg"><span>Lembrete diário</span><small>${S.lembrete||'—'}</small></div>
     <div class="cfg"><span>Acesso</span><small>${S.pago?'Jornada completa ✓':'Gratuito (dia 1)'}</small></div>
     ${!S.pago?`<button class="btn gold" style="margin-top:18px" onclick="abrirOferta('padrao')">Destravar a jornada — ${CONFIG.PRECO}</button>`:''}
-    <button class="ghost" style="margin-top:14px" onclick="alert('No app empacotado: Purchases.restorePurchases()')">Restaurar compra</button>
+    <button class="ghost" style="margin-top:14px" onclick="alert('Na versão final: você entra com o e-mail da compra e o acesso volta em qualquer aparelho.')">Restaurar compra</button>
     <button class="ghost" onclick="if(confirm('Apagar todo o progresso deste aparelho?')){localStorage.removeItem(KEY);location.reload()}">Reiniciar tudo</button>
     <p class="legal" style="margin-top:20px">O Códice · ocodice.app · v1</p></div>`;
 }
