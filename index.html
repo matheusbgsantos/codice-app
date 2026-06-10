@@ -58,12 +58,31 @@ button{font-family:var(--sans);cursor:pointer}
 .pacto-box{border:1px solid rgba(232,200,122,.5);border-radius:16px;background:rgba(232,200,122,.05);padding:22px 20px;font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.55;color:#f0e9d6;text-align:left;max-width:320px;margin-top:18px}
 .pacto-ref{margin-top:14px;font-size:12px;color:var(--mute);font-family:var(--sans);font-style:normal}
 
-/* oferta extra */
-#scr-oferta .center{justify-content:flex-start;padding-top:26px;overflow-y:auto}
-.anc{font-size:13.5px;color:var(--mute);max-width:310px;line-height:1.55;margin:12px 0 0}
+/* oferta */
+#scr-oferta .center{justify-content:flex-start;padding-top:22px;overflow-y:auto}
+.of-card{width:100%;max-width:330px;border:1px solid rgba(232,200,122,.45);border-radius:18px;background:linear-gradient(180deg,rgba(232,200,122,.10),rgba(232,200,122,.03));padding:20px 20px 16px;margin-top:16px}
+.chk{display:flex;gap:10px;align-items:flex-start;text-align:left;font-size:14px;color:#ddd8cb;margin:9px 0;line-height:1.4}
+.chk b{flex:0 0 18px;height:18px;border-radius:50%;background:rgba(232,200,122,.18);color:var(--gold);font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:1px;font-weight:700}
+.of-div{height:1px;background:rgba(232,200,122,.25);margin:14px 0}
+.cmp{display:flex;gap:8px;width:100%;max-width:330px;margin-top:16px}
+.cmp>div{flex:1;border:1px solid var(--line);border-radius:12px;padding:11px 6px;font-size:10.5px;color:var(--mute);line-height:1.5;text-align:center}
+.cmp>div b{display:block;font-size:13.5px;color:var(--dim);margin-bottom:2px}
+.cmp>div.win{border-color:rgba(232,200,122,.55);background:rgba(232,200,122,.07)}
+.cmp>div.win b{color:var(--gold)}
+.stars{color:var(--gold);font-size:15px;letter-spacing:3px;margin-top:24px}
+.test{width:100%;max-width:330px;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:14px 16px;margin-top:10px}
+.test p{margin:0;font-size:13.5px;color:#d8d5cc;line-height:1.55;font-style:italic}
+.test .who{display:flex;align-items:center;gap:9px;margin-top:11px}
+.test .who img{width:27px;height:27px;border-radius:50%;object-fit:cover}
+.test .who span{font-size:12px;color:var(--mute)}
+.gar{display:flex;gap:13px;align-items:center;width:100%;max-width:330px;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:13px 16px;margin-top:20px;text-align:left}
+.gar .ic{font-size:26px}
+.gar p{margin:0;font-size:12.5px;color:var(--dim);line-height:1.55}
+.gar b{color:var(--ink)}
+.anc{font-size:13px;color:var(--mute);max-width:310px;line-height:1.55;margin:14px 0 0}
 .anc b{color:var(--dim)}
-.faq{width:100%;max-width:310px;text-align:left;margin-top:16px}
-.faq p{font-size:13px;color:var(--mute);margin:0 0 8px;line-height:1.5}
+.faq{width:100%;max-width:330px;text-align:left;margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
+.faq p{font-size:12.5px;color:var(--mute);margin:0 0 8px;line-height:1.5}
 .faq b{color:var(--dim)}
 .linkfree{background:none;border:none;color:var(--mute);text-decoration:underline;font-size:13.5px;padding:10px;width:100%}
 
@@ -244,21 +263,43 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
 <!-- ===== OFERTA ===== -->
 <section id="scr-oferta" class="wrap hidden" style="position:relative">
   <div class="center">
-    <span class="mini" style="color:var(--gold)">Plano pronto</span>
+    <img class="codice-img" src="img/codice-5.jpg" width="130" height="130" alt="" style="border-radius:16px;margin-bottom:4px">
+    <span class="mini" style="color:var(--gold);margin-top:10px">Plano pronto</span>
     <h2 class="diag-h" id="ofH">Seu Plano do Herdeiro está pronto.</h2>
     <p class="diag-p" id="ofSub" style="margin-top:6px">60 dias. 1 mudança de identidade: de escravo a filho.</p>
-    <p class="anc">Apps de oração como Hallow e Glorify custam <b>R$300+ por ano — todo ano</b>. O Códice é diferente:</p>
-    <div style="margin-top:14px"><span class="price-old">R$ 97</span><span class="price" id="ofPreco">R$ 67</span>
-      <span style="display:block;font-size:13px;color:var(--gold);margin-top:3px">uma única vez · preço de fundador</span></div>
-    <p class="diag-p" style="font-size:13.5px;margin-top:8px"><b>Sem assinatura. Sem renovação. Seu pra sempre.</b><br>Pouco mais de R$1 por dia — e depois do dia 60, continua seu.</p>
-    <div class="inclui">
-      <p><b>✦</b> A jornada completa de 60 dias</p>
-      <p><b>✦</b> O códice que evolui com você</p>
-      <p><b>✦</b> Ranking da sua turma</p>
-      <p><b>✦</b> Todas as atualizações da Jornada 1</p>
+
+    <div class="of-card">
+      <div><span class="price-old">R$ 97</span><span class="price" id="ofPreco">R$ 67</span></div>
+      <div style="font-size:12.5px;color:var(--gold);margin-top:2px;text-align:center">uma única vez · preço de fundador</div>
+      <div class="of-div"></div>
+      <div class="chk"><b>✓</b>A jornada completa de 60 dias</div>
+      <div class="chk"><b>✓</b>O códice que evolui com você</div>
+      <div class="chk"><b>✓</b>Ranking da sua turma</div>
+      <div class="chk"><b>✓</b>Todas as atualizações da Jornada 1</div>
+      <div class="of-div"></div>
+      <div style="font-size:12.5px;color:var(--dim);text-align:center;line-height:1.55"><b style="color:var(--ink)">Sem assinatura. Sem renovação. Seu pra sempre.</b><br>Pouco mais de R$1 por dia — e depois do dia 60, continua seu.</div>
     </div>
+
+    <div class="cmp">
+      <div><b>Hallow</b>R$ 320/ano<br>todo ano</div>
+      <div><b>Glorify</b>R$ 300/ano<br>todo ano</div>
+      <div class="win"><b>O Códice</b>R$ 67<br>uma vez ✓</div>
+    </div>
+
+    <div class="stars">★★★★★</div>
+    <p class="mini" style="margin-top:6px">Quem caminhou primeiro</p>
+    <div class="test">
+      <p>"Eu lia por obrigação há anos. No dia 9 eu chorei sozinha na cozinha — entendi que Ele tava falando comigo, não cobrando."</p>
+      <div class="who"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt=""><span><b style="color:var(--dim)">Mariana</b> · dia 41 da jornada</span></div>
+    </div>
+    <div class="test">
+      <p>"Nunca passei da segunda semana de nenhum plano. Aqui o dia 20 chegou e eu nem percebi. A diferença? Eu paro de me sentir devendo."</p>
+      <div class="who"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt=""><span><b style="color:var(--dim)">Pedro</b> · dia 28 da jornada</span></div>
+    </div>
+
+    <div class="gar"><span class="ic">🛡️</span><p><b>Garantia de 7 dias.</b> Leia a primeira semana inteira. Se não sentir diferença na sua leitura, devolvemos os R$67. Sem perguntas.</p></div>
     <p class="anc">🤲 Parte de cada Códice mantém o acesso aberto pra quem não pode pagar. Sua compra patrocina a caminhada de outro filho.</p>
-    <p class="anc"><b>Garantia de 7 dias:</b> leia a primeira semana inteira. Se não sentir diferença na sua leitura, devolvemos os R$67. Sem perguntas.</p>
+
     <div class="faq">
       <p><b>É assinatura?</b> Não — pagamento único.</p>
       <p><b>Funciona no meu celular?</b> Sim. É um app web — não precisa instalar nada.</p>
