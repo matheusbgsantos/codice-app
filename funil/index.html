@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O Códice — Do escravo ao filho</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=EB+Garamond:wght@400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet"></noscript>
+<style>
+  :root{--bg:#100f0d;--ink:#ece6d8;--ink-dim:#928d80;--gold:#c9a24b;--green:#5a8a68;--line:#26221c;--card:#16140f;
+    --serif:'Cormorant Garamond',Georgia,serif;--body:'EB Garamond',Georgia,serif;--mono:'IBM Plex Mono',monospace;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:19px;line-height:1.6;-webkit-font-smoothing:antialiased;
+    min-height:100vh;display:flex;align-items:center;justify-content:center;padding:26px}
+  .stage{max-width:540px;width:100%}
+  .hidden{display:none!important}
+  em{color:var(--gold);font-style:italic}.gk{font-family:var(--serif);font-style:italic;color:var(--gold)}
+  strong{color:#fff;font-weight:600}
+  .k{font-family:var(--mono);font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);opacity:.85}
+  h1{font-family:var(--serif);font-weight:700;font-size:44px;line-height:1.06;margin:14px 0 0}
+  h2{font-family:var(--serif);font-weight:600;font-size:32px;line-height:1.15;margin:0 0 18px}
+  .sub{color:var(--ink-dim);font-size:19px;margin:18px 0 30px}
+  .btn{display:block;width:100%;background:var(--gold);color:#15110a;border:none;font-family:var(--body);font-weight:600;
+    font-size:19px;padding:17px 22px;border-radius:5px;cursor:pointer;transition:opacity .15s;text-decoration:none;text-align:center}
+  .btn:hover{opacity:.9}.btn:disabled{opacity:.35;cursor:not-allowed}
+  .btn-ghost{background:none;border:none;color:var(--ink-dim);font-family:var(--mono);font-size:12px;letter-spacing:.06em;cursor:pointer;margin-top:18px;text-decoration:underline}
+  .fade{animation:f .4s ease}@keyframes f{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .center{text-align:center}
+
+  /* códice acorrentado (placeholder — trocar pela arte real depois) */
+  .codice{font-size:64px;text-align:center;position:relative;margin:0 auto 20px;width:90px;height:90px;line-height:90px}
+  .codice .chain{position:absolute;inset:0;font-size:64px;opacity:.85}
+  .estagio{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim);text-align:center}
+
+  /* quiz */
+  .prog{height:4px;background:var(--line);border-radius:3px;margin-bottom:30px;overflow:hidden}
+  .prog i{display:block;height:100%;background:var(--gold);width:0;transition:width .3s}
+  .qn{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:14px}
+  .q{font-family:var(--serif);font-weight:600;font-size:28px;line-height:1.22;text-align:center;margin:0 0 26px}
+  .opt{display:block;width:100%;background:var(--card);color:var(--ink);border:1px solid var(--line);font-family:var(--body);font-size:17px;
+    text-align:left;padding:16px 19px;border-radius:7px;margin-bottom:11px;cursor:pointer;transition:.15s;line-height:1.4}
+  .opt:hover{border-color:var(--gold);background:#1d1a12}
+  input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);color:var(--ink);font-family:var(--body);font-size:20px;
+    padding:16px 18px;border-radius:7px;margin-bottom:16px;outline:none;text-align:center}
+  input[type=text]:focus{border-color:var(--gold)}
+
+  /* analisando */
+  .pulse{width:46px;height:46px;border-radius:50%;background:var(--gold);margin:0 auto 26px;animation:pl 1.2s ease-in-out infinite}
+  @keyframes pl{0%,100%{transform:scale(.75);opacity:.35}50%{transform:scale(1.1);opacity:.9}}
+  .anline{font-family:var(--mono);font-size:14px;letter-spacing:.08em;color:var(--ink-dim)}
+
+  /* revelação — linha do tempo */
+  .timeline{display:flex;justify-content:space-between;align-items:center;margin:28px 0;position:relative}
+  .timeline::before{content:"";position:absolute;left:8%;right:8%;top:14px;height:2px;background:var(--line)}
+  .tnode{position:relative;text-align:center;flex:1;z-index:1}
+  .tdot{width:14px;height:14px;border-radius:50%;background:var(--gold);margin:0 auto 8px}
+  .tnode.dim .tdot{background:var(--line)}
+  .tlab{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-dim)}
+  .tnode:first-child .tlab,.tnode:last-child .tlab{color:var(--gold)}
+  .tempo{text-align:center;font-family:var(--mono);font-size:12px;color:var(--ink-dim);letter-spacing:.04em;margin-top:8px}
+
+  /* oferta */
+  .of-close{position:absolute;top:18px;right:20px;background:none;border:none;color:var(--ink-dim);font-size:22px;cursor:pointer;opacity:.5;line-height:1}
+  .of-close:hover{opacity:1}
+  .incluso{list-style:none;padding:0;margin:22px 0}
+  .incluso li{padding:11px 0 11px 28px;position:relative;border-bottom:1px solid var(--line);font-size:17px}
+  .incluso li:last-child{border-bottom:none}
+  .incluso li::before{content:"✓";position:absolute;left:0;color:var(--green);font-weight:700}
+  .preco{text-align:center;margin:26px 0 6px}
+  .preco .de{color:var(--ink-dim);text-decoration:line-through;font-size:19px}
+  .preco .por{font-family:var(--serif);font-weight:700;font-size:60px;color:var(--gold);line-height:1;margin:2px 0}
+  .preco .por small{font-size:24px;color:var(--ink)}
+  .preco .fundador{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+  .of-nota{font-size:14.5px;color:var(--ink-dim);text-align:center;margin:6px 0 0;line-height:1.5}
+  .of-promessa{border-left:2px solid var(--gold);padding-left:18px;font-size:16px;color:var(--ink-dim);font-style:italic;margin:20px 0}
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <!-- 1. SPLASH -->
+  <div id="s-splash" class="fade center">
+    <div class="codice">📖<span class="chain">⛓️</span></div>
+    <span class="k">O Códice</span>
+    <h1>Do escravo<br>ao <em>filho</em>.</h1>
+    <p class="sub">Em 60 dias, você reabre a Bíblia que já tem em casa — e nunca mais lê de joelhos no chão.</p>
+    <button class="btn" onclick="irQuiz()">Começar</button>
+    <button class="btn-ghost" onclick="show('s-conta')">já tenho conta</button>
+  </div>
+
+  <!-- 2. QUIZ -->
+  <div id="s-quiz" class="hidden">
+    <div class="prog"><i id="qprog"></i></div>
+    <div class="qn" id="qn"></div>
+    <h2 class="q" id="qtext" style="text-align:center"></h2>
+    <div id="qopts"></div>
+    <div id="qname" class="hidden">
+      <input type="text" id="nomeInput" placeholder="Seu primeiro nome" autocomplete="given-name" oninput="checkNome()">
+      <button class="btn" id="nomeBtn" onclick="fimQuiz()" disabled>Ver meu diagnóstico</button>
+    </div>
+  </div>
+
+  <!-- 3. ANALISANDO -->
+  <div id="s-analise" class="hidden center">
+    <div class="pulse"></div>
+    <p class="anline" id="anline">Lendo suas respostas...</p>
+  </div>
+
+  <!-- 4. DIAGNÓSTICO -->
+  <div id="s-diag" class="hidden center fade">
+    <div class="codice">📖<span class="chain">⛓️</span></div>
+    <p class="estagio">Estágio 1 · Acorrentado</p>
+    <span class="k" style="margin-top:18px;display:block">Seu diagnóstico</span>
+    <h2 style="margin-top:14px;text-align:center" id="diag-txt"></h2>
+    <p class="sub">Não é falta de fé — é uma leitura que te ensinaram errado.</p>
+    <button class="btn" onclick="show('s-reve')">Ver o que dá pra fazer</button>
+  </div>
+
+  <!-- 5. REVELAÇÃO DO PLANO -->
+  <div id="s-reve" class="hidden center fade">
+    <span class="k">Seu plano de 60 dias</span>
+    <h2 style="margin-top:14px;text-align:center" id="reve-txt"></h2>
+    <p class="sub">Em 60 dias, um dia de cada vez, esse livro se abre.</p>
+    <div class="timeline">
+      <div class="tnode"><div class="tdot"></div><div class="tlab">Escravo</div></div>
+      <div class="tnode dim"><div class="tdot"></div><div class="tlab">Dia 20<br>Servo</div></div>
+      <div class="tnode dim"><div class="tdot"></div><div class="tlab">Dia 40<br>Filho</div></div>
+      <div class="tnode"><div class="tdot"></div><div class="tlab">Herdeiro</div></div>
+    </div>
+    <p class="tempo">~7 minutos por dia · 3 marcos · o códice evolui com você</p>
+    <button class="btn" style="margin-top:22px" onclick="show('s-oferta')">Destravar minha jornada</button>
+  </div>
+
+  <!-- 6. OFERTA -->
+  <div id="s-oferta" class="hidden fade" style="position:relative">
+    <button class="of-close" onclick="irGratis()" title="continuar grátis">✕</button>
+    <div class="center"><span class="k">Preço de fundador</span></div>
+    <h2 style="text-align:center;margin-top:14px">Destrave seus 60 dias.</h2>
+    <p class="sub center">Pagamento único. Acesso pra sempre. Sem mensalidade.</p>
+    <ul class="incluso">
+      <li>A jornada completa de 60 dias, do escravo ao herdeiro</li>
+      <li>O códice que evolui com você</li>
+      <li>O ranking da sua turma</li>
+      <li>Todas as atualizações da Jornada 1</li>
+    </ul>
+    <div class="preco">
+      <div class="de">de R$97</div>
+      <div class="por"><small>R$</small>67</div>
+      <div class="fundador">preço de fundador</div>
+    </div>
+    <a class="btn" href="https://pay.kiwify.com.br/Xp3KAvZ" id="cta-compra">Destravar minha jornada — R$67</a>
+    <p class="of-nota">Pagamento único. Sem renovação, sem surpresa.</p>
+    <p class="of-promessa">Preço de lançamento. Quando o Códice virar assinatura, quem comprou agora mantém o acesso <strong>pra sempre</strong>.</p>
+    <button class="btn-ghost" style="display:block;margin:0 auto" onclick="irGratis()">prefiro começar grátis (só o Dia 1)</button>
+  </div>
+
+  <!-- 7. CRIAÇÃO DE CONTA -->
+  <div id="s-conta" class="hidden center fade">
+    <span class="k">Quase lá</span>
+    <h2 style="margin-top:14px;text-align:center">Crie sua conta pra começar</h2>
+    <p class="sub">Coloque seu e-mail — a gente te manda um link de acesso. Seu progresso fica salvo.</p>
+    <input type="text" id="emailInput" placeholder="seu e-mail" inputmode="email">
+    <button class="btn" id="contaBtn" onclick="criarConta()">Entrar no app</button>
+    <p class="anline" id="contaMsg" style="margin-top:14px"></p>
+  </div>
+
+</div>
+
+<script>
+  // ====== APP DESTINO (onde o usuário entra depois) ======
+  const APP_URL = 'https://matheusbgsantos.github.io/codice-app/';
+
+  // ====== QUIZ (8 perguntas de hábito — do escopo v1) ======
+  const PERGUNTAS = [
+    { q:"Quando você lê a Bíblia, o que sente com mais frequência?", k:"leitura", opts:[
+      {t:"Obrigação — leio porque “tenho que ler”.", v:"obrigacao"},
+      {t:"Culpa — por não ler como deveria.", v:"culpa"},
+      {t:"Confusão — leio e não entendo o que aquilo tem a ver comigo.", v:"confusao"},
+      {t:"Prazer — mas quero ir mais fundo.", v:"prazer"},
+    ]},
+    { q:"Quantos planos de leitura você já começou e abandonou?", k:"planos", opts:[
+      {t:"Nenhum, esse é meu primeiro.", v:"nenhum"},
+      {t:"Um ou dois.", v:"poucos"},
+      {t:"Perdi a conta.", v:"muitos"},
+      {t:"Eu termino os planos que começo.", v:"termino"},
+    ]},
+    { q:"Complete: “Quando eu oro, eu me sinto mais como...”", k:"oracao", opts:[
+      {t:"Um servo pedindo favor.", v:"servo"},
+      {t:"Um devedor pedindo desculpa.", v:"devedor"},
+      {t:"Um estranho falando com alguém distante.", v:"estranho"},
+      {t:"Um filho falando com o Pai.", v:"filho"},
+    ]},
+    { q:"O que mais te afasta de uma rotina com Deus?", k:"afasta", opts:[
+      {t:"Falta de tempo.", v:"tempo"},
+      {t:"Falta de constância — começo e paro.", v:"constancia"},
+      {t:"Sinceramente? Acho a leitura difícil e seca.", v:"dificil"},
+      {t:"Vergonha de voltar depois de tanto tempo longe.", v:"vergonha"},
+    ]},
+    { q:"Se a Bíblia te chamasse de herdeiro — com direito a tomar posse — isso mudaria o jeito como você a lê?", k:"herdeiro", opts:[
+      {t:"Mudaria tudo.", v:"tudo"},
+      {t:"Talvez, se eu entendesse o que isso significa.", v:"talvez"},
+      {t:"Não sei se acredito nisso pra mim.", v:"duvida"},
+    ]},
+    { q:"Quanto tempo por dia você consegue separar, de verdade?", k:"tempo_dia", opts:[
+      {t:"5 minutos.", v:"5"},{t:"10 minutos.", v:"10"},{t:"15+ minutos.", v:"15"},
+    ]},
+    { q:"Qual o melhor horário pra gente te lembrar?", k:"lembrete_hora", opts:[
+      {t:"Ao acordar.", v:"manha"},{t:"No almoço.", v:"almoco"},{t:"À noite.", v:"noite"},
+    ]},
+    { q:"Como podemos te chamar?", k:"nome", nome:true },
+  ];
+
+  const respostas = {};
+  let qi = 0, nome = '';
+
+  function show(id){
+    document.querySelectorAll('.stage > div').forEach(d=>d.classList.add('hidden'));
+    const el=document.getElementById(id); el.classList.remove('hidden');
+    el.classList.remove('fade'); void el.offsetWidth; el.classList.add('fade');
+    window.scrollTo(0,0);
+  }
+  function irQuiz(){ qi=0; show('s-quiz'); renderQ(); }
+  function renderQ(){
+    const P=PERGUNTAS[qi];
+    document.getElementById('qprog').style.width=((qi)/PERGUNTAS.length*100)+'%';
+    document.getElementById('qn').textContent='Pergunta '+(qi+1)+' de '+PERGUNTAS.length;
+    document.getElementById('qtext').textContent=P.q;
+    const opts=document.getElementById('qopts'), nameBox=document.getElementById('qname');
+    if(P.nome){ opts.classList.add('hidden'); nameBox.classList.remove('hidden'); setTimeout(()=>document.getElementById('nomeInput').focus(),100); return; }
+    opts.classList.remove('hidden'); nameBox.classList.add('hidden'); opts.innerHTML='';
+    P.opts.forEach(o=>{ const b=document.createElement('button'); b.className='opt'; b.textContent=o.t; b.onclick=()=>responder(P.k,o.v); opts.appendChild(b); });
+  }
+  function responder(k,v){ respostas[k]=v; qi++; if(qi<PERGUNTAS.length){ const box=document.getElementById('s-quiz'); box.classList.remove('fade'); void box.offsetWidth; box.classList.add('fade'); renderQ(); } else { fimQuiz(); } }
+  function checkNome(){ document.getElementById('nomeBtn').disabled = document.getElementById('nomeInput').value.trim().length<2; }
+  function fimQuiz(){
+    nome = (document.getElementById('nomeInput').value||'').trim();
+    respostas.nome = nome;
+    localStorage.setItem('codice_quiz', JSON.stringify(respostas));
+    document.getElementById('qprog').style.width='100%';
+    analisar();
+  }
+  function analisar(){
+    show('s-analise');
+    const linhas=['Lendo suas respostas...','Cruzando com a jornada...','Pronto.'];
+    let k=0; const el=document.getElementById('anline'); el.textContent=linhas[0];
+    const t=setInterval(()=>{ k++; if(k<linhas.length) el.textContent=linhas[k]; },950);
+    setTimeout(()=>{ clearInterval(t); diagnostico(); }, 2900);
+  }
+  function diagnostico(){
+    const v = nome ? nome+', suas' : 'Suas';
+    document.getElementById('diag-txt').innerHTML = v+' respostas mostram um padrão: você se relaciona com a Palavra como <strong>escravo</strong> — por obrigação, culpa e distância.';
+    document.getElementById('reve-txt').textContent = (nome? nome+', seu':'Seu')+' plano de 60 dias está pronto.';
+    show('s-diag');
+  }
+
+  // ====== destinos ======
+  function irGratis(){ localStorage.setItem('codice_plano','gratis'); show('s-conta'); }
+  // a compra (Kiwify) acontece no link do CTA; ao voltar, a pessoa cria conta e entra
+  function criarConta(){
+    const email=(document.getElementById('emailInput').value||'').trim();
+    if(!email || !email.includes('@')){ document.getElementById('contaMsg').textContent='Coloque um e-mail válido.'; return; }
+    localStorage.setItem('codice_email', email);
+    document.getElementById('contaMsg').textContent='Te levando pro app...';
+    // leva pro app (onde o login/magic-link finaliza); passa o e-mail e o nome
+    const q = new URLSearchParams({ email, nome: nome||'' }).toString();
+    window.location.href = APP_URL + '?' + q;
+  }
+</script>
+</body>
+</html>
