@@ -352,7 +352,8 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
 <script>
 /* ================= CONFIG ================= */
 const CONFIG = {
-  MODO_TESTE: true,          // true = botão de compra apenas simula (trocar por RevenueCat no Capacitor)
+  MODO_TESTE: false,         // false = botão de compra abre o checkout Kiwify real
+  KIWIFY_URL: 'https://pay.kiwify.com.br/Xp3KAvZ',
   SUPABASE_URL: '',          // preencha para ativar o backend (ver README)
   SUPABASE_KEY: '',
   PRECO: 'R$ 27,90'
@@ -682,8 +683,9 @@ function abrirOferta(modo){
 function fecharOferta(){ S.funil=true; save(); entrarApp(); }
 function comprar(){
   if(CONFIG.MODO_TESTE){ S.pago=true; S.funil=true; save(); entrarApp();
-    alert('Compra simulada (MODO_TESTE). Na venda real, este botão abre o checkout da Kiwify.'); return; }
-  /* PRODUÇÃO: window.location.href = 'https://pay.kiwify.com.br/Xp3KAvZ' (checkout R$27,90) → webhook → tabela compras */
+    alert('Compra simulada (MODO_TESTE).'); return; }
+  S.funil=true; save();
+  window.location.href = CONFIG.KIWIFY_URL; /* → webhook kiwify-webhook já registra o comprador */
 }
 
 /* ================= APP ================= */
@@ -839,6 +841,11 @@ async function compartilhar(){
 }
 
 /* ================= BOOT ================= */
+/* link de entrega da Kiwify: .../codice-app/?pago=1 (provisório até o gate via Supabase) */
+if(new URLSearchParams(location.search).get('pago')==='1'){
+  S.pago=true; S.funil=true; save();
+  history.replaceState(null,'',location.pathname);
+}
 setTimeout(()=>{
   if(S.funil || diasFeitos()>0){ entrarApp(); }
   else { show('scr-intro'); }
