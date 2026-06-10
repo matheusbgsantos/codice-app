@@ -142,9 +142,8 @@
   <div class="auth-card">
     <span class="k">O Códice · 60 Dias</span>
     <h1>Entre na sua jornada</h1>
-    <p class="sub">Coloque seu e-mail e a gente te manda um link de acesso — sem senha pra decorar. Seu progresso fica salvo e te segue em qualquer aparelho.</p>
-    <input id="authEmail" type="email" placeholder="seu e-mail" autocomplete="email">
-    <button class="abtn" id="authBtn" onclick="enviarLink()">Acessar</button>
+    <p class="sub">60 dias pra você parar de ler a Bíblia como escravo e voltar a ler como filho. É só começar — seu progresso fica salvo.</p>
+    <button class="abtn" id="authBtn" onclick="entrarAnonimo()">Começar minha jornada</button>
     <p class="amsg" id="authMsg"></p>
   </div>
 </div>
@@ -418,6 +417,13 @@
     btn.disabled=false;
     if(error){ amsg(error.message,true); return; }
     amsg('Pronto! Te mandamos um link no seu e-mail. Abre e clica pra entrar. (Confere o spam.)');
+  }
+  async function entrarAnonimo(){ // TEMPORÁRIO: 1 clique, sem e-mail. P/ produção, voltar pro enviarLink (magic link).
+    const btn=document.getElementById('authBtn'); btn.disabled=true; amsg('entrando…');
+    const { data, error } = await sb.auth.signInAnonymously();
+    btn.disabled=false;
+    if(error){ amsg('Não consegui entrar: '+error.message,true); return; }
+    USER=data.user; await entrarApp();
   }
   async function sair(){ await sb.auth.signOut(); location.reload(); }
   async function entrarApp(){
