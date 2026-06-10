@@ -176,14 +176,11 @@
 
   // ====== NÍVEIS (você sobe de Escravo a Filho conforme cumpre os dias) ======
   const NIVEIS = [
-    { nivel:0, titulo:'Escravo',              em:0  },
-    { nivel:1, titulo:'O Desperto',           em:1  },
-    { nivel:2, titulo:'Olhos Novos',          em:10 },
-    { nivel:3, titulo:'O Filho Reconhecido',  em:20, marco:true, crown:'🏅' },
-    { nivel:4, titulo:'O que Tem Acesso',     em:30 },
-    { nivel:5, titulo:'A Voz do Filho',       em:40, marco:true, crown:'🏅' },
-    { nivel:6, titulo:'O Filho sem Medo',     em:50 },
-    { nivel:7, titulo:'O Herdeiro à Mesa',    em:60, marco:true, crown:'👑' },
+    { nivel:0, titulo:'Escravo',            em:0  },
+    { nivel:1, titulo:'Empregado',          em:1  },
+    { nivel:2, titulo:'Servo da Casa',      em:20, marco:true, crown:'🏅' },
+    { nivel:3, titulo:'Filho em Formação',  em:40, marco:true, crown:'🏅' },
+    { nivel:4, titulo:'Herdeiro',           em:60, marco:true, crown:'👑' },
   ];
   function nivelAtual(c){ let lv=NIVEIS[0]; for(const x of NIVEIS){ if(c>=x.em) lv=x; } return lv; }
 
