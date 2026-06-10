@@ -34,14 +34,23 @@
   .codice .chain{position:absolute;inset:0;font-size:64px;opacity:.85}
   .estagio{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-dim);text-align:center}
 
-  /* quiz */
-  .prog{height:4px;background:var(--line);border-radius:3px;margin-bottom:30px;overflow:hidden}
-  .prog i{display:block;height:100%;background:var(--gold);width:0;transition:width .3s}
-  .qn{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);text-align:center;margin-bottom:14px}
-  .q{font-family:var(--serif);font-weight:600;font-size:28px;line-height:1.22;text-align:center;margin:0 0 26px}
-  .opt{display:block;width:100%;background:var(--card);color:var(--ink);border:1px solid var(--line);font-family:var(--body);font-size:17px;
-    text-align:left;padding:16px 19px;border-radius:7px;margin-bottom:11px;cursor:pointer;transition:.15s;line-height:1.4}
-  .opt:hover{border-color:var(--gold);background:#1d1a12}
+  /* quiz — estilo app moderno (select → continuar) */
+  .q-screen{display:flex;flex-direction:column;min-height:calc(100vh - 52px)}
+  .q-top{display:flex;align-items:center;gap:16px;padding-top:2px}
+  .q-back{background:none;border:none;color:var(--ink-dim);font-size:30px;cursor:pointer;line-height:1;padding:0;width:22px;font-family:var(--serif)}
+  .q-prog{flex:1;height:3px;background:var(--line);border-radius:3px;overflow:hidden}
+  .q-prog i{display:block;height:100%;background:#fff;width:0;transition:width .35s}
+  .q-count{font-family:var(--mono);font-size:12px;color:var(--ink-dim);min-width:30px;text-align:right}
+  .q-mid{flex:1;display:flex;flex-direction:column;justify-content:center;padding:24px 0}
+  .q-title{font-family:var(--serif);font-weight:700;font-size:30px;line-height:1.18;color:#fff;text-align:left;margin:0 0 8px}
+  .q-sub{color:var(--ink-dim);font-size:15px;margin:0 0 26px}
+  .q-opt{display:block;width:100%;background:#1a1813;color:var(--ink);border:1px solid var(--line);font-family:var(--body);font-size:17px;
+    text-align:left;padding:17px 20px;border-radius:15px;margin-bottom:12px;cursor:pointer;transition:.15s;line-height:1.35}
+  .q-opt:hover{border-color:#3a342a}
+  .q-opt.sel{border-color:var(--gold);background:rgba(201,162,75,.12)}
+  .q-cta{width:100%;background:#2a2620;color:var(--ink-dim);border:none;font-family:var(--body);font-weight:600;font-size:18px;
+    padding:18px;border-radius:40px;cursor:not-allowed;transition:.15s;margin-top:18px}
+  .q-cta.on{background:var(--gold);color:#15110a;cursor:pointer}
   input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);color:var(--ink);font-family:var(--body);font-size:20px;
     padding:16px 18px;border-radius:7px;margin-bottom:16px;outline:none;text-align:center}
   input[type=text]:focus{border-color:var(--gold)}
@@ -91,15 +100,21 @@
   </div>
 
   <!-- 2. QUIZ -->
-  <div id="s-quiz" class="hidden">
-    <div class="prog"><i id="qprog"></i></div>
-    <div class="qn" id="qn"></div>
-    <h2 class="q" id="qtext" style="text-align:center"></h2>
-    <div id="qopts"></div>
-    <div id="qname" class="hidden">
-      <input type="text" id="nomeInput" placeholder="Seu primeiro nome" autocomplete="given-name" oninput="checkNome()">
-      <button class="btn" id="nomeBtn" onclick="fimQuiz()" disabled>Ver meu diagnóstico</button>
+  <div id="s-quiz" class="hidden q-screen">
+    <div class="q-top">
+      <button class="q-back" id="qback" onclick="voltarQ()" aria-label="voltar">‹</button>
+      <div class="q-prog"><i id="qprog"></i></div>
+      <span class="q-count" id="qn">1/8</span>
     </div>
+    <div class="q-mid">
+      <h2 class="q-title" id="qtext"></h2>
+      <p class="q-sub" id="qsub">Seja honesto — ninguém vê suas respostas.</p>
+      <div id="qopts" class="q-opts"></div>
+      <div id="qname" class="hidden">
+        <input type="text" id="nomeInput" placeholder="Seu primeiro nome" autocomplete="given-name" oninput="checkNome()">
+      </div>
+    </div>
+    <button class="q-cta" id="qcta" disabled onclick="avancar()">Continuar</button>
   </div>
 
   <!-- 3. ANALISANDO -->
@@ -222,18 +237,40 @@
     window.scrollTo(0,0);
   }
   function irQuiz(){ qi=0; show('s-quiz'); renderQ(); }
+  let selecao=null;
   function renderQ(){
     const P=PERGUNTAS[qi];
     document.getElementById('qprog').style.width=((qi)/PERGUNTAS.length*100)+'%';
-    document.getElementById('qn').textContent='Pergunta '+(qi+1)+' de '+PERGUNTAS.length;
+    document.getElementById('qn').textContent=(qi+1)+'/'+PERGUNTAS.length;
     document.getElementById('qtext').textContent=P.q;
+    document.getElementById('qsub').textContent=P.sub||'Seja honesto — ninguém vê suas respostas.';
+    document.getElementById('qback').style.visibility = qi>0 ? 'visible' : 'hidden';
+    selecao=null;
+    const cta=document.getElementById('qcta');
+    cta.classList.remove('on'); cta.disabled=true;
+    cta.textContent = P.nome ? 'Ver meu diagnóstico' : 'Continuar';
     const opts=document.getElementById('qopts'), nameBox=document.getElementById('qname');
-    if(P.nome){ opts.classList.add('hidden'); nameBox.classList.remove('hidden'); setTimeout(()=>document.getElementById('nomeInput').focus(),100); return; }
+    if(P.nome){ opts.classList.add('hidden'); nameBox.classList.remove('hidden'); document.getElementById('nomeInput').value=''; setTimeout(()=>document.getElementById('nomeInput').focus(),120); return; }
     opts.classList.remove('hidden'); nameBox.classList.add('hidden'); opts.innerHTML='';
-    P.opts.forEach(o=>{ const b=document.createElement('button'); b.className='opt'; b.textContent=o.t; b.onclick=()=>responder(P.k,o.v); opts.appendChild(b); });
+    P.opts.forEach(o=>{ const b=document.createElement('button'); b.className='q-opt'; b.textContent=o.t; b.onclick=()=>selecionar(b,o.v); opts.appendChild(b); });
   }
-  function responder(k,v){ respostas[k]=v; qi++; if(qi<PERGUNTAS.length){ const box=document.getElementById('s-quiz'); box.classList.remove('fade'); void box.offsetWidth; box.classList.add('fade'); renderQ(); } else { fimQuiz(); } }
-  function checkNome(){ document.getElementById('nomeBtn').disabled = document.getElementById('nomeInput').value.trim().length<2; }
+  function selecionar(btn,v){
+    document.querySelectorAll('.q-opt').forEach(x=>x.classList.remove('sel'));
+    btn.classList.add('sel'); selecao=v;
+    const cta=document.getElementById('qcta'); cta.classList.add('on'); cta.disabled=false;
+  }
+  function checkNome(){
+    const ok=document.getElementById('nomeInput').value.trim().length>=2;
+    const cta=document.getElementById('qcta'); cta.classList.toggle('on',ok); cta.disabled=!ok;
+  }
+  function avancar(){
+    const P=PERGUNTAS[qi];
+    if(P.nome){ nome=(document.getElementById('nomeInput').value||'').trim(); if(nome.length<2) return; respostas.nome=nome; qi++; fimQuiz(); return; }
+    if(selecao==null) return;
+    respostas[P.k]=selecao; qi++;
+    if(qi<PERGUNTAS.length){ renderQ(); const m=document.getElementById('s-quiz'); m.classList.remove('fade'); void m.offsetWidth; m.classList.add('fade'); } else { fimQuiz(); }
+  }
+  function voltarQ(){ if(qi>0){ qi--; renderQ(); } else { show('s-splash'); } }
   function fimQuiz(){
     nome = (document.getElementById('nomeInput').value||'').trim();
     respostas.nome = nome;
