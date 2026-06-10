@@ -2,451 +2,653 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>O Códice — 60 Dias</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet"></noscript>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,600;1,700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg:#100f0d;--ink:#ece6d8;--ink-dim:#928d80;--gold:#c9a24b;--green:#5a8a68;--line:#26221c;--card:#16140f;
-    --serif:'Cormorant Garamond',Georgia,serif;--body:'EB Garamond',Georgia,serif;--mono:'IBM Plex Mono',monospace;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:19px;line-height:1.65;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:600px;margin:0 auto;padding:0 22px}
-  em{color:var(--gold);font-style:italic}.gk{font-family:var(--serif);font-style:italic;color:var(--gold)}
-  strong{color:#fff;font-weight:600}
-  .k{font-family:var(--mono);font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);opacity:.85}
-  .hidden{display:none!important}
+:root{
+  --bg:#050504; --card:rgba(255,255,255,.05); --line:rgba(255,255,255,.09);
+  --ink:#f2f1ee; --dim:#a39f93; --mute:#7d7a72; --faint:#55524a;
+  --gold:#e8c87a; --gold-deep:#c9a24b; --gold-ink:#1c1503;
+  --sans:'Inter',system-ui,sans-serif; --serif:'Cormorant Garamond',Georgia,serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:430px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;padding:env(safe-area-inset-top) 0 0}
+.hidden{display:none!important}
+.gk{font-family:var(--serif);font-style:italic;color:var(--gold)}
+button{font-family:var(--sans);cursor:pointer}
+.btn{display:block;width:100%;background:var(--ink);color:#0c0c0c;border:none;border-radius:28px;padding:16px;font-size:16px;font-weight:600}
+.btn.gold{background:var(--gold);color:var(--gold-ink)}
+.btn:active{transform:scale(.985)}
+.btn:disabled{opacity:.35}
+.ghost{background:none;border:none;color:var(--mute);font-size:14px;padding:12px;width:100%}
+.glass{background:var(--card);border:1px solid var(--line);border-radius:16px}
+.mini{font-size:11px;color:var(--mute);font-weight:500;letter-spacing:.07em;text-transform:uppercase}
+.pad{padding:0 22px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 
-  /* ---- HEADER / PROGRESSO ---- */
-  header{text-align:center;padding:40px 22px 18px;border-bottom:1px solid var(--line)}
-  header h1{font-family:var(--serif);font-weight:700;font-size:34px;margin:10px 0 4px}
-  header .sub{color:var(--ink-dim);font-size:15px;margin:0}
-  .bar{height:6px;background:var(--line);border-radius:4px;margin:18px 0 6px;overflow:hidden}
-  .bar i{display:block;height:100%;background:var(--gold);width:0;transition:width .5s}
-  .barlab{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-dim)}
-  .stats{display:flex;gap:12px;margin:18px 0 0}
-  .stat{flex:1;background:var(--card);border:1px solid var(--line);border-radius:9px;padding:12px 10px;text-align:center}
-  .stat-v{display:block;font-family:var(--serif);font-size:21px;color:var(--gold);line-height:1.1}
-  .stat-l{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim);margin-top:5px}
-  .lu-overlay{position:fixed;inset:0;background:rgba(16,15,13,.94);display:flex;align-items:center;justify-content:center;z-index:50;padding:24px;backdrop-filter:blur(3px)}
-  .lu-card{max-width:420px;width:100%;text-align:center;border:1px solid var(--gold);border-radius:14px;background:var(--card);padding:42px 28px}
-  .lu-crown{font-size:44px;margin-bottom:8px}
-  .lu-k{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
-  .lu-rank{font-family:var(--serif);font-weight:700;font-size:38px;color:#fff;line-height:1.05;margin:8px 0 12px}
-  .lu-sub{color:var(--ink-dim);font-size:17px;margin:0 0 6px}
-  .auth-overlay{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:60;padding:24px}
-  .auth-card{max-width:400px;width:100%;text-align:center}
-  .auth-card h1{font-family:var(--serif);font-weight:700;font-size:32px;margin:10px 0 6px}
-  .auth-card .sub{color:var(--ink-dim);font-size:16px;margin:0 0 26px;line-height:1.5}
-  .auth-card input{width:100%;background:var(--card);border:1px solid var(--line);color:var(--ink);font-family:var(--body);font-size:17px;padding:15px 16px;border-radius:8px;margin-bottom:12px;outline:none;text-align:center}
-  .auth-card input:focus{border-color:var(--gold)}
-  .auth-card .abtn{display:block;width:100%;background:var(--gold);color:#15110a;border:none;font-family:var(--body);font-weight:600;font-size:17px;padding:15px;border-radius:8px;cursor:pointer;margin-top:6px}
-  .auth-card .alink{background:none;border:none;color:var(--ink-dim);font-family:var(--body);font-size:15px;cursor:pointer;margin-top:16px;text-decoration:underline}
-  .auth-card .amsg{font-size:14px;margin-top:14px;min-height:18px;color:var(--gold)}
-  .logout{position:fixed;top:14px;right:14px;z-index:10;background:rgba(22,20,15,.8);border:1px solid var(--line);color:var(--ink-dim);font-family:var(--mono);font-size:11px;padding:7px 12px;border-radius:6px;cursor:pointer}
+/* splash */
+#scr-splash{justify-content:center;align-items:center;text-align:center;gap:14px}
+#scr-splash .logo{font-size:13px;font-weight:600;letter-spacing:.3em;color:var(--dim)}
+#scr-splash h1{font-family:var(--serif);font-style:italic;font-weight:700;font-size:30px;color:var(--gold);margin:0}
 
-  /* ---- TRILHA ---- */
-  .phase{padding:26px 0 6px}
-  .phase .pname{font-family:var(--serif);font-size:23px;color:#fff;margin:0 0 2px}
-  .phase .pdesc{color:var(--ink-dim);font-size:14px;margin:0 0 14px}
-  .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}
-  .cell{aspect-ratio:1;border:1px solid var(--line);border-radius:9px;background:var(--card);display:flex;flex-direction:column;
-    align-items:center;justify-content:center;cursor:pointer;transition:.15s;position:relative;font-family:var(--mono)}
-  .cell .dn{font-size:17px;color:var(--ink)}
-  .cell .st{font-size:13px;margin-top:2px}
-  .cell.locked{opacity:.4;cursor:not-allowed}
-  .cell.locked .dn{color:var(--ink-dim)}
-  .cell.current{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
-  .cell.current .dn{color:var(--gold)}
-  .cell.done{border-color:var(--green)}
-  .cell.done .dn{color:var(--green)}
-  .cell:not(.locked):hover{background:#1d1a12}
+/* quiz */
+.qbar{display:flex;align-items:center;gap:12px;padding:18px 22px 0}
+.qbar .track{flex:1;height:3px;background:var(--line);border-radius:2px;overflow:hidden}
+.qbar .fill{display:block;height:100%;background:var(--gold);width:0;transition:width .3s}
+.qbody{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 22px}
+.qbody h2{font-size:22px;font-weight:600;line-height:1.3;margin:0 0 6px}
+.qbody .sub{font-size:14px;color:var(--mute);margin:0 0 20px}
+.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:15px 16px;font-size:15px;color:#d8d5cc;margin-bottom:10px;line-height:1.4}
+.opt.sel{border-color:var(--gold);background:rgba(232,200,122,.08);color:#f2ead2}
+.qbody input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;color:var(--ink);font-family:var(--sans);font-size:17px;padding:15px 16px;outline:none}
+.qbody input[type=text]:focus{border-color:var(--gold)}
+.qfoot{padding:0 22px 26px}
 
-  /* ---- TELA DO DIA ---- */
-  #dayview{padding:34px 0 60px}
-  .back{background:none;border:none;color:var(--ink-dim);font-family:var(--mono);font-size:12px;letter-spacing:.08em;cursor:pointer;padding:0;margin-bottom:24px}
-  .daytag{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
-  .daytitle{font-family:var(--serif);font-weight:700;font-size:34px;line-height:1.1;margin:8px 0 22px}
-  .blocklab{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:26px 0 8px}
-  .passage{border-left:2px solid var(--gold);padding-left:20px;font-size:21px;font-family:var(--serif);font-style:italic;color:#fff}
-  .ref{font-family:var(--mono);font-size:12px;color:var(--ink-dim);margin-top:8px}
-  .proofbox{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--gold);padding:16px 18px;border-radius:0 8px 8px 0;font-size:17px}
-  .wip{color:var(--ink-dim);font-style:italic}
-  .ensino p{margin:0 0 14px}.ensino p:last-child{margin-bottom:0}
-  .desafio{background:rgba(201,162,75,.07);border:1px solid var(--gold);border-radius:10px;padding:18px 20px}
-  .desafio p{margin:0 0 12px}.desafio p:last-child{margin-bottom:0}
-  .acolhimento{font-family:var(--serif);font-style:italic;font-size:20px;line-height:1.5;color:var(--ink);border-bottom:1px solid var(--line);padding-bottom:24px;margin:0 0 4px}
-  .leitura{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;font-size:18px}
-  .declaracao{background:rgba(201,162,75,.07);border-left:3px solid var(--gold);padding:16px 20px;border-radius:0 8px 8px 0;font-family:var(--serif);font-style:italic;font-size:21px;color:#fff;line-height:1.4}
-  .dec-cue{display:block;font-family:var(--mono);font-style:normal;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-top:12px}
-  .ex{color:var(--ink-dim);font-style:italic;font-size:15px}
-  .chk{display:flex;align-items:center;gap:12px;margin-top:16px;cursor:pointer;font-size:17px;color:var(--ink)}
-  .chk input{width:22px;height:22px;accent-color:var(--gold);cursor:pointer;flex:0 0 auto}
+/* analise / diag / revela / oferta */
+.center{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 26px}
+#analiseTxt{font-size:17px;color:var(--dim)}
+.pulse{width:54px;height:54px;border-radius:50%;border:2px solid var(--gold);opacity:.7;animation:pl 1.4s ease-in-out infinite;margin-bottom:22px}
+@keyframes pl{0%,100%{transform:scale(.85);opacity:.4}50%{transform:scale(1);opacity:.9}}
+.diag-h{font-size:23px;font-weight:600;line-height:1.3;margin:14px 0 0}
+.diag-p{font-size:15px;color:var(--dim);line-height:1.6;margin:12px 0 0;max-width:300px}
+.tl{display:flex;flex-direction:column;width:100%;max-width:320px;text-align:left;margin-top:18px}
+.tl .row{display:flex;gap:13px}
+.tl .dotcol{display:flex;flex-direction:column;align-items:center}
+.tl .dot{width:11px;height:11px;border-radius:50%;flex:0 0 11px}
+.tl .stem{width:2px;flex:1;background:rgba(232,200,122,.22);min-height:26px}
+.tl .tit{font-size:15px;font-weight:600;margin:0}
+.tl .des{font-size:13px;color:var(--mute);margin:2px 0 14px}
+.facts{display:flex;justify-content:space-between;width:100%;max-width:320px;margin-top:6px}
+.facts span{font-size:13px;color:var(--dim)}
+.price-old{color:var(--faint);text-decoration:line-through;font-size:17px;margin-right:8px}
+.price{font-size:30px;font-weight:600;color:var(--gold)}
+.inclui{width:100%;max-width:320px;text-align:left;margin:16px 0 6px}
+.inclui p{display:flex;gap:9px;font-size:14px;color:var(--dim);margin:0 0 9px}
+.inclui p b{color:var(--gold);font-weight:600}
+.xclose{position:absolute;top:calc(14px + env(safe-area-inset-top));right:18px;background:none;border:none;color:#3f3c35;font-size:20px;padding:6px}
+.legal{font-size:11.5px;color:var(--faint);line-height:1.5;margin:12px 0 0;text-align:center}
 
-  /* player de oração (reusa o padrão do quiz) */
-  .prayer-audio{margin:14px 0 0}
-  .play-prayer{display:flex;align-items:center;gap:14px;width:100%;background:var(--card);border:1px solid var(--gold);color:var(--ink);font-family:var(--body);font-size:17px;text-align:left;padding:15px 18px;border-radius:8px;cursor:pointer;transition:.15s}
-  .play-prayer:hover{background:#1d1a12}
-  .play-prayer .pp-ico{display:flex;align-items:center;justify-content:center;flex:0 0 38px;height:38px;border-radius:50%;background:var(--gold);color:#15110a;font-size:14px}
-  .play-prayer .pp-txt{font-style:italic;color:var(--ink-dim);line-height:1.35}
+/* app shell */
+#app{flex:1;display:flex;flex-direction:column}
+.tops{display:flex;justify-content:space-between;align-items:center;padding:16px 20px 0}
+.tops .brand{font-size:12px;font-weight:600;letter-spacing:.22em;color:var(--dim)}
+.pill{display:inline-flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:4px 11px;font-size:12.5px;font-weight:600;color:var(--gold)}
+.view{flex:1;overflow-y:auto;padding-bottom:14px}
+.tabbar{display:flex;border-top:1px solid var(--line);background:var(--bg);padding-bottom:env(safe-area-inset-bottom)}
+.tab{flex:1;background:none;border:none;text-align:center;padding:9px 0 11px;color:var(--faint);font-size:10.5px;font-weight:500}
+.tab svg{display:block;margin:0 auto 3px;width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab.on{color:var(--gold)}
 
-  .done-btn{display:block;width:100%;background:var(--gold);color:#15110a;border:none;font-family:var(--body);font-weight:600;font-size:18px;padding:16px;border-radius:6px;cursor:pointer;margin-top:34px;transition:opacity .15s}
-  .done-btn:disabled{opacity:.3;cursor:not-allowed}
-  .done-note{text-align:center;font-family:var(--mono);font-size:12px;color:var(--ink-dim);margin-top:12px}
-  .done-state{text-align:center;border:1px solid var(--green);border-radius:8px;padding:20px;margin-top:34px;color:var(--green)}
-  .done-state .big{font-family:var(--serif);font-size:22px;color:#fff;font-style:italic}
-  footer{text-align:center;font-family:var(--mono);font-size:11px;color:var(--ink-dim);padding:30px 0 50px}
+/* hoje */
+.hero{display:flex;justify-content:center;padding:4px 0 0}
+.hero svg{width:min(72vw,290px);height:auto}
+.daytag{font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.18em;text-transform:uppercase;text-align:center;margin:2px 0 8px}
+.daytitle{font-family:var(--serif);font-style:italic;font-weight:600;font-size:21px;line-height:1.3;color:#cfc9bb;text-align:center;margin:0 auto;max-width:290px}
+.stats{display:flex;padding:14px 20px 16px;text-align:center;border-bottom:1px solid rgba(255,255,255,.05)}
+.stat{flex:1}
+.stat .v{font-size:20px;font-weight:600}
+.stat .v small{color:var(--mute);font-weight:400;font-size:14px}
+.stat .l{font-size:10.5px;color:var(--faint);margin-top:3px;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+.stat+.stat{border-left:1px solid rgba(255,255,255,.05)}
+.social{display:flex;align-items:center;gap:9px;margin:14px 22px 0;padding:11px 14px}
+.social .avs{display:flex}
+.social .av{width:22px;height:22px;border-radius:50%;border:2px solid #000;margin-left:-7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600}
+.social .av:first-child{margin-left:0}
+.social span.t{font-size:12.5px;color:var(--dim)}
+
+/* dia */
+.dia-head{padding:18px 22px 0}
+.back{background:none;border:none;color:var(--mute);font-size:13px;padding:0 0 16px;display:flex;align-items:center;gap:6px}
+.blocklab{font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin:24px 0 10px}
+.passage{border-left:2px solid var(--gold);padding-left:16px;font-family:var(--serif);font-style:italic;font-size:20px;color:#fff;line-height:1.45}
+.ref{font-size:12px;color:var(--mute);margin-top:8px}
+.ensino p{font-size:15.5px;color:#d8d5cc;line-height:1.7;margin:0 0 14px}
+.boxd{border:1px solid rgba(232,200,122,.45);background:rgba(232,200,122,.06);border-radius:14px;padding:16px 18px;font-size:15px;color:#e7dfc9;line-height:1.6}
+.decl{font-family:var(--serif);font-style:italic;font-size:19px;color:#fff;line-height:1.5;border-left:2px solid var(--gold);padding-left:16px}
+.wip{color:var(--mute);font-style:italic;font-size:15px}
+
+/* overlays */
+.ov{position:fixed;inset:0;background:rgba(5,5,4,.96);display:flex;align-items:center;justify-content:center;z-index:60;padding:24px}
+.ov .card{max-width:340px;width:100%;text-align:center;border:1px solid rgba(232,200,122,.5);border-radius:20px;background:#0b0a08;padding:34px 24px}
+.ov h3{font-family:var(--serif);font-style:italic;font-weight:700;font-size:27px;color:var(--gold);margin:10px 0 6px}
+.ov p{font-size:14px;color:var(--dim);margin:0 0 18px;line-height:1.55}
+
+/* ranking / config */
+.rrow{display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.05)}
+.rrow:last-child{border-bottom:none}
+.rrow .pos{width:20px;font-size:12.5px;font-weight:600;color:var(--mute)}
+.rrow .avr{width:34px;height:34px;border-radius:50%;background:#1d1a14;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--gold);flex:0 0 34px}
+.rrow .nm{flex:1;min-width:0}
+.rrow .nm p{margin:0;font-size:14.5px}
+.rrow .nm small{font-size:11.5px;color:var(--mute)}
+.rrow .dd{font-size:12px;color:var(--mute);font-weight:600}
+.rrow.me{background:rgba(232,200,122,.07)}
+.rrow.me .pos,.rrow.me .dd{color:var(--gold)}
+.cfg{display:flex;justify-content:space-between;align-items:center;padding:15px 4px;border-bottom:1px solid rgba(255,255,255,.05);font-size:15px}
+.cfg small{color:var(--mute)}
+h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
+.grid60{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.cell{aspect-ratio:1;border:1px solid var(--line);border-radius:10px;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--mute);position:relative}
+.cell.done{border-color:rgba(90,160,110,.6);color:#7fb893}
+.cell.cur{border-color:var(--gold);color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+.cell.lock{opacity:.45}
+.phase-t{font-family:var(--serif);font-style:italic;font-size:18px;color:#fff;margin:22px 0 2px}
+.phase-d{font-size:12.5px;color:var(--mute);margin:0 0 12px}
+.bar{height:5px;background:var(--line);border-radius:3px;overflow:hidden;margin:14px 0 6px}
+.bar i{display:block;height:100%;background:var(--gold);width:0;transition:width .5s}
+.marco{display:flex;gap:11px;align-items:center;padding:13px 15px;margin-top:16px}
+.marco .ic{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:22px}
+.marco p{margin:0;font-size:13.5px}
+.marco small{color:var(--mute);font-size:12px}
 </style>
 </head>
 <body>
 
-<!-- ===== DASHBOARD ===== -->
-<div id="dashboard" class="hidden">
-  <header>
-    <span class="k">O Códice</span>
-    <h1>Sua jornada de 60 dias</h1>
-    <p class="sub">Do escravo que implora — ao filho que ocupa o seu lugar.</p>
-    <div class="wrap">
-      <div class="stats">
-        <div class="stat"><span class="stat-v" id="rankName">Escravo</span><span class="stat-l">seu nível</span></div>
-        <div class="stat"><span class="stat-v" id="streakV">0&nbsp;🔥</span><span class="stat-l">dias seguidos</span></div>
-      </div>
-      <div class="bar"><i id="barfill"></i></div>
-      <div class="barlab" id="barlab">0 de 60 dias</div>
+<!-- ===== SPLASH ===== -->
+<section id="scr-splash" class="wrap center">
+  <span class="logo">O CÓDICE</span>
+  <h1>Do escravo ao filho</h1>
+</section>
+
+<!-- ===== INTRO (dor primária + nome) ===== -->
+<section id="scr-intro" class="wrap hidden">
+  <div class="center">
+    <span class="mini" style="color:var(--gold)">O Códice · 60 dias</span>
+    <h2 class="diag-h" style="font-size:26px;margin-top:10px">Ler a Bíblia virou <span class="gk">peso</span> pra você?</h2>
+    <p class="diag-p">Obrigação. Culpa. Distância. Se a leitura te cansa em vez de te transformar, o problema não é você — é o jeito que te ensinaram a ler.</p>
+    <p class="diag-p" style="color:var(--ink);font-weight:500">Responda 7 perguntas rápidas e receba seu diagnóstico.</p>
+  </div>
+  <div class="qfoot">
+    <button class="btn gold" id="introBtn" onclick="iniciarQuiz()">Começar meu diagnóstico</button>
+    <p class="legal">2 minutos · ninguém vê suas respostas</p>
+  </div>
+</section>
+
+<!-- ===== QUIZ ===== -->
+<section id="scr-quiz" class="wrap hidden">
+  <div class="qbar">
+    <button class="ghost" id="qBack" style="width:auto;padding:6px">‹</button>
+    <div class="track"><i class="fill" id="qFill"></i></div>
+    <span class="mini" id="qStep">1/8</span>
+  </div>
+  <div class="qbody" id="qBody"></div>
+  <div class="qfoot"><button class="btn" id="qNext" disabled>Continuar</button></div>
+</section>
+
+<!-- ===== ANÁLISE ===== -->
+<section id="scr-analise" class="wrap hidden center">
+  <div class="pulse"></div>
+  <p id="analiseTxt">Lendo suas respostas...</p>
+</section>
+
+<!-- ===== DIAGNÓSTICO ===== -->
+<section id="scr-diag" class="wrap hidden">
+  <div class="center">
+    <div id="diagHero"></div>
+    <span class="mini" style="color:var(--gold);margin-top:14px">Seu diagnóstico</span>
+    <h2 class="diag-h" id="diagH"></h2>
+    <p class="diag-p">Suas respostas mostram obrigação, culpa e distância. Não é falta de fé — é uma leitura que te ensinaram errado.</p>
+  </div>
+  <div class="qfoot"><button class="btn" onclick="show('scr-revela');renderRevela()">Ver meu plano</button></div>
+</section>
+
+<!-- ===== REVELAÇÃO ===== -->
+<section id="scr-revela" class="wrap hidden">
+  <div class="center">
+    <span class="mini" style="color:var(--gold)">Plano pronto</span>
+    <h2 class="diag-h" style="margin-top:8px">Seus 60 dias do <span class="gk">escravo</span> ao <span class="gk">herdeiro</span></h2>
+    <div class="tl" id="tlBox"></div>
+    <div class="facts glass" style="padding:11px 15px">
+      <span>≈ 7 min/dia</span><span>começa hoje</span>
     </div>
-  </header>
-  <div class="wrap" id="track"></div>
-  <footer>O Códice — O Código de Leitura · um dia de cada vez</footer>
-</div>
-
-<!-- ===== TELA DO DIA ===== -->
-<div id="dayview" class="hidden"><div class="wrap" id="dayinner"></div></div>
-
-<!-- ===== LEVEL UP ===== -->
-<div id="levelup" class="hidden lu-overlay">
-  <div class="lu-card">
-    <div class="lu-crown" id="lu-crown">⬆️</div>
-    <div class="lu-k">Você subiu de nível</div>
-    <div class="lu-rank" id="lu-rank">O Desperto</div>
-    <p class="lu-sub" id="lu-sub"></p>
-    <button class="done-btn" onclick="fecharLevelUp()">Continuar</button>
   </div>
-</div>
+  <div class="qfoot"><button class="btn gold" onclick="abrirOferta('padrao')">Quero começar</button></div>
+</section>
 
-<!-- ===== LOGIN ===== -->
-<div id="authgate" class="auth-overlay hidden">
-  <div class="auth-card">
-    <span class="k">O Códice · 60 Dias</span>
-    <h1>Entre na sua jornada</h1>
-    <p class="sub">60 dias pra você parar de ler a Bíblia como escravo e voltar a ler como filho. É só começar — seu progresso fica salvo.</p>
-    <button class="abtn" id="authBtn" onclick="entrarAnonimo()">Começar minha jornada</button>
-    <p class="amsg" id="authMsg"></p>
+<!-- ===== OFERTA ===== -->
+<section id="scr-oferta" class="wrap hidden" style="position:relative">
+  <button class="xclose" onclick="fecharOferta()" aria-label="Continuar sem comprar">✕</button>
+  <div class="center">
+    <h2 class="diag-h" id="ofH">Destrave seus <span class="gk">60 dias</span>.</h2>
+    <p class="diag-p" id="ofSub" style="margin-top:6px">Pagamento único. Acesso pra sempre. Sem mensalidade.</p>
+    <div class="inclui">
+      <p><b>✦</b> A jornada completa de 60 dias</p>
+      <p><b>✦</b> O códice que evolui com você</p>
+      <p><b>✦</b> Ranking da sua turma</p>
+      <p><b>✦</b> Todas as atualizações da Jornada 1</p>
+    </div>
+    <div style="margin-top:10px"><span class="price-old">R$ 97</span><span class="price" id="ofPreco">R$ 67</span></div>
+    <p class="diag-p" style="font-size:13px;margin-top:6px">Preço de fundador. Quando o Códice virar assinatura, quem comprou agora mantém o acesso pra sempre.</p>
   </div>
-</div>
+  <div class="qfoot">
+    <button class="btn gold" id="ofBtn" onclick="comprar()">Destravar minha jornada — R$ 67</button>
+    <p class="legal">Pagamento único pela loja de aplicativos. Sem renovação, sem surpresa.</p>
+  </div>
+</section>
 
-<button id="logoutBtn" class="logout hidden" onclick="sair()">sair</button>
+<!-- ===== APP ===== -->
+<section id="app" class="wrap hidden">
+  <div class="tops">
+    <span class="brand">CÓDICE</span>
+    <span style="display:flex;gap:7px">
+      <span class="pill" id="pillStreak">🔥 0</span>
+      <span class="pill" style="color:var(--dim)" id="pillNivel">Escravo</span>
+    </span>
+  </div>
+  <div class="view" id="view"></div>
+  <nav class="tabbar">
+    <button class="tab on" data-v="hoje"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/></svg>Hoje</button>
+    <button class="tab" data-v="jornada"><svg viewBox="0 0 24 24"><path d="M9 4 3 7v13l6-3 6 3 6-3V4l-6 3-6-3z"/><path d="M9 4v13M15 7v13"/></svg>Jornada</button>
+    <button class="tab" data-v="ranking"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M7 6H4a2 2 0 0 0 2 4h1M17 6h3a2 2 0 0 1-2 4h-1"/></svg>Ranking</button>
+    <button class="tab" data-v="config"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7 7 0 0 0-2-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.6 2 3.4 2.4-1a7 7 0 0 0 2 1.2L10 21h4l.5-2.6a7 7 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2z"/></svg>Ajustes</button>
+  </nav>
+</section>
+
+<!-- ===== OVERLAYS ===== -->
+<div id="ovLevel" class="ov hidden"><div class="card">
+  <div id="ovHero"></div>
+  <span class="mini" style="color:var(--gold)">Você subiu de nível</span>
+  <h3 id="ovTit">Servo da Casa</h3>
+  <p id="ovSub"></p>
+  <button class="btn gold" onclick="document.getElementById('ovLevel').classList.add('hidden')">Continuar</button>
+</div></div>
+
+<div id="ovDone" class="ov hidden"><div class="card">
+  <span class="mini" style="color:var(--gold)">Dia concluído</span>
+  <h3 id="dnTit">Dia 1 ✓</h3>
+  <p id="dnSub"></p>
+  <button class="btn gold" onclick="compartilhar()" style="margin-bottom:10px">Compartilhar</button>
+  <button class="ghost" onclick="fecharDone()">Voltar pra jornada</button>
+</div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="conteudo.js"></script>
 <script>
-  // ====== CONFIG (mude aqui) ======
-  const TRAVA_DIARIA = false;    // false = ao concluir um dia, o próximo libera NA HORA (sem esperar o dia seguinte).
-  const LIBERAR_ATE = 0;         // 0 = trava progressiva normal (só libera o próximo quem concluiu o anterior).
-  const TOTAL = 60;
+/* ================= CONFIG ================= */
+const CONFIG = {
+  MODO_TESTE: true,          // true = botão de compra apenas simula (trocar por RevenueCat no Capacitor)
+  SUPABASE_URL: '',          // preencha para ativar o backend (ver README)
+  SUPABASE_KEY: '',
+  PRECO: 'R$ 67'
+};
+const TOTAL = 60, MARCOS = [1,20,40,60];
+const NIVEIS = [
+  {em:0, t:'Escravo'}, {em:1, t:'Empregado'}, {em:20, t:'Servo da Casa'},
+  {em:40, t:'Filho em Formação'}, {em:60, t:'Herdeiro'}
+];
+const FASES = [
+  {nome:'Fase 1 · A Identidade', desc:'Quem você é: filho, não escravo.', ini:1, fim:20},
+  {nome:'Fase 2 · O Acesso', desc:'O véu rasgou. Você fala direto com o Pai.', ini:21, fim:40},
+  {nome:'Fase 3 · A Postura', desc:'Viver como filho — sem medo, tomando posse.', ini:41, fim:60}
+];
 
-  // ====== SUPABASE ======
-  const SB_URL = 'https://nbizxbdugsmeoudkwtot.supabase.co';
-  const SB_KEY = 'sb_publishable_MITJbApeJTSHm41YW8a50A_DnbYUWPI';
-  const MODO_TESTE = true;  // TEMPORÁRIO: qualquer um que logar entra (sem precisar comprar). Voltar p/ false ANTES de vender.
-  const sb = window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
-  let USER = null;
-  let _signup = false;
-
-  // ====== FASES ======
-  const FASES = [
-    { nome:'Fase 1 · A Identidade', desc:'Quem você é: filho, não escravo.', ini:1, fim:20 },
-    { nome:'Fase 2 · O Acesso',     desc:'O véu rasgou. Você fala direto com o Pai.', ini:21, fim:40 },
-    { nome:'Fase 3 · A Postura',    desc:'Viver como filho — sem medo, tomando posse.', ini:41, fim:60 },
+/* ================= CÓDICE (objeto-herói, 5 estágios) ================= */
+function codiceSVG(stage, size){
+  const G='#c9a24b';
+  const defs=`<defs>
+    <radialGradient id="cbloom" cx="50%" cy="48%" r="50%"><stop offset="0%" stop-color="#d4a747" stop-opacity="${[.12,.18,.3,.4,.5][stage]}"/><stop offset="55%" stop-color="#8a5fb0" stop-opacity="${[.03,.05,.1,.14,.18][stage]}"/><stop offset="100%" stop-color="#000" stop-opacity="0"/></radialGradient>
+    <linearGradient id="cpg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f7f1de"/><stop offset="100%" stop-color="#cfc4a4"/></linearGradient>
+    <linearGradient id="ccv" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2b2418"/><stop offset="100%" stop-color="#14110b"/></linearGradient>
+  </defs>`;
+  const rays=(n,o)=>{let s='';for(let i=0;i<n;i++){const a=i*2*Math.PI/n-Math.PI/2;
+    s+=`<line x1="${130+Math.cos(a)*86}" y1="${120+Math.sin(a)*86}" x2="${130+Math.cos(a)*100}" y2="${120+Math.sin(a)*100}" stroke="${G}" stroke-opacity="${o}" stroke-width="2" stroke-linecap="round"/>`}return s};
+  const closed=(st,deco)=>`<rect x="80" y="68" width="100" height="104" rx="8" fill="url(#ccv)" stroke="${st}" stroke-width="2"/><rect x="80" y="68" width="13" height="104" rx="6" fill="#0d0b08"/><rect x="166" y="90" width="14" height="14" rx="2" fill="none" stroke="${st}" stroke-width="2"/><rect x="166" y="136" width="14" height="14" rx="2" fill="none" stroke="${st}" stroke-width="2"/>${deco}`;
+  const open=(pg,lineop,beam)=>`${beam}<path d="M130 82 C112 70 90 70 68 79 L68 148 C90 140 112 140 130 152 Z" fill="url(#cpg)" stroke="${G}" stroke-width="2"/><path d="M130 82 C148 70 170 70 192 79 L192 148 C170 140 148 140 130 152 Z" fill="url(#cpg)" stroke="${G}" stroke-width="2"/><path d="M68 148 L68 157 C90 149 112 149 130 161 C148 149 170 149 192 157 L192 148" fill="#1a1610" stroke="${G}" stroke-width="2"/>${[96,109,122].map(y=>`<line x1="80" y1="${y}" x2="118" y2="${y-5}" stroke="#8d8163" stroke-opacity="${lineop}" stroke-width="2" stroke-linecap="round"/><line x1="142" y1="${y-5}" x2="180" y2="${y}" stroke="#8d8163" stroke-opacity="${lineop}" stroke-width="2" stroke-linecap="round"/>`).join('')}`;
+  const band=(x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#000" stroke-width="14"/><line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#3b362c" stroke-width="14" stroke-dasharray="4 10"/>`;
+  const lock=(x,y,r)=>`<g transform="rotate(${r} ${x} ${y})"><path d="M${x-8} ${y} v-7 a8 8 0 0 1 16 0 v7" fill="none" stroke="#55503f" stroke-width="3"/><rect x="${x-11}" y="${y}" width="22" height="19" rx="3" fill="#191510" stroke="#55503f" stroke-width="2"/></g>`;
+  const crown=`<path d="M110 38 L115 20 L123 32 L130 16 L137 32 L145 20 L150 38 Z" fill="${G}"/><rect x="110" y="38" width="40" height="5" rx="2" fill="${G}"/>`;
+  const bodies=[
+    closed('#36302a','')+band(62,82,198,158)+band(62,158,198,82)+lock(130,116,0),
+    closed('#6b5a33',`<path d="M130 94 l8 14 -8 14 -8 -14 Z" fill="none" stroke="${G}" stroke-width="2" stroke-opacity=".7"/>`)+band(62,82,112,112)+band(150,130,198,158)+lock(196,178,28)+rays(4,.18),
+    rays(8,.3)+open('', .55, ''),
+    rays(12,.45)+open('', .75, `<polygon points="121,82 139,82 150,18 110,18" fill="${G}" opacity=".14"/>`),
+    rays(16,.6)+open('', .9, `<polygon points="116,82 144,82 158,14 102,14" fill="${G}" opacity=".18"/>`)+crown
   ];
+  return `<svg viewBox="0 0 260 230" width="${size||260}" height="${(size||260)*0.885}" role="img" aria-label="Códice, estágio ${stage+1} de 5">${defs}<circle cx="130" cy="120" r="${[88,94,102,108,114][stage]}" fill="url(#cbloom)"/>${bodies[stage]}</svg>`;
+}
 
-  // ====== NÍVEIS (você sobe de Escravo a Filho conforme cumpre os dias) ======
-  const NIVEIS = [
-    { nivel:0, titulo:'Escravo',            em:0  },
-    { nivel:1, titulo:'Empregado',          em:1  },
-    { nivel:2, titulo:'Servo da Casa',      em:20, marco:true, crown:'🏅' },
-    { nivel:3, titulo:'Filho em Formação',  em:40, marco:true, crown:'🏅' },
-    { nivel:4, titulo:'Herdeiro',           em:60, marco:true, crown:'👑' },
-  ];
-  function nivelAtual(c){ let lv=NIVEIS[0]; for(const x of NIVEIS){ if(c>=x.em) lv=x; } return lv; }
+/* ================= QUIZ ================= */
+const QUIZ = [
+  {q:'Quando você lê a Bíblia, o que sente com mais frequência?', sub:'Seja honesto — ninguém vê suas respostas.', opts:['Obrigação — leio porque "tenho que ler"','Culpa — por não ler como deveria','Confusão — leio e não entendo o que aquilo tem a ver comigo','Prazer — mas quero ir mais fundo']},
+  {q:'Quantos planos de leitura você já começou e abandonou?', opts:['Nenhum, esse é meu primeiro','Um ou dois','Perdi a conta','Eu termino os planos que começo']},
+  {q:'Complete: "Quando eu oro, eu me sinto mais como..."', opts:['Um servo pedindo favor','Um devedor pedindo desculpa','Um estranho falando com alguém distante','Um filho falando com o Pai']},
+  {q:'O que mais te afasta de uma rotina com Deus?', opts:['Falta de tempo','Falta de constância — começo e paro','Sinceramente? Acho a leitura difícil e seca','Vergonha de voltar depois de tanto tempo longe']},
+  {q:'Se a Bíblia te chamasse de herdeiro — com direito a tomar posse — isso mudaria o jeito como você a lê?', opts:['Mudaria tudo','Talvez, se eu entendesse o que isso significa','Não sei se acredito nisso pra mim']},
+  {q:'Quanto tempo por dia você consegue separar, de verdade?', opts:['5 minutos','10 minutos','15+ minutos']},
+  {q:'Qual o melhor horário pra gente te lembrar?', opts:['Ao acordar','Almoço','Noite']},
+  {q:'Última coisa: como podemos te chamar?', sub:'Seu diagnóstico sai personalizado.', input:true}
+];
 
-  // ====== CONTEÚDO DOS DIAS ======
-  // Dia 1 = real (conferível). Dias 2–60 = esqueleto do arco + corpo "em produção" (preencher via workflow).
-  const TEMAS = [
-    // —— FASE 1 · IDENTIDADE (1–20) ——
-    /*1*/ "Você não é escravo. A palavra original te chama de filho.",
-    /*2*/ "O Salmo 23 que você decorou como ovelha é coroação.",
-    /*3*/ "Filho é herdeiro. E herdeiro toma posse.",
-    /*4*/ "O medo que te ensinaram não veio de Deus.",
-    /*5*/ "“Pecador” ou “santo”? O que o texto diz de você.",
-    /*6*/ "Você não foi adotado por pena — foi escolhido.",
-    /*7*/ "Obedecer por medo x obedecer por amor.",
-    /*8*/ "O nome que o Pai te deu antes de você nascer.",
-    /*9*/ "Você parou de ser órfão no dia da cruz.",
-    /*10*/ "A culpa que Cristo já cancelou — e você ainda paga.",
-    /*11*/ "Imagem e semelhança: o que isso significa de verdade.",
-    /*12*/ "Você não precisa se provar digno. Já é.",
-    /*13*/ "O coração de pedra trocado por um de carne.",
-    /*14*/ "Sua identidade não depende do seu desempenho.",
-    /*15*/ "O Espírito de adoção, não de escravidão.",
-    /*16*/ "Você é morada de Deus, não visitante.",
-    /*17*/ "A vergonha que te calou não tem mais autoridade.",
-    /*18*/ "Filho aprende a reconhecer a voz do Pai.",
-    /*19*/ "Você é novo: o velho já passou.",
-    /*20*/ "Marco da Identidade: declare quem você é.",
-    // —— FASE 2 · ACESSO (21–40) ——
-    /*21*/ "O véu rasgou de cima pra baixo — o acesso é seu.",
-    /*22*/ "Orar como filho, não como mendigo.",
-    /*23*/ "Você não precisa de intermediário pra falar com Deus.",
-    /*24*/ "O trono da graça: chega com ousadia.",
-    /*25*/ "Pedir x tomar posse: a postura muda tudo.",
-    /*26*/ "O Espírito que clama “Aba, Pai” dentro de você.",
-    /*27*/ "Silêncio não é ausência: como ouvir o Pai.",
-    /*28*/ "A oração que Jesus ensinou, relida como filho.",
-    /*29*/ "Gratidão de filho x barganha de escravo.",
-    /*30*/ "Quando a resposta demora: confiança, não abandono.",
-    /*31*/ "Você tem autoridade no nome — entenda por quê.",
-    /*32*/ "Adoração: o lugar onde o filho se reencontra.",
-    /*33*/ "A voz do Pai x as vozes do medo.",
-    /*34*/ "Persistir sem implorar: a fé que descansa.",
-    /*35*/ "O perdão que te devolve a comunhão.",
-    /*36*/ "Intimidade: deixar o Pai te ver por inteiro.",
-    /*37*/ "A Palavra como carta do Pai, não manual de regras.",
-    /*38*/ "Ouvir pra obedecer de amor, não de medo.",
-    /*39*/ "O acesso é diário — não só no domingo.",
-    /*40*/ "Marco do Acesso: a oração do filho.",
-    // —— FASE 3 · POSTURA (41–60) ——
-    /*41*/ "Viver sem medo do futuro — o Pai provê.",
-    /*42*/ "Você é luz: parar de viver escondido.",
-    /*43*/ "Tomar posse das promessas que são suas.",
-    /*44*/ "O filho trabalha do descanso, não pro descanso.",
-    /*45*/ "Perdoar como quem já foi perdoado.",
-    /*46*/ "Sua casa e sua família sob a leitura de filho.",
-    /*47*/ "Dinheiro e provisão: mordomia, não escassez.",
-    /*48*/ "Enfrentar a luta como herdeiro, não como vítima.",
-    /*49*/ "A coragem que nasce de saber quem você é.",
-    /*50*/ "Servir por transbordamento, não por obrigação.",
-    /*51*/ "Sua palavra tem peso: alinhe a boca à identidade.",
-    /*52*/ "O propósito do filho: representar o Pai na terra.",
-    /*53*/ "Constância: a fé que vira o seu normal.",
-    /*54*/ "Generosidade de quem sabe que não vai faltar.",
-    /*55*/ "Descanso: o filho não precisa provar nada.",
-    /*56*/ "Levantar depois da queda — sem voltar pra cela.",
-    /*57*/ "Influência: outros veem o Pai em você.",
-    /*58*/ "A herança que você deixa pra quem vem depois.",
-    /*59*/ "O que mudou em você nesses 60 dias.",
-    /*60*/ "A Proclamação: você nunca mais lê como escravo.",
-  ];
+/* ================= CONTEÚDO ================= */
+/* Dia 1 completo (modelo). Dias 2+ ficam com o tema e corpo "em produção" —
+   no produto final, todo o conteúdo vem da tabela `dias` do Supabase. */
+const TEMAS = [
+"Você não é escravo. A palavra original te chama de filho.",
+"O Salmo 23 que você decorou como ovelha é coroação.",
+"Filho é herdeiro. E herdeiro toma posse.",
+"O medo que te ensinaram não veio de Deus.",
+"“Pecador” ou “santo”? O que o texto diz de você.",
+"Você não foi adotado por pena — foi escolhido.",
+"Obedecer por medo x obedecer por amor.",
+"O nome que o Pai te deu antes de você nascer.",
+"Você parou de ser órfão no dia da cruz.",
+"A culpa que Cristo já cancelou — e você ainda paga.",
+"Imagem e semelhança: o que isso significa de verdade.",
+"O Pai que corre na direção do filho que voltou.",
+"Sua identidade não depende do seu desempenho.",
+"O Espírito que clama “Aba, Pai” dentro de você.",
+"Quem te acusa não fala em nome do Pai.",
+"Filho conhece a voz. Escravo só conhece a ordem.",
+"A mesa é posta pra você — não pra visita.",
+"Coerdeiro com Cristo: o tamanho real da herança.",
+"O que muda quando você lê “amado” antes de “servo”.",
+"Marco: você não mora mais na senzala.",
+"O véu rasgou de cima a baixo — e foi de propósito.",
+"Ousadia no trono da graça não é falta de respeito.",
+"Você não precisa de intermediário pra falar com o Pai.",
+"Oração de filho: conversa, não protocolo.",
+"O Pai que vê em secreto — e gosta de te ouvir.",
+"Pedi, e dar-se-vos-á: a promessa que você suaviza.",
+"O Espírito intercede quando faltam palavras.",
+"Acesso não é visita: você tem as chaves da casa.",
+"Quando o céu parece fechado — e o que o texto diz.",
+"A diferença entre implorar e apresentar petição.",
+"Gratidão: a linguagem nativa de quem tem acesso.",
+"Confessar não é se humilhar — é voltar pra mesa.",
+"O Pai não se cansa de você. Releia isso.",
+"Jejum de filho: fome de presença, não barganha.",
+"Adoração: quando o acesso vira intimidade.",
+"As promessas são sim e amém — em Cristo, pra você.",
+"Orar a Palavra: usando as próprias cartas do Pai.",
+"O silêncio de Deus não é ausência de Deus.",
+"Perseverança: o filho que não desiste da porta.",
+"Marco: você fala com o Pai face a face.",
+"Sem medo: a postura de quem tem acesso.",
+"Tomar posse não é arrogância — é obediência.",
+"O que você faz com a autoridade que recebeu.",
+"Pisar em terra prometida com pé de herdeiro.",
+"Quando a vergonha bater na porta, mande o filho atender.",
+"Generosidade: herdeiro não vive de migalha.",
+"Perdoar como quem foi perdoado primeiro.",
+"Sua casa, seu trabalho, sua rua: território de filho.",
+"A armadura não é fantasia — é uniforme de família.",
+"Falar da fé sem pedir desculpa por ela.",
+"Quando você cair — e você vai — caia pra dentro de casa.",
+"Disciplina do Pai: prova de filiação, não de rejeição.",
+"O descanso é uma ordem, não um prêmio.",
+"Semear onde o Pai mandou, colher o que Ele prometeu.",
+"Sua história de escravo virou testemunho de filho.",
+"Quem você puxa pra mesa com você?",
+"Herança se administra: fidelidade no pouco.",
+"O futuro não te ameaça — ele te espera.",
+"Véspera: olhe pra trás e conte as correntes no chão.",
+"Dia 60: Herdeiro. Tome posse — e não devolva a chave."
+];
+const DIA1 = {
+  passagem:'Porque não recebestes o espírito de escravidão, para viverdes outra vez com medo, mas recebestes o espírito de adoção, pelo qual clamamos: Aba, Pai.',
+  ref:'Romanos 8:15',
+  ensino:[
+    'Tem uma palavra nesse verso que muda tudo, e ela não está em português. “Aba” é aramaico — a língua de casa, a língua que Jesus falava na cozinha, não no templo. É o jeito que uma criança chamava o pai dela. Íntimo. Sem cerimônia. Sem medo.',
+    'Paulo escolheu essa palavra de propósito. Ele podia ter escrito “Senhor soberano”. Escreveu “Aba”. Porque o ponto do verso é exatamente esse: o espírito que você recebeu não é o de quem implora pra não apanhar — é o de quem chega correndo na sala.',
+    'Hoje você não precisa mudar nada na sua rotina. Só precisa notar uma coisa: com que espírito você tem aberto esse livro? De escravo, esperando bronca? Ou de filho, esperando o Pai?'
+  ],
+  desafio:'Antes de dormir, fale com Deus por 2 minutos começando com a palavra “Pai” — e repare no que muda dentro de você quando você não começa pedindo desculpa.',
+  declaracao:'Eu não recebi espírito de escravidão. Eu recebi espírito de adoção. Eu tenho Pai.',
+};
+/* ================= ESTADO ================= */
+const KEY='codice_v1';
+let S = JSON.parse(localStorage.getItem(KEY) || 'null') || {
+  nome:'', lembrete:'', quiz:[], pago:false, funil:false,
+  prog:{},            // {dia: iso}
+  streak:0, lastDone:null,
+  coorte:new Date().toISOString().slice(0,7)
+};
+function save(){ localStorage.setItem(KEY, JSON.stringify(S)); if(sb) syncProg(); }
+let sb = null;
+if (CONFIG.SUPABASE_URL && window.supabase){
+  sb = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_KEY);
+  /* Integração real (ver README): auth anônima, leitura da tabela `dias`,
+     upsert em `progresso` e leitura da view `ranking_coorte`. */
+}
+async function syncProg(){ /* upsert de S.prog no Supabase quando configurado */ }
 
-  // Dia 1 completo e conferível
-  const DIA1 = {
-    acolhimento: "Respira. Você chegou aqui cansado de servir com medo — e hoje eu vou te provar, no original, que você nunca foi escravo.",
-    leitura: "Abra a sua Bíblia em <strong>Gálatas 4:1-7</strong>. Leia devagar, sem pressa. Repare como Paulo fala de um herdeiro que, enquanto criança, vive igualzinho a um escravo — mesmo sendo dono de tudo. Guarde essa imagem: alguém que possui a herança inteira, mas vive como se não tivesse nada.",
-    passagem: "“Assim, já não és escravo, mas filho; e, se és filho, és também herdeiro por Deus.”",
-    ref: "Gálatas 4:7",
-    ensino: "<p>Você foi ensinado a chegar perto de Deus de cabeça baixa, implorando migalha, com medo de fazer feio. Reza certo pra não apanhar. Serve direitinho pra ver se merece. É a vida do escravo: trabalha o dia todo na casa, mas dorme com medo do dono. Nunca toca no que é da família, porque acha que aquilo não é dele.</p><p>Mas olha o que Paulo faz nesse versículo: ele te tira desse lugar com uma frase só. O problema nunca foi a sua fé — foi o crachá errado que penduraram em você. Pense no filho do dono da empresa que passou a vida batendo ponto como funcionário, sem saber que o nome dele estava na escritura. A herança sempre foi dele. Faltava alguém dizer: “para de implorar, isso aqui é seu”.</p>",
-    prova: "Em Gálatas 4:7, Paulo usa duas palavras dentro da MESMA frase e te coloca de um lado pro outro. A primeira é <span class='gk'>doúlos</span> (G1401): escravo — quem serve por medo e não acessa nada da casa. A segunda é <span class='gk'>huiós (υἱός)</span> (G5207): filho legítimo, com plena dignidade de herdeiro. O grego diz literalmente “oukéti ei doúlos allá huiós” — “já NÃO és escravo, MAS filho”. E o verbo está no presente: é o seu status agora, não prêmio pro futuro. O versículo 5 sela com <span class='gk'>huiothesía</span> (G5206): adoção como filho. Deus não te contratou como empregado — te adotou como filho. Confere você mesmo: abra um interlinear em Gálatas 4:7 e veja G1401 (escravo) virar G5207 (filho) na mesma frase.",
-    declaracao: "“Eu já não sou escravo. No original, Deus me chama de filho — υἱός — e filho não implora migalha: filho herda porque pertence.”",
-    desafio: "<p>Hoje, faça uma coisa só: numa oração rápida, <strong>não peça nada</strong>. Em vez de implorar, fale com Ele como filho fala com pai — “Pai, eu sou teu filho, não teu escravo”. Repara como muda o peito quando você ora sem medo de apanhar.</p>",
-    audio: "audios/dia-01.mp3"  // áudio local (autossuficiente p/ deploy); trocar pela oração definitiva do dia 1 depois
-  };
+const diasFeitos = () => Object.keys(S.prog).length;
+const diaAtual   = () => Math.min(diasFeitos()+1, TOTAL);
+const nivelIdx   = () => { let i=0; NIVEIS.forEach((n,j)=>{ if(diasFeitos()>=n.em) i=j; }); return i; };
+const nivel      = () => NIVEIS[nivelIdx()].t;
+function recalcStreak(){
+  if(!S.lastDone) { S.streak=0; return; }
+  const horas = (Date.now()-new Date(S.lastDone))/36e5;
+  if (horas>48) S.streak=0;          // regra: zera após 48h
+}
 
-  function build(n){
-    const f = FASES.find(f=>n>=f.ini && n<=f.fim);
-    const pad = String(n).padStart(2,'0');
-    if(n===1) return {n, fase:f, tema:TEMAS[0], ...DIA1, wip:false};
-    const c = (window.CONTEUDO||{})[n];
-    if(c) return {n, fase:f, tema:c.tema||TEMAS[n-1], ...c, audio:'audios/dia-'+pad+'.mp3', wip:false};
-    return {n, fase:f, tema:TEMAS[n-1], passagem:null, ref:null, prova:null, audio:null, wip:true};
-  }
-  const DIAS = Array.from({length:TOTAL}, (_,i)=>build(i+1));
+/* ================= ROTEADOR ================= */
+const SCREENS=['scr-splash','scr-intro','scr-quiz','scr-analise','scr-diag','scr-revela','scr-oferta','app'];
+function show(id){ SCREENS.forEach(s=>document.getElementById(s).classList.toggle('hidden', s!==id)); window.scrollTo(0,0); }
 
-  // ====== ESTADO ======
-  const KEY='codice45';
-  function load(){ try{return Object.assign({done:[],last:null,streak:0}, JSON.parse(localStorage.getItem(KEY))||{})}catch(e){return{done:[],last:null,streak:0}} }
-  function save(s){ localStorage.setItem(KEY, JSON.stringify(s)); }
-  let S = load();
-  let _played = false;  // ouviu a oração do dia aberto?
-  function checkGate(){
-    const b=document.getElementById('doneBtn'); if(!b) return;
-    const l=document.getElementById('chkLeitura');
-    const c=document.getElementById('chkDesafio');
-    b.disabled = !(_played && l && l.checked && c && c.checked);
-  }
+/* ================= QUIZ ================= */
+let qi=0;
+function renderQuiz(){
+  const Q=QUIZ[qi], body=document.getElementById('qBody');
+  document.getElementById('qFill').style.width=((qi)/QUIZ.length*100)+'%';
+  document.getElementById('qStep').textContent=(qi+1)+'/'+QUIZ.length;
+  let h=`<h2>${Q.q}</h2>`+(Q.sub?`<p class="sub">${Q.sub}</p>`:'<p class="sub"></p>');
+  if(Q.input){ h+=`<input type="text" id="qIn" placeholder="Seu nome" maxlength="30" value="${S.quiz[qi]||''}">`; }
+  else Q.opts.forEach((o,j)=>{ h+=`<button class="opt ${S.quiz[qi]===j?'sel':''}" onclick="pick(${j})">${o}</button>`; });
+  body.innerHTML=h;
+  const btn=document.getElementById('qNext');
+  if(Q.input){ const inp=document.getElementById('qIn'); btn.disabled=!inp.value.trim(); inp.oninput=()=>btn.disabled=!inp.value.trim(); inp.focus(); }
+  else btn.disabled = S.quiz[qi]===undefined;
+  btn.textContent = qi===QUIZ.length-1 ? 'Ver meu diagnóstico' : 'Continuar';
+}
+function pick(j){ S.quiz[qi]=j; renderQuiz(); }
+function iniciarQuiz(){ show('scr-quiz'); renderQuiz(); }
+document.getElementById('qNext').onclick=()=>{
+  if(QUIZ[qi].input){ S.nome=document.getElementById('qIn').value.trim(); }
+  if(qi===6) S.lembrete=['manhã','almoço','noite'][S.quiz[6]]||'';
+  save();
+  if(qi<QUIZ.length-1){ qi++; renderQuiz(); } else iniciarAnalise();
+};
+document.getElementById('qBack').onclick=()=>{ if(qi>0){ qi--; renderQuiz(); } };
 
-  function hoje(){ const d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
-  function ontem(){ const d=new Date(); d.setDate(d.getDate()-1); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
-  function isDone(n){ return S.done.includes(n); }
-  function maxUnlocked(){
-    // primeiro dia não concluído
-    let cur = 1; while(cur<=TOTAL && isDone(cur)) cur++;
-    return cur; // o "dia atual"
-  }
-  function estado(n){
-    if(isDone(n)) return 'done';
-    const cur = maxUnlocked();
-    if(LIBERAR_ATE && n<=LIBERAR_ATE) return n===cur ? 'current' : 'open';  // 1ª sessão liberada
-    if(n>cur) return 'locked';
-    // n === cur (dia atual): checa trava diária
-    if(TRAVA_DIARIA && S.last && S.last===hoje() && cur>1) return 'locked-today';
-    return 'current';
-  }
+function iniciarAnalise(){
+  show('scr-analise');
+  const frases=['Lendo suas respostas...','Cruzando com a jornada...','Pronto.'];
+  let i=0; const el=document.getElementById('analiseTxt');
+  const t=setInterval(()=>{ i++; if(i<frases.length) el.textContent=frases[i];
+    else { clearInterval(t); renderDiag(); show('scr-diag'); } }, 1100);
+}
+function renderDiag(){
+  document.getElementById('diagHero').innerHTML=codiceSVG(0,210);
+  document.getElementById('diagH').innerHTML=`${S.nome||'Amigo'}, hoje você lê a Bíblia como <span class="gk">escravo</span>.`;
+}
+function renderRevela(){
+  const marcos=[['Dia 1 · As correntes','Você descobre o que te prende',1],
+    ['Dia 20 · Servo da Casa','As primeiras correntes caem',.7],
+    ['Dia 40 · Filho em Formação','O livro se abre pra você',.45],
+    ['Dia 60 · Herdeiro','Você toma posse',.3]];
+  document.getElementById('tlBox').innerHTML = marcos.map((m,i)=>`
+    <div class="row"><div class="dotcol">
+      <span class="dot" style="${i===0?'background:var(--gold)':'border:2px solid rgba(232,200,122,'+m[2]+');background:#000'}"></span>
+      ${i<3?'<span class="stem"></span>':''}</div>
+      <div><p class="tit">${m[0]}</p><p class="des">${m[1]}</p></div></div>`).join('');
+}
 
-  // ====== DASHBOARD ======
-  function renderDash(){
-    const done=S.done.length;
-    document.getElementById('barfill').style.width=(done/TOTAL*100)+'%';
-    document.getElementById('barlab').textContent=done+' de '+TOTAL+' dias';
-    document.getElementById('rankName').textContent=nivelAtual(done).titulo;
-    document.getElementById('streakV').innerHTML=(S.streak||0)+'&nbsp;🔥';
-    const t=document.getElementById('track'); t.innerHTML='';
-    FASES.forEach(f=>{
-      const sec=document.createElement('div'); sec.className='phase';
-      sec.innerHTML='<p class="pname">'+f.nome+'</p><p class="pdesc">'+f.desc+'</p>';
-      const g=document.createElement('div'); g.className='grid';
-      for(let n=f.ini;n<=f.fim;n++){
-        const st=estado(n); const c=document.createElement('div');
-        const lock = (st==='locked'||st==='locked-today');
-        c.className='cell '+(st==='done'?'done':st==='current'?'current':lock?'locked':'');
-        c.innerHTML='<span class="dn">'+n+'</span><span class="st">'+(st==='done'?'✓':lock?'🔒':'•')+'</span>';
-        if(!lock) c.onclick=()=>openDay(n);
-        else if(st==='locked-today') c.onclick=()=>{ c.querySelector('.st').textContent='⏳'; setTimeout(()=>c.querySelector('.st').textContent='🔒',1200); };
-        g.appendChild(c);
-      }
-      sec.appendChild(g); t.appendChild(sec);
-    });
-  }
+/* ================= OFERTA / COMPRA ================= */
+function abrirOferta(modo){
+  document.getElementById('ofH').innerHTML = modo==='pos1'
+    ? 'As primeiras correntes <span class="gk">se mexeram</span>.'
+    : 'Destrave seus <span class="gk">60 dias</span>.';
+  document.getElementById('ofSub').textContent = modo==='pos1'
+    ? 'Faltam 59 dias. Pagamento único, acesso pra sempre.'
+    : 'Pagamento único. Acesso pra sempre. Sem mensalidade.';
+  show('scr-oferta');
+}
+function fecharOferta(){ S.funil=true; save(); entrarApp(); }
+function comprar(){
+  if(CONFIG.MODO_TESTE){ S.pago=true; S.funil=true; save(); entrarApp();
+    alert('Compra simulada (MODO_TESTE). No app empacotado, este botão chama o RevenueCat.'); return; }
+  /* PRODUÇÃO (Capacitor): Purchases.purchaseStoreProduct(...) → webhook → tabela compras */
+}
 
-  // ====== TELA DO DIA ======
-  function openDay(n){
-    const D=DIAS[n-1];
-    const done=isDone(n);
-    let html='<button class="back" onclick="goDash()">← Voltar à jornada</button>';
-    html+='<div class="daytag">Dia '+n+' · '+D.fase.nome.split('·')[1].trim()+'</div>';
-    html+='<h2 class="daytitle">'+D.tema+'</h2>';
-    if(D.wip){
-      html+='<div class="blocklab">Em produção</div><p class="wip">O conteúdo deste dia (passagem, prova no original e oração guiada) ainda está sendo escrito e gravado. O mecanismo de desbloqueio já funciona — este dia é um marcador do arco.</p>';
-    } else {
-      _played=false;
-      html+='<p class="acolhimento">'+D.acolhimento+'</p>';
-      html+='<div class="blocklab">📖 Abra sua Bíblia e leia</div><div class="leitura">'+D.leitura+'</div>';
-      html+='<label class="chk"><input type="checkbox" id="chkLeitura" onchange="checkGate()"><span>Li na minha Bíblia</span></label>';
-      html+='<div class="blocklab">A passagem-chave</div>';
-      html+='<p class="passage">'+D.passagem+'</p><p class="ref">'+D.ref+'</p>';
-      html+='<div class="blocklab">A virada</div><div class="ensino">'+D.ensino+'</div>';
-      html+='<div class="blocklab">A prova no original</div><div class="proofbox">'+D.prova+'</div>';
-      html+='<div class="blocklab">🗣️ Declaração do filho</div><div class="declaracao">'+D.declaracao+'<span class="dec-cue">fala em voz alta</span></div>';
-      html+='<div class="blocklab">🎧 A oração de hoje</div>';
-      html+='<div class="prayer-audio"><button type="button" class="play-prayer" onclick="playPrayer(this)"><span class="pp-ico">▶</span><span class="pp-txt">Aperta o play e repete comigo, em voz baixa</span></button><audio id="prayerAudio" preload="none" src="'+D.audio+'"></audio></div>';
-      html+='<div class="blocklab">✅ Seu desafio de hoje</div><div class="desafio">'+D.desafio+'</div>';
-      html+='<label class="chk"><input type="checkbox" id="chkDesafio" onchange="checkGate()"><span>Fiz o desafio de hoje</span></label>';
-    }
-    if(done){
-      html+='<div class="done-state"><div class="big">Dia '+n+' concluído.</div><p>Você esteve aqui como filho. Volte amanhã pro próximo passo.</p></div>';
-    } else {
-      const needGate = !D.wip;
-      html+='<button class="done-btn" id="doneBtn" '+(needGate?'disabled':'')+' onclick="concluir('+n+')">Concluí o dia de hoje</button>';
-      html+='<p class="done-note">'+(needGate?'Leia a Bíblia, ouça a oração e marque o desafio pra concluir.':'Marque pra liberar o próximo dia.')+'</p>';
-    }
-    document.getElementById('dayinner').innerHTML=html;
-    document.getElementById('dashboard').classList.add('hidden');
-    document.getElementById('dayview').classList.remove('hidden');
-    window.scrollTo(0,0);
-  }
-  function goDash(){
-    document.getElementById('dayview').classList.add('hidden');
-    document.getElementById('dashboard').classList.remove('hidden');
-    renderDash(); window.scrollTo(0,0);
-  }
-  function concluir(n){
-    if(S.done.includes(n)){ openDay(n); return; }
-    const antes = nivelAtual(S.done.length).nivel;
-    const t=hoje(), y=ontem();
-    if(S.last===y) S.streak=(S.streak||0)+1;
-    else if(S.last!==t) S.streak=1;          // quebrou a corrente (ou primeiro dia) → reinicia
-    S.done.push(n); S.last=t; save(S);
-    if(USER){ sb.from('progresso').insert({ user_id: USER.id, dia: n }).then(({error})=>{ if(error) console.warn('progresso:', error.message); }); }
-    const depois = nivelAtual(S.done.length);
-    if(depois.nivel>antes) levelUp(depois);  // subiu de nível → cerimônia
-    else openDay(n);
-  }
-  function levelUp(lv){
-    document.getElementById('lu-crown').textContent = lv.crown || '⬆️';
-    document.getElementById('lu-rank').textContent = lv.titulo;
-    document.getElementById('lu-sub').textContent = lv.marco
-      ? 'Você fechou uma fase. Outro homem olha no espelho agora.'
-      : 'Mais um degrau de volta pra casa.';
-    document.getElementById('levelup').classList.remove('hidden');
-    window.scrollTo(0,0);
-  }
-  function fecharLevelUp(){ document.getElementById('levelup').classList.add('hidden'); goDash(); }
+/* ================= APP ================= */
+function entrarApp(){ recalcStreak(); show('app'); go('hoje'); }
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>go(b.dataset.v));
+function go(v){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  document.getElementById('pillStreak').textContent='🔥 '+S.streak;
+  document.getElementById('pillNivel').textContent=nivel();
+  ({hoje:vHoje, jornada:vJornada, ranking:vRanking, config:vConfig, dia:vDia})[v]();
+}
 
-  // ====== PLAYER DE ORAÇÃO ======
-  function playPrayer(btn){
-    const a=document.getElementById('prayerAudio'); if(!a) return;
-    const ico=btn.querySelector('.pp-ico'), txt=btn.querySelector('.pp-txt');
-    if(a.paused){
-      a.play().then(()=>{ ico.textContent='⏸'; txt.textContent='Tocando — repete comigo, baixinho';
-        _played=true; checkGate(); // ouviu a oração → conta pro check-in
-      }).catch(()=>{});
-      a.onended=()=>{ ico.textContent='▶'; txt.textContent='Ouvir de novo'; };
-    } else { a.pause(); ico.textContent='▶'; txt.textContent='Aperta o play e repete comigo, em voz baixa'; }
-  }
+function vHoje(){
+  const d=diaAtual(), fase=FASES.find(f=>d>=f.ini&&d<=f.fim), fim=diasFeitos()>=TOTAL;
+  const pct=Math.round(diasFeitos()/TOTAL*100);
+  document.getElementById('view').innerHTML=`
+    <div class="hero">${codiceSVG(nivelIdx())}</div>
+    <p class="daytag">${fim?'Jornada concluída':'Dia '+d+' · '+fase.nome.split('·')[1].trim()}</p>
+    <p class="daytitle">${fim?'Você tomou posse. Releia qualquer dia quando quiser.':TEMAS[d-1]}</p>
+    <div class="stats">
+      <div class="stat"><div class="v">${diasFeitos()}<small>/60</small></div><div class="l">jornada</div></div>
+      <div class="stat"><div class="v" style="color:var(--gold);font-family:var(--serif);font-style:italic">${nivel().split(' ')[0]}</div><div class="l">nível</div></div>
+      <div class="stat"><div class="v">${pct}%</div><div class="l">completo</div></div>
+    </div>
+    <div class="pad" style="margin-top:16px">
+      <button class="btn gold" onclick="abrirDia(${d})">${fim?'Rever a jornada':'Começar o dia '+d}</button>
+    </div>
+    <div class="social glass">
+      <span class="avs">
+        <span class="av" style="background:#3b4a63;color:#cfd6e4">M</span>
+        <span class="av" style="background:#5a4a2e;color:#e8dcc2">P</span>
+        <span class="av" style="background:#3e5544;color:#cfe0d4">J</span></span>
+      <span class="t">${147+diasFeitos()*3} pessoas concluíram o dia hoje</span>
+    </div>`;
+}
 
-  // ====== AUTH / BOOT ======
-  function amsg(t,erro){ const e=document.getElementById('authMsg'); if(!e)return; e.textContent=t||''; e.style.color=erro?'#b8736d':'var(--gold)'; }
-  function mostrarAuth(){ document.getElementById('authgate').classList.remove('hidden'); document.getElementById('logoutBtn').classList.add('hidden'); }
-  async function enviarLink(){
-    const email=document.getElementById('authEmail').value.trim();
-    if(!email || !email.includes('@')){ amsg('Coloque um e-mail válido.',true); return; }
-    const btn=document.getElementById('authBtn'); btn.disabled=true; amsg('enviando…');
-    const { error } = await sb.auth.signInWithOtp({ email, options:{ emailRedirectTo: window.location.href, shouldCreateUser:true } });
-    btn.disabled=false;
-    if(error){ amsg(error.message,true); return; }
-    amsg('Pronto! Te mandamos um link no seu e-mail. Abre e clica pra entrar. (Confere o spam.)');
+function abrirDia(n){
+  if(n>1 && !S.pago){ abrirOferta('padrao'); return; }
+  if(n>diaAtual()){ return; }
+  vDia(n);
+}
+function vDia(n){
+  const c = n===1 ? DIA1 : null;
+  document.getElementById('view').innerHTML=`
+    <div class="dia-head">
+      <button class="back" onclick="go('hoje')">‹ voltar</button>
+      <p class="daytag" style="text-align:left">Dia ${n} de 60</p>
+      <h2 style="font-family:var(--serif);font-style:italic;font-weight:700;font-size:26px;line-height:1.2;margin:6px 0 0;color:#fff">${TEMAS[n-1]}</h2>
+      ${c?`
+      <p class="blocklab">A passagem</p>
+      <div class="passage">"${c.passagem}"</div><p class="ref">${c.ref}</p>
+      <p class="blocklab">O ensino</p>
+      <div class="ensino">${c.ensino.map(p=>`<p>${p}</p>`).join('')}</div>
+      <p class="blocklab">O desafio de hoje</p>
+      <div class="boxd">${c.desafio}</div>
+      <p class="blocklab">Declare em voz alta</p>
+      <div class="decl">"${c.declaracao}"</div>
+      `:`<p class="blocklab">Conteúdo</p><p class="wip">Este dia está em produção — no app final, todo o conteúdo é carregado da tabela <b>dias</b> do Supabase. Conclua para testar a progressão.</p>`}
+      <div style="padding:28px 0 30px"><button class="btn gold" onclick="concluir(${n})">Concluir dia ${n}</button></div>
+    </div>`;
+  window.scrollTo(0,0);
+}
+
+function concluir(n){
+  if(S.prog[n]) { go('hoje'); return; }
+  recalcStreak();
+  S.prog[n]=new Date().toISOString();
+  S.streak = S.streak+1; S.lastDone=S.prog[n];
+  save();
+  const lv = NIVEIS.find(x=>x.em===diasFeitos());
+  document.getElementById('dnTit').textContent='Dia '+n+' ✓';
+  document.getElementById('dnSub').textContent='Sequência de '+S.streak+(S.streak>1?' dias':' dia')+'. O códice sentiu.';
+  document.getElementById('ovDone').classList.remove('hidden');
+  if(lv && lv.em>0){
+    document.getElementById('ovHero').innerHTML=codiceSVG(nivelIdx(),180);
+    document.getElementById('ovTit').textContent=lv.t;
+    document.getElementById('ovSub').textContent='Dia '+diasFeitos()+' de 60. As correntes estão caindo.';
+    setTimeout(()=>{ document.getElementById('ovDone').classList.add('hidden');
+      document.getElementById('ovLevel').classList.remove('hidden'); }, 1600);
   }
-  async function entrarAnonimo(){ // TEMPORÁRIO: 1 clique, sem e-mail. P/ produção, voltar pro enviarLink (magic link).
-    const btn=document.getElementById('authBtn'); btn.disabled=true; amsg('entrando…');
-    const { data, error } = await sb.auth.signInAnonymously();
-    btn.disabled=false;
-    if(error){ amsg('Não consegui entrar: '+error.message,true); return; }
-    USER=data.user; await entrarApp();
-  }
-  async function sair(){ await sb.auth.signOut(); location.reload(); }
-  async function entrarApp(){
-    let ok=MODO_TESTE;
-    if(!MODO_TESTE){
-      const { data } = await sb.from('compradores').select('email').maybeSingle(); // RLS já filtra pelo e-mail logado
-      ok=!!data;
-    }
-    if(!ok){ amsg('Sua conta ainda não tem acesso ao Códice.',true); return; }
-    const { data:prog } = await sb.from('progresso').select('dia').order('dia');
-    S.done = (prog||[]).map(r=>r.dia);
-    document.getElementById('authgate').classList.add('hidden');
-    document.getElementById('logoutBtn').classList.remove('hidden');
-    document.getElementById('dashboard').classList.remove('hidden');
-    renderDash();
-  }
-  async function boot(){
-    const { data:{ session } } = await sb.auth.getSession();
-    if(session){ USER=session.user; await entrarApp(); }
-    else { mostrarAuth(); }
-  }
-  sb.auth.onAuthStateChange((e,session)=>{ if(session && !USER){ USER=session.user; entrarApp(); } });
-  boot();
+}
+function fecharDone(){
+  document.getElementById('ovDone').classList.add('hidden');
+  if(diasFeitos()===1 && !S.pago) abrirOferta('pos1'); else go('hoje');
+}
+
+function vJornada(){
+  const pct=diasFeitos()/TOTAL*100;
+  let h=`<div class="pad"><h2 class="sec">Sua jornada</h2>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    <div style="display:flex;justify-content:space-between"><span class="mini">Escravo</span><span class="mini" style="color:var(--dim)">${diasFeitos()} / 60</span><span class="mini">Herdeiro</span></div>`;
+  FASES.forEach(f=>{
+    h+=`<p class="phase-t">${f.nome}</p><p class="phase-d">${f.desc}</p><div class="grid60">`;
+    for(let d=f.ini;d<=f.fim;d++){
+      const done=!!S.prog[d], cur=d===diaAtual()&&!done, lock=(d>1&&!S.pago)||d>diaAtual();
+      h+=`<button class="cell ${done?'done':''} ${cur?'cur':''} ${lock&&!done?'lock':''}" onclick="abrirDia(${d})">${done?'✓':(lock?'🔒':d)}</button>`;
+    } h+='</div>';
+  });
+  const next=MARCOS.find(m=>m>diasFeitos());
+  if(next) h+=`<div class="marco glass"><span class="ic">✦</span><div><p>Próximo marco: dia ${next}</p><small>Você se torna ${NIVEIS.find(n=>n.em===next).t}</small></div></div>`;
+  document.getElementById('view').innerHTML=h+'</div>';
+}
+
+function vRanking(){
+  const mock=[['Mariana',41],['Pedro',28],['Lívia',17],['João',12],['Rafa',9],['Bia',5]];
+  const all=[...mock,[S.nome||'Você',diasFeitos(),'me']].sort((a,b)=>b[1]-a[1]);
+  const mes=new Date().toLocaleDateString('pt-BR',{month:'long'});
+  document.getElementById('view').innerHTML=`<div class="pad"><h2 class="sec">Turma de ${mes}</h2>
+    <div class="glass" style="overflow:hidden">${all.map((r,i)=>`
+      <div class="rrow ${r[2]?'me':''}"><span class="pos">${i+1}</span>
+        <span class="avr" ${r[2]?'style="background:var(--gold);color:var(--gold-ink)"':''}>${(r[0]||'?').slice(0,2).toUpperCase()}</span>
+        <div class="nm"><p>${r[2]?(S.nome||'Você'):r[0]}</p><small>${NIVEIS.slice().reverse().find(n=>r[1]>=n.em).t}</small></div>
+        <span class="dd">${r[1]}d</span></div>`).join('')}</div>
+    <p class="legal" style="margin-top:12px">Constância vale mais que velocidade. ${sb?'':'(demonstração — o ranking real vem da view ranking_coorte)'}</p></div>`;
+}
+
+function vConfig(){
+  document.getElementById('view').innerHTML=`<div class="pad"><h2 class="sec">Ajustes</h2>
+    <div class="cfg"><span>Nome</span><small>${S.nome||'—'}</small></div>
+    <div class="cfg"><span>Lembrete diário</span><small>${S.lembrete||'—'}</small></div>
+    <div class="cfg"><span>Acesso</span><small>${S.pago?'Jornada completa ✓':'Gratuito (dia 1)'}</small></div>
+    ${!S.pago?`<button class="btn gold" style="margin-top:18px" onclick="abrirOferta('padrao')">Destravar a jornada — ${CONFIG.PRECO}</button>`:''}
+    <button class="ghost" style="margin-top:14px" onclick="alert('No app empacotado: Purchases.restorePurchases()')">Restaurar compra</button>
+    <button class="ghost" onclick="if(confirm('Apagar todo o progresso deste aparelho?')){localStorage.removeItem(KEY);location.reload()}">Reiniciar tudo</button>
+    <p class="legal" style="margin-top:20px">O Códice · ocodice.app · v1</p></div>`;
+}
+
+/* ================= CARTÃO DE COMPARTILHAMENTO ================= */
+async function compartilhar(){
+  const cv=document.createElement('canvas'); cv.width=1080; cv.height=1920;
+  const x=cv.getContext('2d');
+  x.fillStyle='#050504'; x.fillRect(0,0,1080,1920);
+  const g=x.createRadialGradient(540,820,60,540,820,520);
+  g.addColorStop(0,'rgba(212,167,71,.5)'); g.addColorStop(1,'rgba(0,0,0,0)');
+  x.fillStyle=g; x.fillRect(0,300,1080,1100);
+  x.strokeStyle='#c9a24b'; x.lineWidth=10;
+  x.strokeRect(340,640,400,380); x.beginPath(); x.moveTo(392,640); x.lineTo(392,1020); x.stroke();
+  x.fillStyle='#e8c87a'; x.font='600 44px Inter,sans-serif'; x.textAlign='center';
+  x.fillText('O CÓDICE',540,420);
+  x.fillStyle='#f2f1ee'; x.font='600 120px Inter,sans-serif';
+  x.fillText('Dia '+diasFeitos()+' ✓',540,1250);
+  x.fillStyle='#a39f93'; x.font='400 52px Inter,sans-serif';
+  x.fillText('sequência de '+S.streak+' dias · '+nivel(),540,1340);
+  x.fillStyle='#55524a'; x.font='400 40px Inter,sans-serif';
+  x.fillText('ocodice.app',540,1750);
+  cv.toBlob(async b=>{
+    const file=new File([b],'codice-dia'+diasFeitos()+'.png',{type:'image/png'});
+    if(navigator.canShare && navigator.canShare({files:[file]})) await navigator.share({files:[file],title:'O Códice'});
+    else { const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=file.name; a.click(); }
+  });
+}
+
+/* ================= BOOT ================= */
+setTimeout(()=>{
+  if(S.funil || diasFeitos()>0){ entrarApp(); }
+  else { show('scr-intro'); }
+},1600);
 </script>
 </body>
 </html>
