@@ -35,15 +35,30 @@ button{font-family:var(--sans);cursor:pointer}
 #scr-splash .logo{font-size:13px;font-weight:600;letter-spacing:.3em;color:var(--dim)}
 #scr-splash h1{font-family:var(--serif);font-style:italic;font-weight:700;font-size:30px;color:var(--gold);margin:0}
 
-/* quiz */
+/* quiz — estilo Opal: segmentos no topo, rádio nas opções */
 .qbar{display:flex;align-items:center;gap:12px;padding:18px 22px 0}
-.qbar .track{flex:1;height:3px;background:var(--line);border-radius:2px;overflow:hidden}
-.qbar .fill{display:block;height:100%;background:var(--gold);width:0;transition:width .3s}
+.qseg{display:flex;gap:5px;flex:1}
+.qseg i{flex:1;height:3px;border-radius:2px;background:var(--line);transition:background .3s}
+.qseg i.on{background:var(--gold)}
 .qbody{flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 22px}
-.qbody h2{font-size:22px;font-weight:600;line-height:1.3;margin:0 0 6px}
-.qbody .sub{font-size:14px;color:var(--mute);margin:0 0 20px}
-.opt{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:15px 16px;font-size:15px;color:#d8d5cc;margin-bottom:10px;line-height:1.4}
+.qbody h2{font-size:22px;font-weight:600;line-height:1.3;margin:0 0 6px;text-align:center}
+.qbody .sub{font-size:14px;color:var(--mute);margin:0 0 22px;text-align:center}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:14px 16px;font-size:15px;color:#d8d5cc;margin-bottom:10px;line-height:1.4}
+.opt::before{content:"";width:18px;height:18px;border-radius:50%;border:1.5px solid #3d392f;flex:0 0 18px;transition:.15s}
 .opt.sel{border-color:var(--gold);background:rgba(232,200,122,.08);color:#f2ead2}
+.opt.sel::before{border-color:var(--gold);background:var(--gold);box-shadow:inset 0 0 0 3.5px #15110a}
+.selo{display:block;margin:0 auto;border-radius:50%}
+
+/* player de oração */
+.player{display:flex;align-items:center;gap:13px;padding:12px 15px}
+.pbtn{width:44px;height:44px;border-radius:50%;background:var(--gold);color:#15110a;border:none;font-size:14px;flex:0 0 44px;display:flex;align-items:center;justify-content:center}
+.pbar{flex:1;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.pbar i{display:block;height:100%;width:0;background:var(--gold)}
+.ptime{font-size:11px;color:var(--mute);font-variant-numeric:tabular-nums;min-width:34px;text-align:right}
+
+/* analisando (estilo Opal "Calculating") */
+.an-bar{width:210px;height:3px;background:var(--line);border-radius:2px;overflow:hidden;margin:22px 0 16px}
+.an-bar i{display:block;height:100%;background:var(--gold);width:0;transition:width 3.1s linear}
 .qbody input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;color:var(--ink);font-family:var(--sans);font-size:17px;padding:15px 16px;outline:none}
 .qbody input[type=text]:focus{border-color:var(--gold)}
 .qfoot{padding:0 22px 26px}
@@ -191,7 +206,8 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
 
 <!-- ===== SPLASH ===== -->
 <section id="scr-splash" class="wrap center">
-  <span class="logo">O CÓDICE</span>
+  <img class="selo" src="img/selo.jpg" width="96" height="96" alt="" onerror="this.style.display='none'">
+  <span class="logo" style="margin-top:14px">O CÓDICE</span>
   <h1>Do escravo ao filho</h1>
 </section>
 
@@ -213,8 +229,8 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
 <section id="scr-quiz" class="wrap hidden">
   <div class="qbar">
     <button class="ghost" id="qBack" style="width:auto;padding:6px">‹</button>
-    <div class="track"><i class="fill" id="qFill"></i></div>
-    <span class="mini" id="qStep">1/8</span>
+    <div class="qseg" id="qSegs"></div>
+    <span class="mini" id="qStep">1/14</span>
   </div>
   <div class="qbody" id="qBody"></div>
   <div class="qfoot"><button class="btn" id="qNext" disabled>Continuar</button></div>
@@ -222,7 +238,8 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
 
 <!-- ===== ANÁLISE ===== -->
 <section id="scr-analise" class="wrap hidden center">
-  <div class="pulse"></div>
+  <img class="selo" src="img/selo.jpg" width="88" height="88" alt="" onerror="this.outerHTML='<div class=pulse></div>'">
+  <div class="an-bar"><i id="anFill"></i></div>
   <p id="analiseTxt">Lendo suas respostas...</p>
 </section>
 
@@ -563,7 +580,7 @@ let fi=0;
 const R = S.resp || (S.resp = {});
 function renderFluxo(){
   const P=FLUXO[fi], body=document.getElementById('qBody'), btn=document.getElementById('qNext');
-  document.getElementById('qFill').style.width=(fi/FLUXO.length*100)+'%';
+  document.getElementById('qSegs').innerHTML=FLUXO.map((_,i)=>`<i class="${i<=fi?'on':''}"></i>`).join('');
   document.getElementById('qStep').textContent=(fi+1)+'/'+FLUXO.length;
   btn.textContent = P.t==='nome' ? 'Ver meu diagnóstico' : 'Continuar';
   if(P.t==='respiro'){
@@ -603,6 +620,7 @@ document.getElementById('qBack').onclick=()=>{ if(fi>0){ fi--; renderFluxo(); } 
 
 function iniciarAnalise(){
   show('scr-analise');
+  const f=document.getElementById('anFill'); if(f){ f.style.width='0'; requestAnimationFrame(()=>requestAnimationFrame(()=>f.style.width='100%')); }
   const frases=['Lendo suas respostas...','Cruzando com a jornada...','Pronto, '+(S.nome||'amigo')+'.'];
   let i=0; const el=document.getElementById('analiseTxt'); el.textContent=frases[0];
   const t=setInterval(()=>{ i++; if(i<frases.length) el.textContent=frases[i];
@@ -722,8 +740,9 @@ function vHoje(){
     </div>`;
 }
 
+const AUDIOS={1:'audios/dia-01.mp3',2:'audios/dia-02.mp3'};
 function abrirDia(n){
-  if(n>1 && !S.pago){ abrirOferta('padrao'); return; }
+  if(n>1 && !S.pago){ comprar(); return; } /* dia 2+ sem compra → direto pro checkout */
   if(n>diaAtual()){ return; }
   vDia(n);
 }
@@ -744,10 +763,35 @@ function vDia(n){
       <p class="blocklab">Declare em voz alta</p>
       <div class="decl">"${c.declaracao}"</div>
       `:`<p class="blocklab">Conteúdo</p><p class="wip">Este dia está em produção — no app final, todo o conteúdo é carregado da tabela <b>dias</b> do Supabase. Conclua para testar a progressão.</p>`}
+      ${AUDIOS[n]?`
+      <p class="blocklab">🎧 A oração de hoje</p>
+      <div class="player glass">
+        <button class="pbtn" id="pbtn" onclick="playPause()">▶</button>
+        <div class="pbar" onclick="audSeek(event,this)"><i id="pfill"></i></div>
+        <span class="ptime" id="ptime">··</span>
+      </div>
+      <audio id="audOra" src="${AUDIOS[n]}" preload="none" ontimeupdate="audTick(this)" onended="audEnd()"></audio>
+      <p style="font-size:12.5px;color:var(--mute);margin:8px 0 0">Coloca o fone, fecha os olhos e ora junto.</p>
+      `:''}
       <div style="padding:28px 0 30px"><button class="btn gold" onclick="concluir(${n})">Concluir dia ${n}</button></div>
     </div>`;
   window.scrollTo(0,0);
 }
+function playPause(){
+  const a=document.getElementById('audOra'), b=document.getElementById('pbtn');
+  if(a.paused){ a.play(); b.textContent='❚❚'; } else { a.pause(); b.textContent='▶'; }
+}
+function audTick(a){
+  if(!a.duration) return;
+  document.getElementById('pfill').style.width=(a.currentTime/a.duration*100)+'%';
+  const r=Math.max(0,a.duration-a.currentTime), m=Math.floor(r/60), s=String(Math.floor(r%60)).padStart(2,'0');
+  document.getElementById('ptime').textContent=m+':'+s;
+}
+function audSeek(ev,el){
+  const a=document.getElementById('audOra'); if(!a.duration) return;
+  const r=el.getBoundingClientRect(); a.currentTime=(ev.clientX-r.left)/r.width*a.duration;
+}
+function audEnd(){ document.getElementById('pbtn').textContent='▶'; document.getElementById('pfill').style.width='100%'; }
 
 function concluir(n){
   if(S.prog[n]) { go('hoje'); return; }
