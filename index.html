@@ -162,7 +162,7 @@
   // ====== SUPABASE ======
   const SB_URL = 'https://nbizxbdugsmeoudkwtot.supabase.co';
   const SB_KEY = 'sb_publishable_MITJbApeJTSHm41YW8a50A_DnbYUWPI';
-  const MODO_TESTE = false; // PRODUÇÃO: só quem comprou (está em `compradores`) entra. Webhook do Kiwify libera o e-mail na compra.
+  const MODO_TESTE = true;  // TEMPORÁRIO: qualquer um que logar entra (sem precisar comprar). Voltar p/ false ANTES de vender.
   const sb = window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
   let USER = null;
   let _signup = false;
