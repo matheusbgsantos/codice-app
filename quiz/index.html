@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Você lê a Bíblia como Escravo ou como Filho?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:wght@400;500&family=IBM+Plex+Mono:wght@400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=EB+Garamond:wght@400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet"></noscript>
+<style>
+  :root{
+    --bg:#100f0d;--ink:#ece6d8;--ink-dim:#928d80;--gold:#c9a24b;--line:#2a261f;--card:#17150f;
+    --serif:'Cormorant Garamond',Georgia,serif;--body:'EB Garamond',Georgia,serif;--mono:'IBM Plex Mono',monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:20px;line-height:1.6;
+    min-height:100vh;display:flex;align-items:center;justify-content:center;padding:28px;-webkit-font-smoothing:antialiased}
+  .stage{max-width:560px;width:100%}
+  .k{font-family:var(--mono);font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);opacity:.85}
+  h1{font-family:var(--serif);font-weight:700;font-size:44px;line-height:1.05;margin:16px 0 0}
+  em{color:var(--gold);font-style:italic}
+  strong{color:#fff}
+  .gk{font-family:var(--serif);font-style:italic;color:var(--gold)}
+  .sub{color:var(--ink-dim);font-size:20px;margin:18px 0 30px}
+  .btn{display:block;width:100%;background:var(--gold);color:#15110a;border:none;font-family:var(--body);font-weight:600;
+    font-size:20px;padding:17px 22px;border-radius:4px;cursor:pointer;transition:opacity .15s;text-decoration:none;text-align:center}
+  .btn:hover{opacity:.9}
+  .btn:disabled{opacity:.35;cursor:not-allowed}
+  .prog{display:flex;gap:7px;justify-content:center;margin-bottom:26px}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--line);transition:background .2s}
+  .dot.on{background:var(--gold)}
+  .qnum{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--gold);text-transform:uppercase;text-align:center;margin-bottom:14px}
+  .q{font-family:var(--serif);font-weight:600;font-size:30px;line-height:1.2;text-align:center;margin:0 0 26px}
+  .opt{display:block;width:100%;background:var(--card);color:var(--ink);border:1px solid var(--line);
+    font-family:var(--body);font-size:17.5px;text-align:left;padding:17px 20px;border-radius:6px;margin-bottom:12px;cursor:pointer;transition:.15s;line-height:1.4}
+  .opt:hover{border-color:var(--gold);background:#1d1a12}
+  .fade{animation:f .35s ease}
+  @keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);color:var(--ink);font-family:var(--body);
+    font-size:20px;padding:17px 18px;border-radius:6px;margin-bottom:16px;outline:none;text-align:center}
+  input[type=text]:focus{border-color:var(--gold)}
+  .center{text-align:center}
+  .remoji{font-size:46px;text-align:center}
+  .rtag{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-align:center;margin-top:10px}
+  .rtitle{font-family:var(--serif);font-weight:700;font-size:38px;line-height:1.1;text-align:center;margin:8px 0 20px}
+  .rbody p{margin:0 0 16px;font-size:19px}
+  .reveal{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--gold);padding:18px 20px;margin:20px 0;font-size:17px}
+  .reveal .rl{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+  .price{text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:.04em;color:var(--ink-dim);margin-top:14px;opacity:.8}
+  /* análise */
+  .pulse{width:48px;height:48px;border-radius:50%;background:var(--gold);margin:0 auto 26px;animation:pl 1.2s ease-in-out infinite}
+  @keyframes pl{0%,100%{transform:scale(.75);opacity:.35}50%{transform:scale(1.1);opacity:.9}}
+  .anline{font-family:var(--mono);font-size:14px;letter-spacing:.08em;color:var(--ink-dim)}
+  /* resultado profundo */
+  .rbody p{margin:0 0 18px;font-size:19px;line-height:1.65}
+  .rbody .em{color:#fff;font-family:var(--serif);font-size:23px;font-style:italic;line-height:1.4}
+  .rbody .proof{border-left:2px solid var(--gold);padding-left:20px;color:var(--ink)}
+  .turn{border-top:1px solid var(--line);margin:34px 0 24px;padding-top:30px;text-align:center}
+  .turn .lead-in{font-family:var(--body);font-size:19px;line-height:1.7;color:var(--ink);text-align:left;margin-bottom:30px}
+  .turn .lead-in em{color:var(--gold);font-style:italic}
+  .prayer-audio{margin:22px 0}
+  .play-prayer{display:flex;align-items:center;gap:14px;width:100%;background:var(--card);border:1px solid var(--gold);color:var(--ink);font-family:var(--body);font-size:17px;text-align:left;padding:15px 18px;border-radius:8px;cursor:pointer;transition:.15s}
+  .play-prayer:hover{background:#1d1a12}
+  .play-prayer .pp-ico{display:flex;align-items:center;justify-content:center;flex:0 0 38px;height:38px;border-radius:50%;background:var(--gold);color:#15110a;font-size:14px}
+  .play-prayer .pp-txt{font-style:italic;color:var(--ink-dim);line-height:1.35}
+  .how45{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:24px 22px;margin:0 0 26px;text-align:left}
+  .how45-h{font-family:var(--serif);font-size:25px;line-height:1.25;color:#fff;margin:0 0 16px}
+  .how45-sub{color:var(--ink-dim);font-size:17px;margin:0 0 18px}
+  .how45-step{display:flex;gap:14px;align-items:flex-start;margin:0 0 14px;font-size:17px;line-height:1.45}
+  .how45-n{flex:0 0 30px;height:30px;border-radius:50%;background:var(--gold);color:#15110a;font-family:var(--mono);font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  .how45-close{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--ink);margin:18px 0 0;line-height:1.45}
+  .gifts-intro{color:var(--ink-dim);font-size:16px;text-align:left;margin:0 0 8px}
+  .bridge{border-left:2px solid var(--gold);padding-left:20px;margin:0 0 26px;text-align:left;font-size:18px;line-height:1.62;color:var(--ink)}
+  .gifts{list-style:none;padding:0;margin:6px 0 26px;text-align:left}
+  .gifts li{padding:14px 2px;border-bottom:1px solid var(--line)}
+  .gifts li:last-child{border-bottom:none}
+  .g-main{display:block;color:#fff;font-family:var(--serif);font-size:20px;font-weight:600;line-height:1.25}
+  .g-desc{display:block;color:var(--ink-dim);font-size:15px;margin-top:3px;line-height:1.4}
+  .hidden{display:none}
+  .sound{position:fixed;top:16px;right:16px;z-index:20;background:rgba(23,21,15,.85);border:1px solid var(--line);
+    color:var(--gold);width:44px;height:44px;border-radius:50%;font-size:18px;cursor:pointer;line-height:1;
+    backdrop-filter:blur(4px);transition:.15s}
+  .sound:hover{border-color:var(--gold)}
+  @media(max-width:560px){h1{font-size:35px}.q{font-size:25px}.rtitle{font-size:30px}body{font-size:18px}.opt{font-size:16.5px}}
+
+  .how45-cf{color:var(--ink);font-size:16px;line-height:1.6;margin:0}
+  .mock{max-width:300px;margin:26px auto;border:2px solid var(--gold);border-radius:24px;padding:16px 14px 18px;background:#0d0c0a;box-shadow:0 0 0 6px rgba(201,162,75,.06)}
+  .mock-top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10.5px;color:var(--gold);letter-spacing:.06em;margin-bottom:11px}
+  .mock-bar{height:5px;background:var(--line);border-radius:3px;margin-bottom:14px;overflow:hidden}
+  .mock-bar i{display:block;height:100%;width:2%;background:var(--gold)}
+  .mock-tag{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+  .mock-verse{font-family:var(--serif);font-style:italic;font-size:16px;color:#fff;line-height:1.3;margin:0 0 12px}
+  .mock-proof{font-size:12.5px;color:var(--ink-dim);line-height:1.45;border-left:2px solid var(--gold);padding-left:11px;margin-bottom:14px}
+  .mock-proof b{color:var(--gold);font-style:italic}
+  .mock-play{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--gold);border-radius:8px;padding:9px 12px;font-size:12.5px;color:var(--ink-dim)}
+  .mock-play .pl{flex:0 0 26px;height:26px;border-radius:50%;background:var(--gold);color:#15110a;display:flex;align-items:center;justify-content:center;font-size:10px}
+  .mock-cap{text-align:center;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim);margin:10px 0 0}
+  .of-micro{color:var(--ink-dim);font-size:14.5px;line-height:1.6;margin:16px 0 0}
+</style>
+</head>
+<body>
+
+<!-- TRILHA DE FUNDO — dropar um MP3 chamado "trilha.mp3" nesta pasta -->
+<button id="soundToggle" class="sound" onclick="toggleSound()" title="Som" aria-label="Ligar/desligar som">🔇</button>
+<audio id="bg" loop preload="none"><source src="trilha.mp3" type="audio/mpeg"></audio>
+
+<div class="stage">
+
+  <!-- INTRO -->
+  <div id="intro" class="fade">
+    <span class="k">O Códice · Diagnóstico</span>
+    <h1>Você se relaciona com Deus por <em>amor</em> — ou por <em>medo</em>?</h1>
+    <p class="sub">Você ora, tem fé, faz tudo certo — mas a vida não anda. Trabalho parado, dinheiro curto, a mesma luta de anos. E se não for falta de fé? Responda 6 perguntas (1 min) e descubra o que está te travando.</p>
+    <button class="btn" onclick="begin()">Começar o diagnóstico</button>
+  </div>
+
+  <!-- NOME (obrigatório, no começo) -->
+  <div id="name" class="hidden fade center">
+    <span class="k">Antes de começar</span>
+    <h1 style="font-size:38px">Como você se chama?</h1>
+    <p class="sub">Seu diagnóstico vai ser personalizado pra você.</p>
+    <input type="text" id="nameInput" placeholder="Seu primeiro nome" autocomplete="given-name" oninput="checkName()">
+    <button class="btn" id="nameBtn" onclick="startQuiz()" disabled>Continuar</button>
+  </div>
+
+  <!-- PERGUNTAS -->
+  <div id="quiz" class="hidden">
+    <div class="prog" id="prog"></div>
+    <div class="qnum" id="qnum"></div>
+    <h2 class="q" id="qtext"></h2>
+    <div id="opts"></div>
+  </div>
+
+  <!-- ANÁLISE -->
+  <div id="analyzing" class="hidden fade center">
+    <div class="pulse"></div>
+    <p class="anline" id="anline">Lendo suas respostas...</p>
+  </div>
+
+  <!-- RESULTADO -->
+  <div id="result" class="hidden fade">
+    <div class="remoji" id="remoji"></div>
+    <div class="rtag">Seu perfil de leitura</div>
+    <div class="rtitle" id="rtitle"></div>
+    <div class="rbody" id="rbody"></div>
+    <div class="turn">
+      <p class="lead-in" id="leadin"></p>
+
+      <p class="bridge">Olha — você consegue chegar nesse lugar sozinho. Te dou a chave de propósito justamente pra isso: a verdade não é minha, está escrita, e em algum momento você ia tropeçar nela. Mas eu já caminhei esses 60 dias no escuro — do escravo que acordava travado pro filho que senta à mesa — e anotei cada passo, cada palavra no original, cada virada. Não é informação escondida. É o caminho na ordem certa, pra você chegar onde eu cheguei sem levar os anos que eu levei tropeçando, voltando pra cela, e desistindo no meio. Eu não tiro o seu mérito de andar. Eu só te poupo o tempo de descobrir o mapa do zero — e ando do seu lado enquanto você atravessa.</p>
+
+      <div class="how45">
+        <p class="how45-h">Como funciona</p>
+        <p class="how45-cf">O Códice é um app que te guia, dia após dia, por 60 dias — pra você parar de viver como escravo e voltar a ocupar o seu lugar de filho. Você entra com o e-mail da compra, no celular ou no computador, e o app abre o dia de hoje pra você. Sem se perder, sem decidir por onde começar: ele já sabe onde você parou. E cada dia leva uns 5 minutos — o tempo de um café, antes do mundo abrir a boca pra te dizer que você é pequeno. Cada dia tem o mesmo ritmo, simples e fundo: um acolhimento curto pra você chegar; um versículo reaberto no original, com a palavra em grego ou hebraico e o número do Strong's pra você conferir na hora — mais uma prova, preto no branco, de que você é filho e não escravo; um ensino curto que destrava o que aquela palavra muda na sua vida; uma declaração pra você dizer em voz alta; uma oração guiada em áudio, pra você repetir baixinho — a mesma coisa que você sentiu agora há pouco, só que de novo, e de novo, até virar o seu normal; e um pequeno desafio pra levar a verdade do dia pra dentro da sua vida real. O app guarda o teu progresso e te mostra subindo numa trilha de níveis — você começa em Escravo, atravessa Empregado, Servo da Casa, Filho em Formação, e chega em Herdeiro. Não é jogo: é o retrato, dia após dia, de você deixando de ler a sua Bíblia de joelhos no chão e passando a ler sentado no colo. A oração que você fez hoje foi a primeira de 60. Falta você sentir as outras 59.</p>
+      </div>
+
+      <div class="mock">
+        <div class="mock-top"><span>Dia 1 de 60</span><span>Nível: Escravo</span></div>
+        <div class="mock-bar"><i></i></div>
+        <div class="mock-tag">A prova de hoje · Gálatas 4:7</div>
+        <p class="mock-verse">"já não és escravo, mas filho; e se filho, herdeiro."</p>
+        <div class="mock-proof">No original: <b>doulos</b> (G1401, escravo) → <b>huios</b> (G5207, filho). Confere no Strong's.</div>
+        <div class="mock-play"><span class="pl">▶</span> Oração guiada do Dia 1</div>
+      </div>
+      <p class="mock-cap">— exemplo do Dia 1 no app —</p>
+
+      <p class="gifts-intro">E é tudo isto que vem junto:</p>
+      <ul class="gifts">
+        <li><span class="g-main">✅ Os 60 dias guiados, no app — a jornada inteira, sempre na sua mão</span><span class="g-desc">É o coração de tudo. 60 dias, 60 versículos reabertos no original, 60 orações guiadas em áudio. Cada dia o app te entrega a palavra em grego ou hebraico, o capítulo, o versículo e o número do Strong's pra você conferir agora mesmo — onde sua Bíblia diz "servo", o original escreveu doulos, escravo de propriedade; mas Gálatas 4:7 te chama de huios (filho) e klēronomos (herdeiro). No Salmo 23, "unges minha cabeça" é deshen — coroação, não ovelha de cabeça baixa esperando migalha. Não é fé, não é papo de pregador: é o que está escrito, e depois que você vê, não tem como desver. Tudo salvo, sempre acessível, no seu ritmo.</span></li>
+        <li><span class="g-main">✅ A trilha de níveis — de Escravo a Herdeiro, com o seu progresso à vista</span><span class="g-desc">O app não te deixa no escuro perguntando "será que tô avançando?". A cada dia você vê, preto no branco, subindo de Escravo pra Empregado, pra Servo da Casa, pra Filho em Formação, até Herdeiro. É o seu mapa de volta pra casa, e ele só anda quando você anda — pra que a mudança deixe de ser sensação e vire algo que você consegue ver acontecendo.</span></li>
+        <li><span class="g-main">✅ As orações guiadas em áudio — a de hoje foi 1 de 60</span><span class="g-desc">Você acabou de orar como filho e sentiu. Dentro do app tem mais 59 — uma por dia, em áudio, pra você apertar o play e repetir baixinho, sem fórmula decorada e sem se rebaixar. É aqui que a verdade sai da cabeça e desce pro peito: você não só entende que é filho, você sente — todo dia, até falar com Deus de cabeça erguida deixar de ser novidade e virar o seu normal.</span></li>
+        <li><span class="g-main">✅ O Método dos 4 Movimentos — a chave pra ler qualquer versículo sozinho</span><span class="g-desc">Dentro do app, destravado ao longo da jornada: a chave que você aplica em qualquer passagem, de Gênesis ao Apocalipse, pra arrancar sozinho a verdade de filho que a tradução escondeu. Depois disso você não depende mais de pastor, de líder, nem de vendedor de promessa — nem de mim. Você abre o Livro que já tem em casa e confere você mesmo. A objeção "a igreja não me contou tudo" morre no dia em que a chave passa pra sua mão.</span></li>
+        <li><span class="g-main">✅ As 3 Chaves — Identidade, Acesso e Postura, provadas no grego</span><span class="g-desc">Quem você é (filho, não empregado). Que portas isso te abre (você entra, não fica esperando ser chamado). E como você passa a se portar diante do Pai (de pé, não implorando na fresta da porta). Cada uma nasce de uma palavra no original que o app te prova na hora. É aqui que o medo de orar vai embora — e não volta mais.</span></li>
+        <li><span class="g-main">🎁 Bônus — As 7 Mentiras que a Igreja Te Ensinou (PDF no e-mail)</span><span class="g-desc">As sete leituras de escravo que te plantaram desde criança e te mantiveram pequeno, calado, implorando migalha. Cada uma desmontada, com a palavra no original que a desfaz ao lado. Chega no seu e-mail pra você guardar e reler quando quiser — pra entender, de uma vez, por que "tenha mais fé" nunca foi a resposta.</span></li>
+        <li><span class="g-main">🎁 Bônus — O Glossário Proibido (PDF no e-mail)</span><span class="g-desc">A lista das palavras no original que eles amaciaram, com a tradução de verdade, o capítulo e o versículo ao lado. Bateu uma dúvida em qualquer passagem, dentro ou fora do app? Você confere sozinho no mesmo segundo, sem depender de ninguém. É a regra de ouro virada item: eu não te peço fé, eu te dou prova — a prova na sua mão, pra sempre.</span></li>
+        <li><span class="g-main">🎁 Bônus — A Proclamação do Filho (PDF pra imprimir + wallpaper, no e-mail)</span><span class="g-desc">O decreto da sua identidade pra pendurar na parede e botar na tela do celular. Pra que toda manhã, antes do mundo abrir a boca pra te dizer que você é pequeno, você leia com os próprios olhos quem Deus já disse que você é. Chega no seu e-mail junto com o acesso.</span></li>
+      </ul>
+
+      <a class="btn" href="https://pay.kiwify.com.br/Xp3KAvZ" id="cta">Quero começar o Dia 1 e ocupar o meu lugar de filho</a>
+      <p class="of-micro">O acesso ao app chega no seu e-mail no instante do pagamento, junto com os bônus em PDF. Você entra com o e-mail da compra — no celular ou no computador — abre o Dia 1 e segue os 60 dias com o seu progresso salvo, uns 5 minutos por dia. E você não arrisca nada: tem 7 dias pra abrir, conferir cada palavra no Strong's e sentir as orações. Se em 7 dias você não vir com os seus próprios olhos o que eu tô te mostrando, devolvo o seu dinheiro inteiro, sem perguntar nada. Eu não te peço pra acreditar em mim. Te peço só pra abrir e conferir.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const QUESTIONS = [
+    { q:"Quando você pensa em Deus agora — antes de tentar pensar a resposta \"certa\" — o que vem primeiro no peito?", opts:[
+      {t:"Um aperto: medo de não estar à altura, de decepcioná-Lo.", a:"culpado"},
+      {t:"Distância: como se Ele estivesse longe, do outro lado de um vidro.", a:"distante"},
+      {t:"Cobrança: a sensação de que preciso fazer mais pra Ele me aceitar.", a:"mendigo"},
+      {t:"Eu sei na cabeça que Ele me ama — mas no peito não sinto que isso é pra mim.", a:"cetico"},
+    ]},
+    { q:"Quando você ora, o que mais se parece com você?", opts:[
+      {t:"Imploro e fico torcendo pra Deus me ouvir.", a:"mendigo"},
+      {t:"Peço, mas sentindo que não mereço a resposta.", a:"culpado"},
+      {t:"Falo, mas sinto Deus distante, como se a voz não chegasse.", a:"distante"},
+      {t:"Digo as palavras certas, mas no fundo me pergunto se tem alguém do outro lado ouvindo.", a:"cetico"},
+    ]},
+    { q:"Quando você pensa \"o que eu sou pra Deus, de verdade?\", a resposta honesta é:", opts:[
+      {t:"Um pecador que Ele tolera por bondade.", a:"orfao"},
+      {t:"Alguém que ainda precisa se provar digno.", a:"culpado"},
+      {t:"Alguém que precisa fazer por merecer pra ser aceito.", a:"mendigo"},
+      {t:"Sei a teoria — que sou filho, herdeiro. Mas é como se isso valesse pros outros, não pra mim.", a:"cetico"},
+    ]},
+    { q:"Quando a vida aperta — trabalho parado, dinheiro curto, a mesma luta de anos — seu primeiro pensamento é:", opts:[
+      {t:"\"Deus está me castigando pelos meus erros.\"", a:"culpado"},
+      {t:"\"Eu não mereço coisa boa mesmo; coisa boa não é pra mim.\"", a:"orfao"},
+      {t:"\"Deus deve estar longe, me abandonou bem na hora que eu mais precisava.\"", a:"distante"},
+      {t:"\"Faço tudo certo, oro, tenho fé — e mesmo assim nada anda. Será que essa promessa toda é real?\"", a:"cetico"},
+    ]},
+    { q:"Já tentaram te dizer que você é \"filho de Deus, herdeiro, livre\". Quando você ouve isso, o que acontece por dentro?", opts:[
+      {t:"Fico tocado por um instante, mas logo penso: \"alguém como eu não pode ser tudo isso\".", a:"orfao"},
+      {t:"Penso: \"talvez um dia, quando eu estiver mais digno, mais limpo\".", a:"culpado"},
+      {t:"Soa bonito, mas distante — como uma promessa que nunca chega de verdade até mim.", a:"distante"},
+      {t:"Já ouvi mil vezes, conheço o versículo de cor — mas é frase de igreja, não mexe comigo. Eu queria ver provado.", a:"cetico"},
+    ]},
+    { q:"Pra falar com Deus de verdade, sem intermediário, você sente que:", opts:[
+      {t:"Preciso de um pastor ou alguém mais santo intercedendo por mim.", a:"distante"},
+      {t:"Preciso estar digno o suficiente primeiro.", a:"culpado"},
+      {t:"Preciso implorar bastante pra ser ouvido.", a:"mendigo"},
+      {t:"Intelectualmente eu sei que o véu rasgou e o acesso é meu — mas sinto que, na prática, isso não é pra mim.", a:"cetico"},
+    ]},
+  ];
+
+  const ARQ = {
+    mendigo:{ emoji:"🪙", nome:"O Mendigo",
+      retrato:"por trás da sua fé existe um cansaço que você quase nunca admite em voz alta. Você ora muito — mas sai da oração com a sensação de quem bateu numa porta e não sabe se tem alguém do outro lado. Pede, agradece, insiste… e no fundo fica esperando uma migalha, com medo de pedir demais e parecer ingrato. Você trata Deus como um patrão que pode te demitir do próprio céu, e não como o Pai que já te deu o nome da casa.",
+      preco:"Esse jeito de viver cobra um preço silencioso: você nunca descansa de verdade. Está sempre achando que precisa fazer mais pra merecer, sempre na ponta dos pés diante de Deus. Você confundiu ansiedade com humildade por tanto tempo que esqueceu como é viver sem esse peso no peito. E o pior — a sensação de \"nunca é suficiente\" não fica só na oração: ela vaza pro trabalho, pro dinheiro, pra cada canto da sua vida, te deixando travado quando você devia estar avançando como herdeiro." },
+    orfao:{ emoji:"🩹", nome:"O Órfão",
+      retrato:"existe uma frase que mora em você e quase nunca sai pra fora: \"eu não pertenço\". Mesmo na igreja, mesmo orando, mesmo fazendo tudo certo, fica aquela sensação de estar do lado de fora, espiando uma família da qual você não faz parte de verdade. Você se vê como alguém que Deus aguenta — não como alguém que Ele escolheu, chamou pelo nome e sentou à mesa.",
+      preco:"E isso te rouba a coisa mais preciosa: a intimidade. Você nunca se entrega por inteiro, porque quem se sente órfão sempre guarda uma parte protegida, esperando a hora em que vão te mandar embora. Você vive em dívida com um Pai que já te deu o sobrenome da família — e carrega uma solidão que nenhuma multidão de culto preenche. Você tapa esse vazio com serviço, com esforço, com mais um compromisso na igreja… e ele sempre volta, porque o buraco não era de fazer, era de pertencer." },
+    culpado:{ emoji:"⚖️", nome:"O Culpado",
+      retrato:"você lê a própria vida como um tribunal. Quando algo bom acontece, quase se assusta, esperando a conta chegar. Quando algo ruim acontece, você já sabe a sentença: \"é castigo, eu mereço\". Carrega uma culpa de fundo que nem tem nome direito — uma sensação constante de estar devendo, de nunca estar limpo o bastante pra se aproximar de cabeça erguida.",
+      preco:"O preço é que você nunca se permite ser feliz em paz. A alegria sempre vem com um aperto, porque lá no fundo você acha que não tem direito a ela. Você se pune antes mesmo de Deus dizer qualquer coisa — cumprindo, sozinho, uma sentença que Cristo já cancelou na cruz, sem nunca ter percebido que o processo foi arquivado. E enquanto você se condena, deixa de viver: a vida não anda porque uma parte de você sente que não merece que ela ande." },
+    distante:{ emoji:"🚪", nome:"O Distante",
+      retrato:"você acredita em Deus — mas Ele sempre parece estar do outro lado de um vidro. Você fala, e a voz parece não atravessar. Vê os outros falando d'Ele com intimidade e sente uma pontada: \"por que com eles é perto e comigo é longe?\". Você se sente um cristão de segunda classe, sempre precisando de alguém mais santo, de um pastor, de um intermediário pra alcançar o que devia ser direto e seu.",
+      preco:"Essa distância te deixa órfão de presença. Você faz tudo certo por fora, mas por dentro ora pra um teto. E o pior: você se acostumou. Aceitou que perto de Deus é pros outros, não pra você — e essa resignação é a corrente mais pesada de todas, porque ela nem dói mais, só pesa. Você desistiu de esperar a intimidade, e essa desistência calada vai apagando, devagar, a esperança que te trouxe à fé no começo." },
+    cetico:{ emoji:"🔍", nome:"O Cético / Desconfiado",
+      retrato:"você não é leigo nem por fora. Você conhece a teoria — já ouviu mil vezes que é filho, herdeiro, livre; talvez até saiba Gálatas 4:7 de cor. Mas existe uma fenda entre o que você sabe na cabeça e o que você sente no peito: parece que toda essa promessa vale pros outros, não pra você. Você faz tudo certo, ora, frequenta — e mesmo assim a vida não anda, e isso plantou uma desconfiança honesta dentro de você: \"será que é real, ou é só frase bonita de igreja?\". Você já se cansou de promessa vazia. Não quer mais que te peçam pra \"ter fé\". Você quer ver provado.",
+      preco:"O preço dessa desconfiança é que você fica preso no meio do caminho: sabe demais pra acreditar como criança, e foi decepcionado demais pra se entregar como filho. Então você vive de braços meio cruzados diante de Deus — perto o suficiente pra continuar tentando, longe o suficiente pra se proteger de mais uma decepção. E essa autoproteção, que parece sabedoria, é justamente o que te mantém pequeno: você nunca recebe de verdade aquilo que sua mente já admite ser seu, porque o seu peito ainda não baixou a guarda. A teoria não te liberta. Só a prova que você confere com os próprios olhos derruba esse muro — e enquanto ela não vem, você segue sabendo de tudo e sentindo nada." },
+    filho:{ emoji:"🌱", nome:"O Filho em Formação",
+      retrato:"alguma coisa em você já despertou. Você já provou, em momentos, o que é falar com Deus de cabeça erguida — sem implorar, sem se rebaixar — e por isso sabe que aquilo é real. Mas isso ainda não desceu da cabeça pro peito em todos os cantos da sua vida. Há áreas onde você já anda mais leve; e há outras onde o velho reflexo ainda manda — ali você volta a temer, a se achar pequeno, a implorar a migalha que já é sua por herança. Você não está mais na cela, mas também ainda não ocupa a casa inteira.",
+      preco:"E é justo nesses cantos que a sua vida ainda trava. Não é falta de fé — é uma verdade que conhece a sua mente mas ainda não conquistou cada cômodo do seu coração. Você tem a chave de algumas portas e ainda soca outras com os punhos, sem perceber que a mesma chave abre todas. O risco do seu momento é parar no meio: achar que \"já entendi\" e deixar a transformação pela metade, voltando, sem perceber, aos reflexos de escravo nas horas de aperto. Você precisa caminhar o resto do caminho — levar de cabeça pra peito, dia após dia, até que ser filho deixe de ser algo que você sabe e vire, simplesmente, quem você é em tudo." },
+  };
+
+  let i=0, userName=''; const counts={cetico:0,mendigo:0,orfao:0,culpado:0,distante:0};
+
+  // ---- trilha de fundo ----
+  let soundOn=false;
+  function playMusic(){ const a=document.getElementById('bg'); if(!a) return; a.volume=0.18;
+    a.play().then(()=>{soundOn=true;updateSoundIcon();}).catch(()=>{}); }
+  function toggleSound(){ const a=document.getElementById('bg'); if(!a) return;
+    if(soundOn){ a.pause(); soundOn=false; }
+    else { a.volume=0.18; a.play().then(()=>{soundOn=true;updateSoundIcon();}).catch(()=>{}); soundOn=true; }
+    updateSoundIcon(); }
+  function updateSoundIcon(){ document.getElementById('soundToggle').textContent = soundOn?'🔊':'🔇'; }
+  function begin(){ playMusic(); show('name'); }
+  // ---- oração guiada (carrega só no clique; pausa a trilha pra não sobrepor) ----
+  function playPrayer(btn){
+    const a=document.getElementById('prayerAudio'); if(!a) return;
+    const ico=btn.querySelector('.pp-ico'), txt=btn.querySelector('.pp-txt');
+    if(a.paused){
+      const bg=document.getElementById('bg'); if(bg && !bg.paused){ bg.pause(); soundOn=false; updateSoundIcon(); }
+      a.play().then(()=>{ ico.textContent='⏸'; txt.textContent='Tocando — repete comigo, baixinho'; }).catch(()=>{});
+      a.onended=()=>{ ico.textContent='▶'; txt.textContent='Ouvir de novo'; };
+    } else {
+      a.pause(); ico.textContent='▶'; txt.textContent='Aperta o play e repete comigo, em voz baixa';
+    }
+  }
+
+  function show(id){
+    ['intro','name','quiz','result'].forEach(s=>document.getElementById(s).classList.add('hidden'));
+    const el=document.getElementById(id); el.classList.remove('hidden');
+    el.classList.remove('fade'); void el.offsetWidth; el.classList.add('fade');
+    if(id==='name') setTimeout(()=>document.getElementById('nameInput').focus(),100);
+  }
+  function checkName(){
+    const v=document.getElementById('nameInput').value.trim();
+    document.getElementById('nameBtn').disabled = v.length<2;
+  }
+  function startQuiz(){
+    userName=document.getElementById('nameInput').value.trim();
+    i=0; Object.keys(counts).forEach(k=>counts[k]=0);
+    show('quiz'); render();
+  }
+  function renderProg(){
+    const p=document.getElementById('prog'); p.innerHTML='';
+    QUESTIONS.forEach((_,k)=>{const d=document.createElement('div');d.className='dot'+(k<=i?' on':'');p.appendChild(d);});
+  }
+  function render(){
+    const Q=QUESTIONS[i], quiz=document.getElementById('quiz');
+    quiz.classList.remove('fade'); void quiz.offsetWidth; quiz.classList.add('fade');
+    document.getElementById('qnum').textContent='Pergunta '+(i+1)+' de '+QUESTIONS.length;
+    document.getElementById('qtext').textContent=Q.q;
+    const o=document.getElementById('opts'); o.innerHTML='';
+    Q.opts.forEach(op=>{const b=document.createElement('button');b.className='opt';b.innerHTML=op.t;b.onclick=()=>answer(op.a);o.appendChild(b);});
+    renderProg();
+  }
+  function answer(a){
+    if(a) counts[a]++;
+    i++;
+    if(i<QUESTIONS.length){ render(); } else { startAnalysis(); }
+  }
+  function startAnalysis(){
+    show('analyzing');
+    const lines=['Lendo suas respostas…','Cruzando seus padrões de leitura…','Revelando seu perfil…'];
+    let k=0; const el=document.getElementById('anline'); el.textContent=lines[0];
+    const t=setInterval(()=>{ k++; if(k<lines.length) el.textContent=lines[k]; },950);
+    setTimeout(()=>{ clearInterval(t); showResult(); }, 2800);
+  }
+  function showResult(){
+    const slaves=['cetico','mendigo','orfao','culpado','distante'];
+    let key = slaves.reduce((m,s)=>counts[s]>counts[m]?s:m,'cetico');
+    const A=ARQ[key], n=userName||'', v=n?n+', ':'';
+    show('result');
+    document.getElementById('remoji').textContent=A.emoji;
+    document.getElementById('rtitle').textContent=v+'seu perfil é '+A.nome;
+    document.getElementById('rbody').innerHTML=
+      "<p>"+v+A.retrato+"</p>"+
+      "<p>"+A.preco+"</p>"+
+      "<p class='em'>E talvez você nunca tenha percebido — mas é tudo a mesma ferida.</p>"+
+      "<p>Essa forma de se relacionar com Deus não fica presa na hora da oração. Ela vaza, silenciosa, pra cada canto da sua vida. Repara:</p>"+
+      "<p>É <strong>por isso</strong> que Ele parece distante, por mais que você busque.<br>"+
+      "É <strong>por isso</strong> que a sua vida não anda — você se move travado, com medo, sem a ousadia que um filho teria.<br>"+
+      "É <strong>por isso</strong> que existe uma tristeza de fundo que você nem sabe explicar — e uma solidão que continua até no meio da igreja cheia.<br>"+
+      "É <strong>por isso</strong> que às vezes bate uma revolta surda: você faz tudo certo, e mesmo assim sente que a conta nunca fecha pro seu lado.<br>"+
+      "E é <strong>por isso</strong> que tem aquele vazio que nada preenche — nem o trabalho, nem o culto, nem as pessoas. Você tapa, e ele volta.</p>"+
+      "<p class='em'>"+(n?n+", ":"")+"tudo isso tem uma raiz só. E é sobre isso.</p>"+
+      "<p>Você se relaciona com Deus como <strong>escravo</strong> — por medo, cobrança e distância — e não como <strong>filho</strong>, por amor, confiança e pertencimento. Um escravo nunca descansa, nunca se sente em casa, nunca acha que merece. É exatamente assim que você tem se sentido: com Deus, e com a vida.</p>"+
+      "<p class='em'>Mas eu preciso te dizer uma coisa que talvez ninguém nunca tenha te dito:</p>"+
+      "<p><strong>Isso não é culpa sua.</strong> Ninguém nunca te mostrou quem Deus realmente é. Te apresentaram um Deus de cobrança, de vigilância, de distância — e você passou a vida tentando agradar um Pai que te pintaram errado.</p>"+
+      "<p>E a verdade sobre quem Ele é sempre esteve escrita — só que foi distorcida bem debaixo do seu nariz. Onde diz “servo”, o original diz <span class='gk'>doulos</span>: escravo de propriedade. Amaciaram a palavra pra você se sentir empregado. Mas o texto grita o oposto:</p>"+
+      "<p class='proof'><span class='gk'>“já não és escravo, mas filho — e se filho, herdeiro.”</span> — Gálatas 4:7</p>"+
+      "<p class='em'>E eu não te peço pra acreditar em mim. Eu provo.</p>"+
+      "<p>Cada coisa que eu afirmo tem capítulo, versículo e a palavra no original — pra você <strong>conferir você mesmo</strong>. Não é fé cega, não é papo de pregador. É o que está escrito, e você checa.</p>"+
+      "<p>Você não nasceu "+A.nome+". <strong>Foi assim que te ensinaram a ver Deus.</strong> E o que foi ensinado pode ser desaprendido.</p>"+
+      "<p class='em'>Agora imagina por um segundo.</p>"+
+      "<p>Imagina acordar e sentir Deus <strong>perto</strong> — não como um juiz te vigiando, mas como um Pai do seu lado. A oração virando conversa. O medo afrouxando. A revolta dando lugar à paz. E aquele vazio, finalmente, começando a encher — porque você descobriu que <strong>pertence</strong>, que a casa é do seu Pai e tem o seu nome na porta.</p>"+
+      "<p class='em'>E o que dá pra fazer sobre isso, "+n+"?</p>"+
+      "<p>Não é num passe de mágica — mas também não leva anos. Vou te mostrar agora mesmo o primeiro passo de volta. <strong>Faça isto antes de continuar:</strong></p>"+
+      "<p>Feche os olhos. Respira fundo, sem pensar em nada. E fala, baixinho, como um filho falaria com o Pai:</p>"+
+      "<div class='prayer-audio'><button type='button' class='play-prayer' onclick='playPrayer(this)'><span class='pp-ico'>▶</span><span class='pp-txt'>Aperta o play e repete comigo, em voz baixa</span></button><audio id='prayerAudio' preload='none' src='oracao-do-filho.mp3'></audio></div>"+
+      "<p>Respira. Repara que foi diferente — você não implorou, não barganhou, não se rebaixou. Você só chegou. É assim que um filho fala. E isso é só a porta de entrada.</p>"+
+      "<p>Eu já trilhei esse caminho inteiro de volta — e documentei cada passo. Dá pra você descobrir tudo do zero, como eu descobri. Mas, pra <strong>facilitar a sua jornada</strong>, vou te mostrar a minha.</p>"+
+      "<p class='em'>E é isto que você vai sentir:</p>"+
+      "<p>Nos <strong>primeiros dias</strong>, o peso do medo começa a sair — você para de orar implorando e começa a falar com Deus como filho.<br>"+
+      "No <strong>meio do caminho</strong>, você vê com os seus próprios olhos, no texto original, onde a verdade foi distorcida — e aí não tem mais volta, não dá pra desver.<br>"+
+      "Lá pelos <strong>últimos dias</strong>, a paz que faltava começa a aparecer: Deus perto, o medo afrouxando, o vazio começando a encher.</p>";
+    document.getElementById('leadin').innerHTML="Escuta. A oração que você acabou de fazer agora há pouco — aquela em que você só chegou, sem implorar, sem barganhar, sem aquela vozinha dizendo que você não merece — não foi sugestão emocional. Foi você, pela primeira vez, falando com Deus como filho. E o que você sentiu foi real porque estava ancorado numa palavra que sempre esteve ali, debaixo da tradução que te amaciaram pra te manter pequeno. Eu não te peço fé. Eu te dou a prova — e você confere cada palavra sozinho, no Strong's, sem precisar acreditar em mim nem em ninguém. O problema é que sentir isso uma vez não muda quem você é. Amanhã o velho reflexo volta, a vida aperta, e você se pega implorando de novo. O que muda é fazer isso todo dia, na ordem certa, até parar de ser esforço e virar quem você é.";
+  }
+</script>
+</body>
+</html>
