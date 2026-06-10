@@ -115,8 +115,9 @@ button{font-family:var(--sans);cursor:pointer}
 .stat+.stat{border-left:1px solid rgba(255,255,255,.05)}
 .social{display:flex;align-items:center;gap:9px;margin:14px 22px 0;padding:11px 14px}
 .social .avs{display:flex}
-.social .av{width:22px;height:22px;border-radius:50%;border:2px solid #000;margin-left:-7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600}
+.social .av{width:22px;height:22px;border-radius:50%;border:2px solid #000;margin-left:-7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;overflow:hidden}
 .social .av:first-child{margin-left:0}
+.social .av img,.rrow .avr img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
 .social span.t{font-size:12.5px;color:var(--dim)}
 
 /* dia */
@@ -140,7 +141,7 @@ button{font-family:var(--sans);cursor:pointer}
 .rrow{display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.05)}
 .rrow:last-child{border-bottom:none}
 .rrow .pos{width:20px;font-size:12.5px;font-weight:600;color:var(--mute)}
-.rrow .avr{width:34px;height:34px;border-radius:50%;background:#1d1a14;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--gold);flex:0 0 34px}
+.rrow .avr{width:34px;height:34px;border-radius:50%;background:#1d1a14;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--gold);flex:0 0 34px;overflow:hidden}
 .rrow .nm{flex:1;min-width:0}
 .rrow .nm p{margin:0;font-size:14.5px}
 .rrow .nm small{font-size:11.5px;color:var(--mute)}
@@ -665,9 +666,9 @@ function vHoje(){
     </div>
     <div class="social glass">
       <span class="avs">
-        <span class="av" style="background:#3b4a63;color:#cfd6e4">M</span>
-        <span class="av" style="background:#5a4a2e;color:#e8dcc2">P</span>
-        <span class="av" style="background:#3e5544;color:#cfe0d4">J</span></span>
+        <span class="av"><img src="https://randomuser.me/api/portraits/women/68.jpg" alt="" loading="lazy"></span>
+        <span class="av"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt="" loading="lazy"></span>
+        <span class="av"><img src="https://randomuser.me/api/portraits/women/47.jpg" alt="" loading="lazy"></span></span>
       <span class="t">${147+diasFeitos()*3} pessoas concluíram o dia hoje</span>
     </div>`;
 }
@@ -740,13 +741,15 @@ function vJornada(){
 }
 
 function vRanking(){
-  const mock=[['Mariana',41],['Pedro',28],['Lívia',17],['João',12],['Rafa',9],['Bia',5]];
-  const all=[...mock,[S.nome||'Você',diasFeitos(),'me']].sort((a,b)=>b[1]-a[1]);
+  const FOTO='https://randomuser.me/api/portraits/';
+  const mock=[['Mariana',41,null,FOTO+'women/68.jpg'],['Pedro',28,null,FOTO+'men/32.jpg'],['Lívia',17,null,FOTO+'women/47.jpg'],['João',12,null,FOTO+'men/76.jpg'],['Rafa',9,null,FOTO+'men/15.jpg'],['Bia',5,null,FOTO+'women/26.jpg']];
+  const all=[...mock,[S.nome||'Você',diasFeitos(),'me',null]].sort((a,b)=>b[1]-a[1]);
   const mes=new Date().toLocaleDateString('pt-BR',{month:'long'});
   document.getElementById('view').innerHTML=`<div class="pad"><h2 class="sec">Turma de ${mes}</h2>
     <div class="glass" style="overflow:hidden">${all.map((r,i)=>`
       <div class="rrow ${r[2]?'me':''}"><span class="pos">${i+1}</span>
-        <span class="avr" ${r[2]?'style="background:var(--gold);color:var(--gold-ink)"':''}>${(r[0]||'?').slice(0,2).toUpperCase()}</span>
+        ${r[3]?`<span class="avr"><img src="${r[3]}" alt="" loading="lazy"></span>`
+              :`<span class="avr" ${r[2]?'style="background:var(--gold);color:var(--gold-ink)"':''}>${(r[0]||'?').slice(0,2).toUpperCase()}</span>`}
         <div class="nm"><p>${r[2]?(S.nome||'Você'):r[0]}</p><small>${NIVEIS.slice().reverse().find(n=>r[1]>=n.em).t}</small></div>
         <span class="dd">${r[1]}d</span></div>`).join('')}</div>
     <p class="legal" style="margin-top:12px">Constância vale mais que velocidade. ${sb?'':'(demonstração — o ranking real vem da view ranking_coorte)'}</p></div>`;
