@@ -218,6 +218,7 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
     <h2 class="diag-h" style="font-size:26px;margin-top:10px">Ler a Bíblia virou <span class="gk">peso</span> pra você?</h2>
     <p class="diag-p">Obrigação. Culpa. Distância. Se a leitura te cansa em vez de te transformar, o problema não é você — é o jeito que te ensinaram a ler.</p>
     <p class="diag-p" style="color:var(--ink);font-weight:500">2 minutos pra descobrir como você lê a Bíblia — e o que isso explica.</p>
+    <p class="diag-p" style="margin-top:10px">🎁 E quem responde até o fim <b style="color:var(--gold)">ganha um presente</b>.</p>
   </div>
   <div class="qfoot">
     <button class="btn gold" id="introBtn" onclick="iniciarQuiz()">Começar meu diagnóstico</button>
@@ -266,21 +267,22 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
   <div class="qfoot"><button class="btn gold" onclick="irPacto()">Quero começar</button></div>
 </section>
 
-<!-- ===== PACTO ===== -->
+<!-- ===== CONTRATO ===== -->
 <section id="scr-pacto" class="wrap hidden">
   <div class="center">
     <span class="mini" style="color:var(--gold)">Antes do seu plano</span>
-    <h2 class="diag-h" style="margin-top:8px">Faça o pacto.</h2>
+    <h2 class="diag-h" style="margin-top:8px">Assine o contrato.</h2>
     <div class="pacto-box" id="pactoTxt"></div>
     <p class="pacto-ref">"Recebestes o espírito de adoção" — Romanos 8:15</p>
+    <p class="diag-p" style="margin-top:18px">🎁 Assinou? Eu te dou um <b style="color:var(--gold)">presente</b>: o Dia 1 completo, com a oração guiada em áudio — seu, antes de decidir qualquer coisa.</p>
   </div>
-  <div class="qfoot"><button class="btn gold" onclick="assinarPacto()">Assinar meu pacto ✍️</button></div>
+  <div class="qfoot"><button class="btn gold" onclick="assinarPacto()">Assinar e receber meu presente 🎁</button></div>
 </section>
 
 <!-- ===== OFERTA ===== -->
 <section id="scr-oferta" class="wrap hidden" style="position:relative">
   <div class="center">
-    <img class="codice-img" src="img/codice-5.jpg" width="130" height="130" alt="" style="border-radius:16px;margin-bottom:4px">
+    <img class="codice-img" src="img/simbolo-5.jpg" width="130" height="130" alt="" style="border-radius:16px;margin-bottom:4px">
     <span class="mini" style="color:var(--gold);margin-top:10px">Plano pronto</span>
     <h2 class="diag-h" id="ofH">Seu Plano do Herdeiro está pronto.</h2>
     <p class="diag-p" id="ofSub" style="margin-top:6px">60 dias. 1 mudança de identidade: de escravo a filho.</p>
@@ -326,7 +328,7 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
   <div class="qfoot">
     <button class="btn gold" id="ofBtn" onclick="comprar()">Destravar meu plano de 60 dias →</button>
     <p class="legal">Pagamento único e seguro. Sem renovação, sem surpresa.</p>
-    <button class="linkfree" onclick="fecharOferta()">Quero começar só com o Dia 1 grátis</button>
+    <button class="linkfree" onclick="fecharOferta()">🎁 Quero meu presente: começar o Dia 1 grátis</button>
   </div>
 </section>
 
@@ -410,9 +412,9 @@ function codiceSVG(stage, size){
   ];
   return `<svg viewBox="0 0 260 230" width="${size||260}" height="${(size||260)*0.885}" role="img" aria-label="Códice, estágio ${stage+1} de 5">${defs}<circle cx="130" cy="120" r="${[88,94,102,108,114][stage]}" fill="url(#cbloom)"/>${bodies[stage]}</svg>`;
 }
-/* renders 3D (Higgsfield) — codiceSVG fica como fallback */
+/* símbolos monoline (Higgsfield, estilo do selo) — codiceSVG fica como fallback */
 function codiceImg(stage, size){
-  return `<img class="codice-img" src="img/codice-${stage+1}.jpg" width="${size||260}" height="${size||260}" alt="Códice, estágio ${stage+1} de 5" onerror="this.outerHTML=codiceSVG(${stage},${size||260})">`;
+  return `<img class="codice-img" src="img/simbolo-${stage+1}.jpg" width="${size||260}" height="${size||260}" alt="Códice, estágio ${stage+1} de 5" onerror="this.outerHTML=codiceSVG(${stage},${size||260})">`;
 }
 
 /* ================= QUIZ — arquitetura validada (ver pesquisa-funil-concorrentes.md) ================= */
@@ -637,6 +639,8 @@ function renderDiag(){
   const n=S.nome||'Amigo';
   const sent=L_SENT[R.sentimento??0], ora=L_ORA[R.oracao??0];
   const nTent=(R.tentou||[]).filter(j=>j<5).length;
+  const dores=(R.afasta||[]).slice(0,2).map(j=>L_AFASTA[j]);
+  const dorTxt=dores.length?dores.join(' e '):'a distância';
   if(R.tom!==1){ /* Versão A — confronto bíblico + absolvição */
     document.getElementById('diagH').textContent=n+', suas respostas revelam algo.';
     document.getElementById('diagP').innerHTML=
@@ -646,15 +650,18 @@ function renderDiag(){
       `<br><br><i>"Não recebestes o espírito de escravidão, para viverdes outra vez com medo..."</i> — Romanos 8:15`+
       `<br><br><b style="color:var(--gold)">Você lê a Bíblia como escravo. E a culpa não é sua.</b>`+
       `<br><br>Ninguém te ensinou a ler de outro jeito. Te apresentaram a Palavra como cobrança, meta e dívida — e nenhum escravo aguenta muito tempo na casa do patrão. Por isso os planos não duraram. Não foi falta de fé. Foi excesso de peso.`+
+      `<br><br>E você sabe o preço que paga: ${dorTxt} — e a sensação de estar sempre do lado de fora de uma casa que era pra ser sua. Cada semana que passa assim, a corrente assenta um pouco mais.`+
       `<br><br>Mas o mesmo verso continua: <i>"...recebestes o espírito de adoção, pelo qual clamamos: Aba, Pai."</i>`+
-      `<br><br><b>Existe um jeito de filho ler. E dá pra aprender em 60 dias.</b>`;
+      `<br><br><b>Existe um jeito de filho ler. E dá pra aprender em 60 dias.</b>`+
+      `<br><br>Imagina daqui a 60 dias: você abrindo esse mesmo livro sem peso nenhum — esperando um Pai, não uma bronca. Não é promessa vazia: é um caminho com data, ${nTent?'e dessa vez ':''}um dia de cada vez. <b style="color:var(--gold)">A escolha de hoje é só dar o primeiro passo.</b>`;
   } else { /* Versão B — identidade revelada */
     document.getElementById('diagH').textContent=n+', a análise das suas respostas está pronta.';
     document.getElementById('diagP').innerHTML=
       `Você não tem um problema de disciplina. Suas respostas mostram outra coisa: <b style="color:var(--gold)">um coração de filho preso numa rotina de escravo.</b>`+
-      `<br><br>Você sente o chamado — por isso ${nTent?`já tentou ${nTent} ${nTent>1?'vezes':'vez'}`:'chegou até aqui'}. Mas te entregaram a Bíblia como obrigação, e obrigação nenhuma sobrevive 60 dias.`+
+      `<br><br>Você sente o chamado — por isso ${nTent?`já tentou ${nTent} ${nTent>1?'vezes':'vez'}`:'chegou até aqui'}. Mas te entregaram a Bíblia como obrigação, e obrigação nenhuma sobrevive 60 dias. E o custo disso você conhece: ${dorTxt}, e aquela sensação de ler e não encontrar ninguém do outro lado.`+
       `<br><br>A Escritura diz quem você realmente é: <i>"Já não és escravo, porém filho; e, se filho, também herdeiro."</i> — Gálatas 4:7`+
-      `<br><br><b>Seu perfil: herdeiro que ainda lê como escravo.</b> Nos próximos 60 dias, o Códice te ensina a ler do lugar que já é seu: a mesa do Pai.`;
+      `<br><br><b>Seu perfil: herdeiro que ainda lê como escravo.</b> Nos próximos 60 dias, o Códice te ensina a ler do lugar que já é seu: a mesa do Pai.`+
+      `<br><br>Imagina a sua leitura daqui a 60 dias: sem ${dores[0]||'o peso'}, sem pressa, com voz. <b style="color:var(--gold)">É pra lá que a gente vai — começando hoje.</b>`;
   }
 }
 function renderRevela(){
