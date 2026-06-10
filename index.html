@@ -294,9 +294,9 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
     <h2 class="diag-h" style="margin-top:8px">Assine o contrato.</h2>
     <div class="pacto-box" id="pactoTxt"></div>
     <p class="pacto-ref">"Recebestes o espírito de adoção" — Romanos 8:15</p>
-    <p class="diag-p" style="margin-top:18px">🎁 Assinou? Eu te dou um <b style="color:var(--gold)">presente</b>: o Dia 1 completo, com a oração guiada em áudio — seu, antes de decidir qualquer coisa.</p>
+    <p class="diag-p" style="margin-top:18px">🎁 Assinou? Seu <b style="color:var(--gold)">Dia 1 já abre na hora</b> — passagem, ensino e a oração guiada em áudio. De graça, sem pedir nada em troca. Sua jornada começa agora.</p>
   </div>
-  <div class="qfoot"><button class="btn gold" onclick="assinarPacto()">Assinar e receber meu presente 🎁</button></div>
+  <div class="qfoot"><button class="btn gold" onclick="assinarPacto()">Assinar e abrir meu Dia 1 🎁</button></div>
 </section>
 
 <!-- ===== OFERTA ===== -->
@@ -405,8 +405,8 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
   <span class="mini" style="color:var(--gold)">Dia concluído</span>
   <h3 id="dnTit">Dia 1 ✓</h3>
   <p id="dnSub"></p>
-  <button class="btn gold" onclick="compartilhar()" style="margin-bottom:10px">Compartilhar</button>
-  <button class="ghost" onclick="fecharDone()">Voltar pra jornada</button>
+  <button class="btn gold" id="dnPrim" style="margin-bottom:10px"></button>
+  <button class="ghost" id="dnSec"></button>
 </div></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -734,7 +734,7 @@ function irPacto(){
     `Eu, <b style="color:var(--gold)">${S.nome||'_____'}</b>, decido parar de ler a Bíblia como escravo e aprender a ler como filho.<br><br>Pelos próximos 60 dias, abro o Códice por ${min} minutos por dia.`;
   show('scr-pacto');
 }
-function assinarPacto(){ S.pacto=true; save(); abrirOferta('padrao'); }
+function assinarPacto(){ S.pacto=true; S.funil=true; save(); entrarApp(); vDia(1); } /* presente: entra direto no Dia 1, sem oferta */
 
 /* ================= OFERTA / COMPRA ================= */
 function abrirOferta(modo){
@@ -857,6 +857,15 @@ function concluir(n){
   const lv = NIVEIS.find(x=>x.em===diasFeitos());
   document.getElementById('dnTit').textContent='Dia '+n+' ✓';
   document.getElementById('dnSub').textContent='Sequência de '+S.streak+(S.streak>1?' dias':' dia')+'. O códice sentiu.';
+  const prim=document.getElementById('dnPrim'), sec=document.getElementById('dnSec');
+  if(n===1 && !S.pago){ /* fim do presente: gancho de desbloqueio */
+    document.getElementById('dnSub').textContent='Sentiu a diferença? Isso foi só o Dia 1. Faltam 59.';
+    prim.textContent='Liberar meus 60 dias →'; prim.onclick=()=>{ document.getElementById('ovDone').classList.add('hidden'); abrirOferta('pos1'); };
+    sec.textContent='Agora não, quero ficar só no Dia 1'; sec.onclick=()=>{ document.getElementById('ovDone').classList.add('hidden'); go('hoje'); };
+  } else {
+    prim.textContent='Compartilhar'; prim.onclick=compartilhar;
+    sec.textContent='Voltar pra jornada'; sec.onclick=fecharDone;
+  }
   document.getElementById('ovDone').classList.remove('hidden');
   if(lv && lv.em>0){
     document.getElementById('ovHero').innerHTML=codiceImg(nivelIdx(),180);
