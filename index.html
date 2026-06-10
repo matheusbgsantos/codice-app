@@ -105,6 +105,8 @@ button{font-family:var(--sans);cursor:pointer}
 /* hoje */
 .hero{display:flex;justify-content:center;padding:4px 0 0}
 .hero svg{width:min(72vw,290px);height:auto}
+.hero img{width:min(72vw,290px);height:auto;border-radius:22px}
+.codice-img{border-radius:18px;display:block;margin:0 auto}
 .daytag{font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.18em;text-transform:uppercase;text-align:center;margin:2px 0 8px}
 .daytitle{font-family:var(--serif);font-style:italic;font-weight:600;font-size:21px;line-height:1.3;color:#cfc9bb;text-align:center;margin:0 auto;max-width:290px}
 .stats{display:flex;padding:14px 20px 16px;text-align:center;border-bottom:1px solid rgba(255,255,255,.05)}
@@ -349,6 +351,10 @@ function codiceSVG(stage, size){
   ];
   return `<svg viewBox="0 0 260 230" width="${size||260}" height="${(size||260)*0.885}" role="img" aria-label="Códice, estágio ${stage+1} de 5">${defs}<circle cx="130" cy="120" r="${[88,94,102,108,114][stage]}" fill="url(#cbloom)"/>${bodies[stage]}</svg>`;
 }
+/* renders 3D (Higgsfield) — codiceSVG fica como fallback */
+function codiceImg(stage, size){
+  return `<img class="codice-img" src="img/codice-${stage+1}.jpg" width="${size||260}" height="${size||260}" alt="Códice, estágio ${stage+1} de 5" onerror="this.outerHTML=codiceSVG(${stage},${size||260})">`;
+}
 
 /* ================= QUIZ — arquitetura validada (ver pesquisa-funil-concorrentes.md) ================= */
 const FLUXO = [
@@ -567,7 +573,7 @@ const L_ORA=['um servo pedindo favor ao patrão','um devedor prestando contas','
 const L_AFASTA=['a falta de tempo','a distração','a culpa','a sequidão','a ansiedade','o cansaço'];
 const L_TEMPO=[5,10,15];
 function renderDiag(){
-  document.getElementById('diagHero').innerHTML=codiceSVG(0,190);
+  document.getElementById('diagHero').innerHTML=codiceImg(0,190);
   const n=S.nome||'Amigo';
   const sent=L_SENT[R.sentimento??0], ora=L_ORA[R.oracao??0];
   const nTent=(R.tentou||[]).filter(j=>j<5).length;
@@ -653,7 +659,7 @@ function vHoje(){
   const d=diaAtual(), fase=FASES.find(f=>d>=f.ini&&d<=f.fim), fim=diasFeitos()>=TOTAL;
   const pct=Math.round(diasFeitos()/TOTAL*100);
   document.getElementById('view').innerHTML=`
-    <div class="hero">${codiceSVG(nivelIdx())}</div>
+    <div class="hero">${codiceImg(nivelIdx())}</div>
     <p class="daytag">${fim?'Jornada concluída':'Dia '+d+' · '+fase.nome.split('·')[1].trim()}</p>
     <p class="daytitle">${fim?'Você tomou posse. Releia qualquer dia quando quiser.':TEMAS[d-1]}</p>
     <div class="stats">
@@ -711,7 +717,7 @@ function concluir(n){
   document.getElementById('dnSub').textContent='Sequência de '+S.streak+(S.streak>1?' dias':' dia')+'. O códice sentiu.';
   document.getElementById('ovDone').classList.remove('hidden');
   if(lv && lv.em>0){
-    document.getElementById('ovHero').innerHTML=codiceSVG(nivelIdx(),180);
+    document.getElementById('ovHero').innerHTML=codiceImg(nivelIdx(),180);
     document.getElementById('ovTit').textContent=lv.t;
     document.getElementById('ovSub').textContent='Dia '+diasFeitos()+' de 60. As correntes estão caindo.';
     setTimeout(()=>{ document.getElementById('ovDone').classList.add('hidden');
