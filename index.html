@@ -75,6 +75,18 @@ button{font-family:var(--sans);cursor:pointer}
 
 /* oferta */
 #scr-oferta .center{justify-content:flex-start;padding-top:22px;overflow-y:auto}
+.preview{width:100%;max-width:330px;margin-top:16px}
+.pv-stats{display:flex;gap:8px;margin-bottom:12px}
+.pv-stats>div{flex:1;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:11px 4px;text-align:center}
+.pv-stats b{display:block;font-family:var(--serif);font-style:italic;font-size:21px;color:var(--gold);line-height:1}
+.pv-stats span{font-size:10px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em;margin-top:4px;display:block}
+.pv-tl{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:14px 16px}
+.pv-tl .pv-row{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--dim);padding:5px 0}
+.pv-tl .pv-row b{flex:0 0 52px;color:var(--gold);font-size:12px;font-weight:600}
+.pv-eco{font-size:12.5px;color:var(--gold);text-align:center;margin-top:12px;line-height:1.5;font-style:italic}
+.price-de{color:var(--faint);text-decoration:line-through;font-size:18px;margin-right:8px}
+.btn.card-cta{margin-top:16px;border-radius:14px}
+.cta-micro{font-size:11.5px;color:var(--mute);text-align:center;margin-top:8px}
 .of-card{width:100%;max-width:330px;border:1px solid rgba(232,200,122,.45);border-radius:18px;background:linear-gradient(180deg,rgba(232,200,122,.10),rgba(232,200,122,.03));padding:20px 20px 16px;margin-top:16px}
 .chk{display:flex;gap:10px;align-items:flex-start;text-align:left;font-size:14px;color:#ddd8cb;margin:9px 0;line-height:1.4}
 .chk b{flex:0 0 18px;height:18px;border-radius:50%;background:rgba(232,200,122,.18);color:var(--gold);font-size:11px;display:flex;align-items:center;justify-content:center;margin-top:1px;font-weight:700}
@@ -287,8 +299,24 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
     <h2 class="diag-h" id="ofH">Seu Plano do Herdeiro está pronto.</h2>
     <p class="diag-p" id="ofSub" style="margin-top:6px">60 dias. 1 mudança de identidade: de escravo a filho.</p>
 
+    <!-- PREVIEW CONCRETO DO PLANO (antes do preço) -->
+    <div class="preview">
+      <div class="pv-stats">
+        <div><b>60</b><span>dias</span></div>
+        <div><b id="pvMin">10</b><span>min/dia</span></div>
+        <div><b>60</b><span>orações</span></div>
+      </div>
+      <div class="pv-tl">
+        <div class="pv-row"><b>Dia 1</b> Você não é escravo — a palavra original te chama de filho</div>
+        <div class="pv-row"><b>Dia 20</b> Servo da Casa · as primeiras correntes caem</div>
+        <div class="pv-row"><b>Dia 40</b> Filho em Formação · o livro se abre</div>
+        <div class="pv-row"><b>Dia 60</b> Herdeiro · você toma posse</div>
+      </div>
+      <p class="pv-eco" id="pvEco"></p>
+    </div>
+
     <div class="of-card">
-      <div style="text-align:center"><span class="price" id="ofPreco">R$ 27<small style="font-size:18px">,90</small></span></div>
+      <div style="text-align:center"><span class="price-de">R$ 67</span><span class="price" id="ofPreco">R$ 27<small style="font-size:18px">,90</small></span></div>
       <div style="font-size:12.5px;color:var(--gold);margin-top:2px;text-align:center">uma única vez · preço de fundador</div>
       <div class="of-div"></div>
       <div class="chk"><b>✓</b>A jornada completa de 60 dias</div>
@@ -296,7 +324,10 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
       <div class="chk"><b>✓</b>Ranking da sua turma</div>
       <div class="chk"><b>✓</b>Todas as atualizações da Jornada 1</div>
       <div class="of-div"></div>
-      <div style="font-size:12.5px;color:var(--dim);text-align:center;line-height:1.55"><b style="color:var(--ink)">Sem assinatura. Sem renovação. Seu pra sempre.</b><br>Menos de 50 centavos por dia — e depois do dia 60, continua seu.</div>
+      <div style="font-size:12.5px;color:var(--dim);text-align:center;line-height:1.55"><b style="color:var(--ink)">Sem assinatura. Sem renovação. Seu pra sempre.</b></div>
+      <!-- CTA COLADO NO CARD -->
+      <button class="btn gold card-cta" onclick="comprar()">Destravar meu plano de 60 dias →</button>
+      <p class="cta-micro">Pagamento único · Acesso pra sempre · Garantia de 7 dias</p>
     </div>
 
     <div class="cmp">
@@ -316,8 +347,11 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
       <div class="who"><img src="https://randomuser.me/api/portraits/men/32.jpg" alt=""><span><b style="color:var(--dim)">Pedro</b> · dia 28 da jornada</span></div>
     </div>
 
-    <div class="gar"><span class="ic">🛡️</span><p><b>Garantia de 7 dias.</b> Leia a primeira semana inteira. Se não sentir diferença na sua leitura, devolvemos cada centavo. Sem perguntas.</p></div>
-    <p class="anc">🤲 Parte de cada Códice mantém o acesso aberto pra quem não pode pagar. Sua compra patrocina a caminhada de outro filho.</p>
+    <div class="gar"><span class="ic">🛡️</span><p><b>Garantia de 7 dias.</b> Leia a primeira semana inteira. Se não sentir diferença na sua leitura, é só me avisar — devolvo cada centavo. Sem perguntas, sem ressentimento.</p></div>
+
+    <button class="btn gold" style="max-width:330px;margin-top:18px" onclick="comprar()">Quero meus 60 dias — R$ 27,90 →</button>
+
+    <p class="anc" style="margin-top:18px">🤲 Parte de cada Códice mantém o acesso aberto pra quem não pode pagar. Sua compra patrocina a caminhada de outro filho.</p>
 
     <div class="faq">
       <p><b>É assinatura?</b> Não — pagamento único.</p>
@@ -703,6 +737,12 @@ function abrirOferta(modo){
   document.getElementById('ofSub').textContent = modo==='pos1'
     ? 'Faltam 59 dias. Não deixa a corrente assentar de novo.'
     : '60 dias. 1 mudança de identidade: de escravo a filho.';
+  const min=L_TEMPO[R.tempo??1]||10;
+  document.getElementById('pvMin').textContent=min;
+  const dores=(R.afasta||[]).slice(0,2).map(j=>L_AFASTA[j]);
+  document.getElementById('pvEco').textContent = dores.length
+    ? 'Seus primeiros 7 dias atacam exatamente '+dores.join(' e ')+'.'
+    : 'Um dia de cada vez, do escravo ao herdeiro.';
   show('scr-oferta');
 }
 function fecharOferta(){ S.funil=true; save(); entrarApp(); }
