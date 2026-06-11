@@ -1148,9 +1148,15 @@ function vJornada(){
   document.getElementById('view').innerHTML=h+'</div>';
 }
 
+/* ranking-demo VIVO: cada pessoa avança +1 dia por dia real desde a âncora.
+   (vira ranking real do Supabase quando bater 100 compradores) */
+const RANK_ANCORA='2026-06-11';        // dia em que os números abaixo valem
+const RANK_BASE=[['Mariana',41,'women/68.jpg'],['Pedro',28,'men/32.jpg'],['Lívia',17,'women/47.jpg'],['João',12,'men/76.jpg'],['Rafa',9,'men/15.jpg'],['Bia',5,'women/26.jpg']];
 function vRanking(){
   const FOTO='https://randomuser.me/api/portraits/';
-  const mock=[['Mariana',41,null,FOTO+'women/68.jpg'],['Pedro',28,null,FOTO+'men/32.jpg'],['Lívia',17,null,FOTO+'women/47.jpg'],['João',12,null,FOTO+'men/76.jpg'],['Rafa',9,null,FOTO+'men/15.jpg'],['Bia',5,null,FOTO+'women/26.jpg']];
+  const hoje0=new Date(); hoje0.setHours(0,0,0,0);
+  const dec=Math.max(0,Math.floor((hoje0-new Date(RANK_ANCORA+'T00:00:00'))/864e5)); // dias decorridos
+  const mock=RANK_BASE.map(p=>[p[0], Math.min(60, p[1]+dec), null, FOTO+p[2]]);
   const all=[...mock,[S.nome||'Você',diasFeitos(),'me',null]].sort((a,b)=>b[1]-a[1]);
   const mes=new Date().toLocaleDateString('pt-BR',{month:'long'});
   const medalha=['🥇','🥈','🥉'], cls=['ouro','prata','bronze'];
