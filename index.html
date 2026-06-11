@@ -567,6 +567,16 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
   <button class="ghost" id="dnSec"></button>
 </div></div>
 
+<!-- ===== DESCANSE NO PAI (após compartilhar) ===== -->
+<div id="ovDescanso" class="ov hidden"><div class="card">
+  <div style="font-size:34px">🌿</div>
+  <span class="mini" style="color:var(--gold);margin-top:8px">Agora viva o dia</span>
+  <h3 style="margin-top:8px">Descanse no Pai.</h3>
+  <p style="font-size:14px;color:var(--dim);margin:0 0 6px">Seu desafio de hoje, pra levar a leitura pra dentro da vida:</p>
+  <div class="boxd" id="descansoDesafio" style="text-align:left;margin-bottom:18px"></div>
+  <button class="btn gold" onclick="document.getElementById('ovDescanso').classList.add('hidden');proximoPasso()">Amém 🙏</button>
+</div></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ================= CONFIG ================= */
@@ -786,6 +796,15 @@ const diasFeitos = () => Object.keys(S.prog).length;
 const diaAtual   = () => Math.min(diasFeitos()+1, TOTAL);
 const nivelIdx   = () => { let i=0; NIVEIS.forEach((n,j)=>{ if(diasFeitos()>=n.em) i=j; }); return i; };
 const nivel      = () => NIVEIS[nivelIdx()].t;
+/* TRAVA DIÁRIA: 1 dia por dia real. O próximo abre só depois da virada do dia (00:00). */
+function liberadoHoje(){
+  if(sessionStorage.getItem('codice_livre')==='1') return true; // bypass de teste (?livre=1)
+  if(diasFeitos()===0) return true;        // Dia 1 sempre liberado
+  if(!S.lastDone) return true;
+  const last=new Date(S.lastDone); last.setHours(0,0,0,0);
+  const hoje=new Date(); hoje.setHours(0,0,0,0);
+  return hoje.getTime()>last.getTime();    // só libera se virou o dia
+}
 function recalcStreak(){
   if(!S.lastDone) { S.streak=0; return; }
   const horas = (Date.now()-new Date(S.lastDone))/36e5;
@@ -1060,7 +1079,11 @@ function vHoje(){
       <div class="stat"><div class="v">${pct}%</div><div class="l">completo</div></div>
     </div>
     <div class="pad" style="margin-top:16px">
-      <button class="btn gold" onclick="abrirDia(${d})">${fim?'Rever a jornada':'Começar o dia '+d}</button>
+      ${fim ? `<button class="btn gold" onclick="abrirDia(${d})">Rever a jornada</button>`
+        : (diasFeitos()>0 && !liberadoHoje())
+          ? `<button class="btn" disabled style="opacity:.6">🌙 Volte amanhã pro dia ${d}</button>
+             <p style="font-size:12.5px;color:var(--mute);text-align:center;margin:10px 0 0">Você já caminhou hoje. Um dia de cada vez.</p>`
+          : `<button class="btn gold" onclick="abrirDia(${d})">Começar o dia ${d}</button>` }
     </div>
     <div class="social glass">
       <span class="avs">
@@ -1075,8 +1098,19 @@ const AUDIOS={1:'audios/dia-01.mp3',2:'audios/dia-02.mp3'};
 function abrirDia(n){
   if(n>1 && !S.pago){ comprar(); return; } /* dia 2+ sem compra → direto pro checkout */
   if(n>diaAtual()){ return; }
+  if(n===diaAtual() && diasFeitos()>0 && !liberadoHoje()){ avisoAmanha(); return; } /* já fez hoje */
   vDia(n);
 }
+function avisoAmanha(){
+  document.getElementById('dnTit').textContent='Volte amanhã 🌙';
+  document.getElementById('dnSub').textContent='Você já caminhou hoje. O próximo dia abre à meia-noite — um dia de cada vez é o que faz a jornada mudar você de verdade.';
+  const prim=document.getElementById('dnPrim'), sec=document.getElementById('dnSec');
+  prim.textContent='Entendi'; prim.onclick=()=>{ document.getElementById('ovDone').classList.add('hidden'); go('hoje'); };
+  sec.style.display='none';
+  document.querySelector('#ovDone .mini').textContent='Hoje já foi';
+  document.getElementById('ovDone').classList.remove('hidden');
+}
+let _diaConteudo=null;
 async function vDia(n){
   let c = n===1 ? DIA1 : CONTEUDO[n];
   if(!c && n>1){ /* conteúdo ainda não chegou — tenta carregar */
@@ -1084,6 +1118,7 @@ async function vDia(n){
     conteudoCarregado=false; await carregarConteudo(); c=CONTEUDO[n];
     if(!c){ document.getElementById('view').innerHTML=`<div class="dia-head"><button class="back" onclick="go('hoje')">‹ voltar</button><p class="wip" style="margin-top:40px">Não consegui carregar este dia. Confira sua conexão e tente de novo.</p></div>`; return; }
   }
+  _diaConteudo = c; /* guarda p/ a mensagem única de conclusão */
   const versosHtml = c.versos ? c.versos.map((v,i)=>{
     const novoCap = i===0 || v.c!==c.versos[i-1].c;
     const capMark = (novoCap && c.versos.some(x=>x.c!==c.versos[0].c)) ? `<span class="biblia-cap">Capítulo ${v.c}</span>` : '';
@@ -1160,13 +1195,21 @@ function concluir(n){
   save();
   _diaConcluido=n;
   const subiu = nivelIdx()>antes;
-  /* 1) CELEBRAÇÃO — a pessoa controla o ritmo (botão), nunca rápido demais */
+  /* 1) CELEBRAÇÃO — mensagem ÚNICA do dia (a declaração) = compartilhável */
+  document.querySelector('#ovDone .mini').textContent='Dia concluído';
   document.getElementById('dnTit').textContent='Dia '+n+' ✓';
-  document.getElementById('dnSub').textContent='Sequência de '+S.streak+(S.streak>1?' dias':' dia')+'. O códice sentiu.';
+  const decl = (_diaConteudo&&_diaConteudo.declaracao) ? _diaConteudo.declaracao : 'Mais um passo do escravo ao filho.';
+  document.getElementById('dnSub').innerHTML='<span style="font-family:var(--serif);font-style:italic;font-size:18px;color:var(--gold-hi);line-height:1.5;display:block;margin-bottom:8px">"'+decl+'"</span>Sequência de '+S.streak+(S.streak>1?' dias':' dia')+'.';
   const prim=document.getElementById('dnPrim'), sec=document.getElementById('dnSec');
   prim.textContent='Continuar'; prim.onclick=()=>{ document.getElementById('ovDone').classList.add('hidden'); if(subiu) showLevelUp(); else proximoPasso(); };
   sec.style.display='block'; sec.textContent='Compartilhar 📤'; sec.onclick=compartilhar;
   document.getElementById('ovDone').classList.remove('hidden');
+}
+/* após compartilhar: "descanse no Pai" + o desafio do dia */
+function mostrarDescanso(){
+  const des = (_diaConteudo&&_diaConteudo.desafio) ? _diaConteudo.desafio : 'Leve o que você leu hoje pra dentro da sua rotina.';
+  document.getElementById('descansoDesafio').textContent=des;
+  document.getElementById('ovDescanso').classList.remove('hidden');
 }
 function showLevelUp(){
   const lv=NIVEIS[nivelIdx()], total=NIVEIS.length-1, idx=nivelIdx();
@@ -1240,27 +1283,43 @@ function vConfig(){
 }
 
 /* ================= CARTÃO DE COMPARTILHAMENTO ================= */
+function wrapText(x, txt, cx, cy, maxW, lh){
+  const palavras=txt.split(' '); let linha='', y=cy, linhas=[];
+  for(const p of palavras){ const teste=linha+p+' '; if(x.measureText(teste).width>maxW && linha){ linhas.push(linha.trim()); linha=p+' '; } else linha=teste; }
+  linhas.push(linha.trim());
+  linhas.forEach((l,i)=>x.fillText(l, cx, y+i*lh));
+  return y+linhas.length*lh;
+}
 async function compartilhar(){
+  const decl=(_diaConteudo&&_diaConteudo.declaracao)?_diaConteudo.declaracao:'Do escravo ao filho.';
   const cv=document.createElement('canvas'); cv.width=1080; cv.height=1920;
   const x=cv.getContext('2d');
-  x.fillStyle='#050504'; x.fillRect(0,0,1080,1920);
-  const g=x.createRadialGradient(540,820,60,540,820,520);
-  g.addColorStop(0,'rgba(212,167,71,.5)'); g.addColorStop(1,'rgba(0,0,0,0)');
-  x.fillStyle=g; x.fillRect(0,300,1080,1100);
-  x.strokeStyle='#c9a24b'; x.lineWidth=10;
-  x.strokeRect(340,640,400,380); x.beginPath(); x.moveTo(392,640); x.lineTo(392,1020); x.stroke();
-  x.fillStyle='#e8c87a'; x.font='600 44px Schibsted Grotesk,sans-serif'; x.textAlign='center';
-  x.fillText('O CÓDICE',540,420);
-  x.fillStyle='#f2f1ee'; x.font='600 120px Schibsted Grotesk,sans-serif';
-  x.fillText('Dia '+diasFeitos()+' ✓',540,1250);
-  x.fillStyle='#a39f93'; x.font='400 52px Schibsted Grotesk,sans-serif';
-  x.fillText('sequência de '+S.streak+' dias · '+nivel(),540,1340);
-  x.fillStyle='#55524a'; x.font='400 40px Schibsted Grotesk,sans-serif';
-  x.fillText('ocodice.app',540,1750);
+  x.fillStyle='#0B0A0C'; x.fillRect(0,0,1080,1920);
+  const g=x.createRadialGradient(540,760,60,540,760,640);
+  g.addColorStop(0,'rgba(220,180,106,.42)'); g.addColorStop(.55,'rgba(138,95,176,.08)'); g.addColorStop(1,'rgba(0,0,0,0)');
+  x.fillStyle=g; x.fillRect(0,200,1080,1200);
+  x.textAlign='center';
+  x.fillStyle='#DCB46A'; x.font='700 40px Schibsted Grotesk,sans-serif';
+  x.fillText('O  C Ó D I C E',540,360);
+  x.fillStyle='#F5EDDE'; x.font='600 150px Newsreader,serif'; x.fillStyle='#F2D79A';
+  x.fillText('Dia '+diasFeitos(),540,640);
+  x.strokeStyle='#DCB46A'; x.lineWidth=2; x.beginPath(); x.moveTo(440,710); x.lineTo(640,710); x.stroke();
+  // a declaração (mensagem única do dia) — itálico serif, com wrap
+  x.fillStyle='#F5EDDE'; x.font='italic 500 58px Newsreader,serif';
+  const endY=wrapText(x, '"'+decl+'"', 540, 880, 880, 78);
+  x.fillStyle='#a39f93'; x.font='400 46px Schibsted Grotesk,sans-serif';
+  x.fillText(nivel()+' · sequência de '+S.streak+' dias', 540, Math.max(endY+90, 1500));
+  x.fillStyle='#55524a'; x.font='400 38px Schibsted Grotesk,sans-serif';
+  x.fillText('comece a sua jornada — O Códice', 540, 1800);
   cv.toBlob(async b=>{
     const file=new File([b],'codice-dia'+diasFeitos()+'.png',{type:'image/png'});
-    if(navigator.canShare && navigator.canShare({files:[file]})) await navigator.share({files:[file],title:'O Códice'});
-    else { const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=file.name; a.click(); }
+    try{
+      if(navigator.canShare && navigator.canShare({files:[file]})) await navigator.share({files:[file],title:'O Códice',text:decl});
+      else { const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=file.name; a.click(); }
+    }catch(e){}
+    /* depois de compartilhar → descanse no Pai + desafio */
+    document.getElementById('ovDone').classList.add('hidden');
+    mostrarDescanso();
   });
 }
 
