@@ -360,7 +360,7 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
   </div>
   <div class="qfoot">
     <button class="btn gold" id="entrarBtn" onclick="confirmarEntrar()">Liberar meu acesso</button>
-    <button class="ghost" onclick="show(S.funil?'app':'scr-intro');if(S.funil)entrarApp()">Voltar</button>
+    <button class="ghost" onclick="if(souMorador())entrarApp();else show('scr-intro')">Voltar</button>
   </div>
 </section>
 
@@ -715,6 +715,10 @@ if (CONFIG.SUPABASE_URL && window.supabase){
      upsert em `progresso` e leitura da view `ranking_coorte`. */
 }
 async function syncProg(){ /* upsert de S.prog no Supabase quando configurado */ }
+
+/* MORADOR: quem já entrou no app uma vez (terminou funil, comprou, ou tem progresso).
+   Morador NUNCA volta pro funil — só pro app. */
+function souMorador(){ return !!(S.funil || S.pago || Object.keys(S.prog||{}).length>0); }
 
 const diasFeitos = () => Object.keys(S.prog).length;
 const diaAtual   = () => Math.min(diasFeitos()+1, TOTAL);
@@ -1158,10 +1162,11 @@ async function boot(){
     document.getElementById('entrarMsg').textContent='Confirme seu acesso abaixo.';
     return;
   }
-  if(S.funil || diasFeitos()>0){ entrarApp(); }
+  if(souMorador()){ entrarApp(); }   /* morador nunca vê o funil */
   else { show('scr-intro'); }
 }
-setTimeout(boot, 1600);
+/* morador entra rápido (sem splash longo); visitante vê o splash de marca */
+setTimeout(boot, souMorador() ? 200 : 1600);
 </script>
 </body>
 </html>
