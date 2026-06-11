@@ -231,7 +231,27 @@ button{font-family:var(--sans);cursor:pointer}
 
 /* overlays */
 .ov{position:fixed;inset:0;background:rgba(5,5,4,.96);display:flex;align-items:center;justify-content:center;z-index:60;padding:24px}
-.ov .card{max-width:340px;width:100%;text-align:center;border:1px solid rgba(232,200,122,.5);border-radius:20px;background:#0b0a08;padding:34px 24px}
+.ov .card{max-width:340px;width:100%;text-align:center;border:1px solid rgba(232,200,122,.5);border-radius:20px;background:#0b0a08;padding:34px 24px;animation:ovIn .45s cubic-bezier(.2,.9,.3,1) both}
+@keyframes ovIn{from{opacity:0;transform:scale(.92) translateY(12px)}to{opacity:1;transform:none}}
+/* level-up — cerimônia */
+.lvcard{overflow:hidden}
+.lv-burst{position:relative;width:168px;height:168px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center}
+.lv-rays{position:absolute;inset:-26px;border-radius:50%;
+  background:repeating-conic-gradient(from 0deg, rgba(242,215,154,0) 0deg 4.5deg, rgba(242,215,154,.22) 4.5deg 6deg, rgba(242,215,154,0) 6deg 12deg);
+  -webkit-mask:radial-gradient(circle, transparent 26%, #000 40%, #000 62%, transparent 78%);
+  mask:radial-gradient(circle, transparent 26%, #000 40%, #000 62%, transparent 78%);
+  animation:lvSpin 14s linear infinite, lvRaysIn 1s ease both}
+@keyframes lvSpin{to{transform:rotate(360deg)}}
+@keyframes lvRaysIn{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:scale(1)}}
+.lv-seal{position:relative;z-index:2;animation:lvPop .75s cubic-bezier(.2,1.5,.4,1) both}
+@keyframes lvPop{0%{transform:scale(.4);opacity:0}55%{transform:scale(1.14)}100%{transform:scale(1);opacity:1}}
+.lv-burst .spark{position:absolute;width:7px;height:7px;background:var(--gold-hi);border-radius:50%;opacity:0;box-shadow:0 0 9px var(--gold-hi);animation:lvSpark 1.6s ease-in-out infinite;z-index:1}
+@keyframes lvSpark{0%,100%{opacity:0;transform:scale(0)}45%{opacity:1;transform:scale(1.1)}}
+.lv-bar{height:7px;background:var(--line-soft);border-radius:4px;overflow:hidden;margin:18px auto 8px;max-width:240px}
+.lv-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold-deep),var(--gold-hi));box-shadow:0 0 12px rgba(220,180,106,.55)}
+.lv-steps{display:flex;justify-content:space-between;max-width:240px;margin:0 auto 20px;gap:4px}
+.lv-steps span{flex:1;font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:var(--faint);text-align:center;transition:color .4s}
+.lv-steps span.on{color:var(--gold)}
 .ov h3{font-family:var(--serif);font-style:italic;font-weight:600;font-size:28px;letter-spacing:-0.01em;color:var(--gold);margin:10px 0 6px}
 .ov p{font-size:14px;color:var(--dim);margin:0 0 18px;line-height:1.55}
 
@@ -492,12 +512,23 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
 </section>
 
 <!-- ===== OVERLAYS ===== -->
-<div id="ovLevel" class="ov hidden"><div class="card">
-  <div id="ovHero"></div>
+<div id="ovLevel" class="ov hidden"><div class="card lvcard">
+  <div class="lv-burst">
+    <div class="lv-rays"></div>
+    <span class="spark" style="top:8%;left:24%;animation-delay:.2s"></span>
+    <span class="spark" style="top:18%;left:78%;animation-delay:.6s"></span>
+    <span class="spark" style="top:70%;left:14%;animation-delay:.9s"></span>
+    <span class="spark" style="top:76%;left:82%;animation-delay:.4s"></span>
+    <span class="spark" style="top:42%;left:6%;animation-delay:1.1s"></span>
+    <span class="spark" style="top:50%;left:92%;animation-delay:.75s"></span>
+    <div class="lv-seal" id="ovHero"></div>
+  </div>
   <span class="mini" style="color:var(--gold)">Você subiu de nível</span>
   <h3 id="ovTit">Servo da Casa</h3>
   <p id="ovSub"></p>
-  <button class="btn gold" onclick="document.getElementById('ovLevel').classList.add('hidden')">Continuar</button>
+  <div class="lv-bar"><i id="lvBarFill"></i></div>
+  <div class="lv-steps" id="lvSteps"></div>
+  <button class="btn gold" id="lvBtn">Continuar</button>
 </div></div>
 
 <div id="ovDone" class="ov hidden"><div class="card">
@@ -1047,32 +1078,39 @@ function audSeek(ev,el){
 }
 function audEnd(){ document.getElementById('pbtn').textContent='▶'; document.getElementById('pfill').style.width='100%'; }
 
+let _diaConcluido=0;
 function concluir(n){
   if(S.prog[n]) { go('hoje'); return; }
   recalcStreak();
+  const antes=nivelIdx();
   S.prog[n]=new Date().toISOString();
   S.streak = S.streak+1; S.lastDone=S.prog[n];
   save();
-  const lv = NIVEIS.find(x=>x.em===diasFeitos());
+  _diaConcluido=n;
+  const subiu = nivelIdx()>antes;
+  /* 1) CELEBRAÇÃO — a pessoa controla o ritmo (botão), nunca rápido demais */
   document.getElementById('dnTit').textContent='Dia '+n+' ✓';
   document.getElementById('dnSub').textContent='Sequência de '+S.streak+(S.streak>1?' dias':' dia')+'. O códice sentiu.';
   const prim=document.getElementById('dnPrim'), sec=document.getElementById('dnSec');
-  if(n===1 && !S.pago){ /* fim do presente: gancho de desbloqueio */
-    document.getElementById('dnSub').textContent='Sentiu a diferença? Isso foi só o Dia 1. Faltam 59.';
-    prim.textContent='Destravar os 60 dias — R$ 27,90'; prim.onclick=()=>{ document.getElementById('ovDone').classList.add('hidden'); abrirOferta('pos1'); };
-    sec.textContent='Quero ficar só no Dia 1'; sec.onclick=()=>{ document.getElementById('ovDone').classList.add('hidden'); go('hoje'); };
-  } else {
-    prim.textContent='Compartilhar'; prim.onclick=compartilhar;
-    sec.textContent='Voltar pra jornada'; sec.onclick=fecharDone;
-  }
+  prim.textContent='Continuar'; prim.onclick=()=>{ document.getElementById('ovDone').classList.add('hidden'); if(subiu) showLevelUp(); else proximoPasso(); };
+  sec.style.display='block'; sec.textContent='Compartilhar 📤'; sec.onclick=compartilhar;
   document.getElementById('ovDone').classList.remove('hidden');
-  if(lv && lv.em>0){
-    document.getElementById('ovHero').innerHTML=codiceImg(nivelIdx(),180);
-    document.getElementById('ovTit').textContent=lv.t;
-    document.getElementById('ovSub').textContent='Dia '+diasFeitos()+' de 60. As correntes estão caindo.';
-    setTimeout(()=>{ document.getElementById('ovDone').classList.add('hidden');
-      document.getElementById('ovLevel').classList.remove('hidden'); }, 1600);
-  }
+}
+function showLevelUp(){
+  const lv=NIVEIS[nivelIdx()], total=NIVEIS.length-1, idx=nivelIdx();
+  document.getElementById('ovHero').innerHTML=codiceImg(idx,140);
+  document.getElementById('ovTit').textContent=lv.t;
+  document.getElementById('ovSub').textContent='Dia '+diasFeitos()+' de 60. As correntes estão caindo.';
+  document.getElementById('lvSteps').innerHTML=NIVEIS.map((nv,i)=>`<span class="${i<=idx?'on':''}">${nv.t.split(' ')[0]}</span>`).join('');
+  const fill=document.getElementById('lvBarFill');
+  fill.style.transition='none'; fill.style.width=Math.max(0,(idx-1)/total*100)+'%';
+  document.getElementById('lvBtn').onclick=()=>{ document.getElementById('ovLevel').classList.add('hidden'); proximoPasso(); };
+  document.getElementById('ovLevel').classList.remove('hidden');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ fill.style.transition='width 1.3s cubic-bezier(.3,.8,.3,1)'; fill.style.width=(idx/total*100)+'%'; }));
+}
+function proximoPasso(){
+  if(_diaConcluido===1 && !S.pago){ abrirOferta('pos1'); }
+  else go('hoje');
 }
 function fecharDone(){
   document.getElementById('ovDone').classList.add('hidden');
