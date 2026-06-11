@@ -67,6 +67,15 @@ button{font-family:var(--sans);cursor:pointer}
 .an-bar{width:210px;height:3px;background:var(--line);border-radius:2px;overflow:hidden;margin:22px 0 16px}
 .an-bar i{display:block;height:100%;background:var(--gold);width:0;transition:width 3.1s linear}
 
+/* diagnóstico — cards curtos */
+.dcard{border:1px solid var(--line-soft);background:var(--card);border-radius:16px;padding:15px 17px;margin-top:12px;text-align:left}
+.dcard.gold{border-color:var(--gold);background:rgba(220,180,106,.10)}
+.dcard .dlabel{font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.dcard p{margin:6px 0 0;font-size:15.5px;color:var(--ink);line-height:1.4}
+.dcard.gold p{color:var(--gold-hi);font-family:var(--serif);font-style:italic;font-size:17px}
+.dmais{background:none;border:none;color:var(--mute);font-size:13.5px;font-weight:600;padding:14px 0 4px;width:100%;text-align:center}
+.dmais.aberto{color:var(--gold)}
+
 /* revelação do plano */
 .rev-stats{display:flex;justify-content:center;gap:24px;margin:18px 0 6px}
 .rev-stats>div{text-align:center}
@@ -300,13 +309,18 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
   <p class="abrindo-txt" id="analiseTxt" style="margin-top:28px">Lendo suas respostas...</p>
 </section>
 
-<!-- ===== DIAGNÓSTICO ===== -->
+<!-- ===== DIAGNÓSTICO (card curto + texto opcional) ===== -->
 <section id="scr-diag" class="wrap hidden">
-  <div class="center" style="justify-content:flex-start;padding-top:26px;overflow-y:auto">
-    <div id="diagHero"></div>
-    <span class="mini" style="color:var(--gold);margin-top:10px">Seu diagnóstico</span>
-    <h2 class="diag-h" id="diagH"></h2>
-    <p class="diag-p" id="diagP" style="max-width:320px;text-align:left;font-size:15px"></p>
+  <div class="view" style="padding:22px 26px 0">
+    <div style="text-align:center"><div id="diagHero"></div>
+      <span class="mini" style="margin-top:8px;display:block">Seu diagnóstico</span>
+      <h2 class="diag-h" id="diagH" style="margin-top:8px"></h2>
+    </div>
+    <div class="dcard"><span class="dlabel">Seu problema</span><p id="dProb"></p></div>
+    <div class="dcard"><span class="dlabel">Seu padrão hoje</span><p id="dPad"></p></div>
+    <div class="dcard gold"><span class="dlabel">Seu próximo passo</span><p id="dPasso"></p></div>
+    <button class="dmais" id="dMaisBtn" onclick="document.getElementById('diagP').classList.toggle('hidden');this.classList.toggle('aberto')">Ler o que isso significa ↓</button>
+    <p class="diag-p hidden" id="diagP" style="max-width:none;text-align:left;font-size:15px;margin-top:8px"></p>
   </div>
   <div class="qfoot"><button class="btn gold" onclick="show('scr-revela');renderRevela()">Ver o que muda em 60 dias</button></div>
 </section>
@@ -337,31 +351,31 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
   <div class="an-bar" style="margin-top:18px"><i id="abrFill"></i></div>
 </section>
 
-<!-- ===== O PACTO (contrato assinável) ===== -->
+<!-- ===== A ALIANÇA ===== -->
 <section id="scr-pacto" class="wrap hidden">
   <div class="center">
-    <span class="mini">O Pacto</span>
-    <h2 class="diag-h" style="margin-top:10px;text-align:center">Um compromisso entre você e a Palavra</h2>
+    <span class="mini">Sua decisão</span>
+    <h2 class="diag-h" style="margin-top:10px;text-align:center">A sua aliança<br>com a Palavra</h2>
     <div class="pacto-box" style="margin-top:22px">
       <span id="pactoTxt" style="display:block"></span>
       <div class="assina" onclick="assinar()">
-        <span id="assinaPlaceholder">Toque para assinar ✍︎</span>
+        <span id="assinaPlaceholder">Toque aqui para selar ✍︎</span>
         <span id="assinaNome" class="hidden"></span>
       </div>
       <div class="assina-line" id="assinaLine"></div>
       <div class="assina-data" id="assinaData"></div>
     </div>
   </div>
-  <div class="qfoot"><button class="btn gold" id="pactoBtn" disabled onclick="selarPacto()">Selar e continuar</button></div>
+  <div class="qfoot"><button class="btn gold" id="pactoBtn" disabled onclick="selarPacto()">Começar minha jornada</button></div>
 </section>
 
 <!-- ===== POPUP PRÊMIO ===== -->
 <div id="ovPremio" class="ov hidden"><div class="card">
   <div style="font-size:40px">🎁</div>
-  <span class="mini" style="color:var(--gold);margin-top:8px">Você foi premiado(a)</span>
+  <span class="mini" style="color:var(--gold);margin-top:8px">Um presente pra você</span>
   <h3 id="premioTit" style="margin-top:8px">Seu primeiro dia é por nossa conta.</h3>
-  <p id="premioSub">Por selar o pacto, você ganha o <b style="color:var(--gold-hi)">Dia 1 completo, de graça</b> — a passagem, o ensino e a oração guiada em áudio. Sem pagar nada. É o nosso jeito de te receber na casa.</p>
-  <button class="btn gold" onclick="receberPremio()">Receber meu prêmio 🎁</button>
+  <p id="premioSub">Você ganhou o <b style="color:var(--gold-hi)">Dia 1 completo, de graça</b> — a passagem, o ensino e a oração guiada em áudio. Sem pagar nada. É o nosso jeito de te receber na casa.</p>
+  <button class="btn gold" onclick="receberPremio()">Receber meu presente 🎁</button>
 </div></div>
 
 <!-- ===== OFERTA ===== -->
@@ -545,13 +559,8 @@ function bookSeal(level, size){
     ${crown}${laurel}<path d="M50 37v33"/>${body}${lock}</svg>`;
 }
 
-/* ================= QUIZ — arquitetura validada (ver pesquisa-funil-concorrentes.md) ================= */
+/* ================= QUIZ — 9 telas (enxuto p/ tráfego frio) ================= */
 const FLUXO = [
-  {t:'q', k:'motivo', q:'O que você mais quer na sua vida com Deus hoje?', sub:'Não tem resposta errada.', opts:[
-    '🔥 Me aproximar de verdade — não só "cumprir tabela"',
-    '📖 Finalmente entender o que leio',
-    '🕊️ Paz — orar sem ansiedade e sem culpa',
-    '⚓ Constância — um hábito que não morre na 2ª semana']},
   {t:'q', k:'sentimento', q:'Sendo honesto: o que você mais sente quando senta pra ler a Bíblia?', sub:'Ninguém vê suas respostas.', opts:[
     '😮‍💨 Obrigação — leio porque "tenho que ler"',
     '😔 Culpa — lembro de quantas vezes falhei',
@@ -560,42 +569,38 @@ const FLUXO = [
     '🤷 Sinceramente? Quase não leio']},
   {t:'q', k:'frequencia', q:'E com que frequência você termina a leitura se sentindo pior do que começou?', opts:[
     'Quase sempre','Às vezes','Raramente','Nunca reparei']},
-  {t:'respiro', ico:'📖', tit:'Você não está sozinho.', p:'7 em cada 10 cristãos que abandonam planos de leitura descrevem exatamente o que você marcou. Isso tem causa — e tem nome. Já chegamos lá.'},
-  {t:'multi', k:'tentou', q:'Quais dessas coisas você já tentou pra criar o hábito?', sub:'Marque todas que se aplicam.', opts:[
-    '📖 Plano de leitura "a Bíblia em 1 ano"',
+  {t:'multi', k:'tentou', q:'O que você já tentou pra criar o hábito?', sub:'Marque todas que se aplicam.', opts:[
+    '📖 Plano "a Bíblia em 1 ano"',
     '📱 App de versículo do dia',
-    '⛪ Promessa de ano novo / campanha da igreja',
-    '🎧 Devocionais no YouTube ou podcast',
+    '⛪ Campanha / promessa da igreja',
+    '🎧 Devocionais no YouTube',
     '📚 Livro devocional (tipo Café com Deus Pai)',
     '😶 Nunca tentei nada estruturado']},
-  {t:'respiro', ico:'🤲', tit:'Obrigado pela honestidade.', p:'Se você já tentou e parou, saiba: isso é mais comum do que você imagina — e não é falta de fé. É que ninguém te ensinou a ler de outro jeito.'},
   {t:'q', k:'oracao', q:'Quando você ora, no fundo você se sente como...', opts:[
     '🧎 Um servo pedindo um favor ao patrão',
     '📋 Um devedor prestando contas',
     '🚪 Um estranho falando com alguém distante',
     '👨‍👦 Um filho conversando com o Pai',
     '🤐 Sinceramente, não sei o que sentir']},
-  {t:'multi', k:'afasta', q:'E o que mais te afasta hoje?', sub:'Pode marcar mais de uma.', opts:[
-    '⏰ Falta de tempo — a rotina engole',
-    '📵 Distração — pego o celular e a Bíblia perde',
-    '😔 Culpa — de tanto falhar, nem tento mais',
+  {t:'multi', k:'afasta', q:'E o que mais te trava hoje?', sub:'Pode marcar mais de uma.', opts:[
+    '⏰ Falta de tempo',
+    '📵 Distração — o celular ganha',
+    '😔 Culpa — de tanto falhar, nem tento',
     '🥀 Sequidão — leio e não sinto nada',
-    '😟 Ansiedade — minha cabeça não para nem pra orar',
+    '😟 Ansiedade — não paro nem pra orar',
     '😴 Cansaço — chego no fim do dia sem energia']},
   {t:'q', k:'tom', q:'Como você prefere que a verdade chegue até você?', sub:'Seu diagnóstico vai respeitar isso.', opts:[
     '🗡️ Direta — me confronta, eu aguento',
     '🤲 Mansa — me acolhe primeiro']},
   {t:'q', k:'tempo', q:'Quanto tempo por dia você consegue separar, de verdade?', sub:'Prometa só o que dá pra cumprir.', opts:['🕐 5 minutos','🕑 10 minutos','🕒 15 minutos ou mais'], hint:[
-    'Com 5 min/dia, em 60 dias você terá passado 5 horas ouvindo o Pai — mais do que a maioria passa em um ano.',
-    'Com 10 min/dia, em 60 dias você terá passado 10 horas ouvindo o Pai — mais do que a maioria passa em um ano.',
-    'Com 15 min/dia, em 60 dias você terá passado 15 horas ouvindo o Pai — mais do que a maioria passa em um ano.']},
+    'Com 5 min/dia, em 60 dias são 5 horas com o Pai — mais do que a maioria passa em um ano.',
+    'Com 10 min/dia, em 60 dias são 10 horas com o Pai — mais do que a maioria passa em um ano.',
+    'Com 15 min/dia, em 60 dias são 15 horas com o Pai — mais do que a maioria passa em um ano.']},
   {t:'q', k:'horario', q:'Todo encontro marcado tem hora. Qual vai ser a sua com o Pai?', opts:[
-    '☕ De manhã, antes de tudo (com o café)',
+    '☕ De manhã, antes de tudo',
     '🌤️ Na pausa do almoço',
     '🌙 À noite, antes de dormir']},
-  {t:'q', k:'yes1', q:'Se existisse um jeito de ler a Bíblia onde você se sente esperado — e não cobrado — você ia querer conhecer?', opts:['Sim, quero ✅','Talvez... me mostra']},
-  {t:'q', k:'yes2', q:'Você costuma terminar o que começa quando alguém caminha junto com você?', opts:['Sim','Preciso de ajuda com constância (por isso estou aqui)']},
-  {t:'nome', q:'Como você se chama?', sub:'Suas respostas estão sendo analisadas. O resultado é pessoal — e merece ser entregue pelo nome.'}
+  {t:'nome', q:'Como você se chama?', sub:'Seu diagnóstico sai personalizado — e merece ser entregue pelo nome.'}
 ];
 
 /* ================= CONTEÚDO ================= */
@@ -771,14 +776,25 @@ const L_ORA=['um servo pedindo favor ao patrão','um devedor prestando contas','
 const L_AFASTA=['a falta de tempo','a distração','a culpa','a sequidão','a ansiedade','o cansaço'];
 const L_TEMPO=[5,10,15];
 function renderDiag(){
-  document.getElementById('diagHero').innerHTML=codiceImg(0,190);
+  document.getElementById('diagHero').innerHTML=codiceImg(0,150);
   const n=S.nome||'Amigo';
   const sent=L_SENT[R.sentimento??0], ora=L_ORA[R.oracao??0];
   const nTent=(R.tentou||[]).filter(j=>j<5).length;
   const dores=(R.afasta||[]).slice(0,2).map(j=>L_AFASTA[j]);
   const dorTxt=dores.length?dores.join(' e '):'a distância';
+  const min=L_TEMPO[R.tempo??1]||10;
+  /* CARD CURTO — sempre (impaciente lê em 5s) */
+  if(R.tom!==1){
+    document.getElementById('diagH').textContent=n+', encontramos o seu padrão.';
+    document.getElementById('dProb').innerHTML='Não é falta de fé. É <b>excesso de peso</b> — você lê por cobrança, não por intimidade.';
+  } else {
+    document.getElementById('diagH').textContent=n+', sua análise está pronta.';
+    document.getElementById('dProb').innerHTML='Não é problema de disciplina. É um <b>coração de filho preso numa rotina de escravo</b>.';
+  }
+  document.getElementById('dPad').innerHTML=`Leitura por <b>${sent}</b> → ${dorTxt} → distância → abandono. Você ora como <b>${ora}</b>.`;
+  document.getElementById('dPasso').textContent=`${min} minutos por dia, por 60 dias — pra sair da culpa e voltar a ler como filho.`;
+  /* TEXTO PROFUNDO — opcional (escondido) */
   if(R.tom!==1){ /* Versão A — confronto bíblico + absolvição */
-    document.getElementById('diagH').textContent=n+', suas respostas revelam algo.';
     document.getElementById('diagP').innerHTML=
       `Você marcou que sente <b>${sent}</b> quando abre a Bíblia. Que ora como <b>${ora}</b>.`+
       (nTent?` Que já tentou <b>${nTent} ${nTent>1?'métodos':'método'}</b> — e carregou a culpa de cada um.`:'')+
@@ -791,7 +807,6 @@ function renderDiag(){
       `<br><br><b>Existe um jeito de filho ler. E dá pra aprender em 60 dias.</b>`+
       `<br><br>Imagina daqui a 60 dias: você abrindo esse mesmo livro sem peso nenhum — esperando um Pai, não uma bronca. Não é promessa vazia: é um caminho com data, ${nTent?'e dessa vez ':''}um dia de cada vez. <b style="color:var(--gold)">A escolha de hoje é só dar o primeiro passo.</b>`;
   } else { /* Versão B — identidade revelada */
-    document.getElementById('diagH').textContent=n+', a análise das suas respostas está pronta.';
     document.getElementById('diagP').innerHTML=
       `Você não tem um problema de disciplina. Suas respostas mostram outra coisa: <b style="color:var(--gold)">um coração de filho preso numa rotina de escravo.</b>`+
       `<br><br>Você sente o chamado — por isso ${nTent?`já tentou ${nTent} ${nTent>1?'vezes':'vez'}`:'chegou até aqui'}. Mas te entregaram a Bíblia como obrigação, e obrigação nenhuma sobrevive 60 dias. E o custo disso você conhece: ${dorTxt}, e aquela sensação de ler e não encontrar ninguém do outro lado.`+
@@ -840,7 +855,7 @@ let pactoAssinado=false;
 function irPacto(){
   const nome=S.nome||'_______';
   document.getElementById('pactoTxt').innerHTML=
-    `Eu, <b style="color:var(--gold-hi)">${nome}</b>, escolho caminhar 60 dias. Comprometo-me a abrir a Palavra todos os dias — não por obrigação, mas para aprender a ler como filho e herdeiro.`;
+    `Eu, <b style="color:var(--gold-hi)">${nome}</b>, escolho começar. Pelos próximos 60 dias, vou me aproximar da Palavra um pouco a cada dia — não por cobrança, mas pra aprender a ler como filho.`;
   pactoAssinado=false;
   document.getElementById('assinaPlaceholder').classList.remove('hidden');
   document.getElementById('assinaNome').classList.add('hidden');
@@ -996,8 +1011,8 @@ function concluir(n){
   const prim=document.getElementById('dnPrim'), sec=document.getElementById('dnSec');
   if(n===1 && !S.pago){ /* fim do presente: gancho de desbloqueio */
     document.getElementById('dnSub').textContent='Sentiu a diferença? Isso foi só o Dia 1. Faltam 59.';
-    prim.textContent='Liberar meus 60 dias →'; prim.onclick=()=>{ document.getElementById('ovDone').classList.add('hidden'); abrirOferta('pos1'); };
-    sec.textContent='Agora não, quero ficar só no Dia 1'; sec.onclick=()=>{ document.getElementById('ovDone').classList.add('hidden'); go('hoje'); };
+    prim.textContent='Destravar os 60 dias — R$ 27,90'; prim.onclick=()=>{ document.getElementById('ovDone').classList.add('hidden'); abrirOferta('pos1'); };
+    sec.textContent='Quero ficar só no Dia 1'; sec.onclick=()=>{ document.getElementById('ovDone').classList.add('hidden'); go('hoje'); };
   } else {
     prim.textContent='Compartilhar'; prim.onclick=compartilhar;
     sec.textContent='Voltar pra jornada'; sec.onclick=fecharDone;
