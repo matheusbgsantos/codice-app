@@ -226,6 +226,13 @@ button{font-family:var(--sans);cursor:pointer}
 .ref{font-size:12px;color:var(--mute);margin-top:8px}
 .ensino p{font-size:15.5px;color:#d8d5cc;line-height:1.7;margin:0 0 14px}
 .boxd{border:1px solid rgba(232,200,122,.45);background:rgba(232,200,122,.06);border-radius:14px;padding:16px 18px;font-size:15px;color:#e7dfc9;line-height:1.6}
+.leitura{padding:16px 18px}
+.leitura-ref{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--gold-hi);letter-spacing:-0.01em}
+.leitura-instr{font-size:14.5px;color:var(--dim);line-height:1.55;margin:8px 0 14px}
+.leitura-chk{display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--ink);cursor:pointer;user-select:none}
+.leitura-chk input{appearance:none;-webkit-appearance:none;width:22px;height:22px;border:1.5px solid var(--gold);border-radius:6px;flex:0 0 22px;cursor:pointer;position:relative;transition:.15s}
+.leitura-chk input:checked{background:var(--gold)}
+.leitura-chk input:checked::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--gold-ink);font-size:14px;font-weight:700}
 .decl{font-family:var(--serif);font-style:italic;font-size:19px;color:#fff;line-height:1.5;border-left:2px solid var(--gold);padding-left:16px}
 .wip{color:var(--mute);font-style:italic;font-size:15px}
 
@@ -734,6 +741,8 @@ const TEMAS = [
 "Dia 60: Herdeiro. Tome posse — e não devolva a chave."
 ];
 const DIA1 = {
+  leitura:'Romanos 8:14-17',
+  leituraInstr:'Pega a sua Bíblia — a de papel, se tiver. Abra em Romanos 8 e leia os versículos 14 a 17, devagar, em voz alta. Não corra. É a sua leitura de hoje, no seu próprio livro.',
   passagem:'Porque não recebestes o espírito de escravidão, para viverdes outra vez com medo, mas recebestes o espírito de adoção, pelo qual clamamos: Aba, Pai.',
   ref:'Romanos 8:15',
   ensino:[
@@ -1053,7 +1062,13 @@ function vDia(n){
       <p class="daytag" style="text-align:left">Dia ${n} de 60</p>
       <h2 style="font-family:var(--serif);font-style:italic;font-weight:500;font-size:27px;line-height:1.18;letter-spacing:-0.01em;margin:6px 0 0;color:var(--ink)">${TEMAS[n-1]}</h2>
       ${c?`
-      <p class="blocklab">A passagem</p>
+      <p class="blocklab">📖 Abra a sua Bíblia</p>
+      <div class="leitura glass">
+        <div class="leitura-ref">${c.leitura||c.ref}</div>
+        <p class="leitura-instr">${c.leituraInstr||('Pega a sua Bíblia, abra em '+(c.leitura||c.ref)+' e leia, devagar, em voz alta.')}</p>
+        <label class="leitura-chk"><input type="checkbox" id="chkLeitura"> Li na minha Bíblia</label>
+      </div>
+      <p class="blocklab">A passagem de hoje</p>
       <div class="passage">"${c.passagem}"</div><p class="ref">${c.ref}</p>
       <p class="blocklab">O ensino</p>
       <div class="ensino">${c.ensino.map(p=>`<p>${p}</p>`).join('')}</div>
@@ -1072,9 +1087,19 @@ function vDia(n){
       <audio id="audOra" src="${AUDIOS[n]}" preload="none" ontimeupdate="audTick(this)" onended="audEnd()"></audio>
       <p style="font-size:12.5px;color:var(--mute);margin:8px 0 0">Coloca o fone, fecha os olhos e ora junto.</p>
       `:''}
-      <div style="padding:28px 0 30px"><button class="btn gold" onclick="concluir(${n})">Concluir dia ${n}</button></div>
+      <div style="padding:28px 0 30px"><button class="btn gold" onclick="tentarConcluir(${n})">Concluir dia ${n}</button>
+        <p id="concluirMsg" style="font-size:13px;color:var(--gold);text-align:center;margin:10px 0 0;min-height:16px"></p></div>
     </div>`;
   window.scrollTo(0,0);
+}
+function tentarConcluir(n){
+  const chk=document.getElementById('chkLeitura');
+  if(chk && !chk.checked){
+    document.getElementById('concluirMsg').textContent='Marque que você leu na sua Bíblia primeiro 📖';
+    const box=chk.closest('.leitura'); box.style.borderColor='var(--gold)'; box.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  concluir(n);
 }
 function playPause(){
   const a=document.getElementById('audOra'), b=document.getElementById('pbtn');
