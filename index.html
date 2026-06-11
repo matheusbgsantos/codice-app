@@ -187,8 +187,8 @@ button{font-family:var(--sans);cursor:pointer}
 .tab.on{color:var(--gold)}
 
 /* hoje */
-.hero{display:flex;justify-content:center;padding:4px 0 0}
-.hero svg{width:min(72vw,290px);height:auto}
+.hero{display:flex;justify-content:center;padding:18px 0 6px}
+.hero svg{width:150px;height:150px}
 .hero img{width:min(72vw,290px);height:auto;border-radius:22px}
 .codice-img{border-radius:18px;display:block;margin:0 auto}
 .daytag{font-size:11px;color:var(--gold);font-weight:600;letter-spacing:.18em;text-transform:uppercase;text-align:center;margin:2px 0 8px}
@@ -522,6 +522,27 @@ function codiceSVG(stage, size){
 /* símbolos monoline (Higgsfield, estilo do selo) — codiceSVG fica como fallback */
 function codiceImg(stage, size){
   return `<img class="codice-img" src="img/simbolo-${stage+1}.jpg" width="${size||260}" height="${size||260}" alt="Códice, estágio ${stage+1} de 5" onerror="this.outerHTML=codiceSVG(${stage},${size||260})">`;
+}
+
+/* selo monoline vetorial (do Claude Design) — limpo, escala perfeito, funde no fundo.
+   level 0 Escravo (acorrentado) → 4 Herdeiro (aberto + coroa + louros) */
+function bookSeal(level, size){
+  size=size||128;
+  const G='#DCB46A', Ghi='#F2D79A';
+  const open = level>=2;
+  const crown = level>=4 ? `<path d="M36 24l5.5 7.5L50 22l8.5 9.5L64 24" stroke="${Ghi}" stroke-width="2"/>` : '';
+  const laurel = level>=4
+    ? `<path d="M24 50c0-10 5-18 12-22" stroke="${G}" stroke-opacity=".5" stroke-width="1.4"/><path d="M76 50c0-10-5-18-12-22" stroke="${G}" stroke-opacity=".5" stroke-width="1.4"/>${[34,42,50,58].map(y=>`<path d="M26 ${y}q-5 1-7 5M74 ${y}q5 1 7 5" stroke="${G}" stroke-opacity=".4" stroke-width="1.2"/>`).join('')}`
+    : '';
+  const body = open
+    ? `<path d="M50 37c-6.5-4.5-14-5.5-21-4.5v31c7-1 14.5 0 21 4.5"/><path d="M50 37c6.5-4.5 14-5.5 21-4.5v31c-7-1-14.5 0-21 4.5"/><path d="M34 44h10M34 52h10M56 44h10M56 52h10" stroke-opacity=".42" stroke-width="1.4"/>`
+    : `<path d="M31 33h17a3 3 0 0 1 2 1v36a3 3 0 0 0-2-1H31z"/><path d="M69 33H52a3 3 0 0 0-2 1v36a3 3 0 0 1 2-1h17z"/>`;
+  const lock = level===0
+    ? `<g stroke="${G}"><rect x="43" y="72" width="14" height="10.5" rx="2"/><path d="M46.2 72v-2a3.8 3.8 0 0 1 7.6 0v2"/><path d="M28 40c-4 6-4 14 0 20M72 40c4 6 4 14 0 20" stroke-opacity=".7" stroke-width="1.6"/></g>`
+    : '';
+  return `<svg viewBox="0 0 100 100" width="${size}" height="${size}" fill="none" stroke="${G}" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 0 26px rgba(220,180,106,.42))">
+    <circle cx="50" cy="50" r="45" stroke="${G}" stroke-opacity=".5" stroke-width="1.2"/>
+    ${crown}${laurel}<path d="M50 37v33"/>${body}${lock}</svg>`;
 }
 
 /* ================= QUIZ — arquitetura validada (ver pesquisa-funil-concorrentes.md) ================= */
@@ -890,7 +911,7 @@ function vHoje(){
   const d=diaAtual(), fase=FASES.find(f=>d>=f.ini&&d<=f.fim), fim=diasFeitos()>=TOTAL;
   const pct=Math.round(diasFeitos()/TOTAL*100);
   document.getElementById('view').innerHTML=`
-    <div class="hero">${codiceImg(nivelIdx())}</div>
+    <div class="hero">${bookSeal(nivelIdx(),150)}</div>
     <p class="daytag">${fim?'Jornada concluída':'Dia '+d+' · '+fase.nome.split('·')[1].trim()}</p>
     <p class="daytitle">${fim?'Você tomou posse. Releia qualquer dia quando quiser.':TEMAS[d-1]}</p>
     <div class="stats">
