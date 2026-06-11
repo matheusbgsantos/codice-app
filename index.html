@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>O Códice — 60 Dias</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B0A0C">
+<link rel="apple-touch-icon" href="img/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="O Códice">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,500;1,6..72,600&family=Schibsted+Grotesk:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1277,9 +1283,52 @@ function vConfig(){
     <div class="cfg"><span>Nome</span><small>${S.nome||'—'}</small></div>
     <div class="cfg"><span>Lembrete diário</span><small>${S.lembrete||'—'}</small></div>
     <div class="cfg"><span>Acesso</span><small>${S.pago?'Jornada completa ✓':'Gratuito (dia 1)'}</small></div>
+    <div class="cfg" onclick="ativarLembrete()" style="cursor:pointer"><span>🔔 Lembrete diário</span><small id="cfgLembrete" style="color:var(--gold)">${S.lembreteOn?'Ativado ✓':'Ativar'}</small></div>
+    <div id="cfgInstalar"></div>
     ${!S.pago?`<button class="btn gold" style="margin-top:18px" onclick="abrirOferta('padrao')">Destravar a jornada — ${CONFIG.PRECO}</button>`:''}
     <button class="ghost" style="margin-top:14px" onclick="abrirEntrar()">Restaurar compra (outro aparelho)</button>
     <p class="legal" style="margin-top:20px">O Códice · arquivosoculto.com.br</p></div>`;
+  renderInstalar();
+}
+/* ===== PWA: instalar / atalho na tela ===== */
+let _deferredPrompt=null;
+window.addEventListener('beforeinstallprompt', e=>{ e.preventDefault(); _deferredPrompt=e; });
+function ehStandalone(){ return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone; }
+function renderInstalar(){
+  const el=document.getElementById('cfgInstalar'); if(!el) return;
+  if(ehStandalone()){ el.innerHTML='<div class="cfg"><span>📲 App instalado</span><small style="color:var(--gold)">✓</small></div>'; return; }
+  const iOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+  if(_deferredPrompt){
+    el.innerHTML='<button class="btn" style="margin-top:14px" onclick="instalarApp()">📲 Adicionar à tela inicial</button>';
+  } else if(iOS){
+    el.innerHTML='<div class="cfg" onclick="this.querySelector(\'.ios-h\').classList.toggle(\'hidden\')" style="cursor:pointer;flex-direction:column;align-items:stretch"><div style="display:flex;justify-content:space-between"><span>📲 Adicionar à tela inicial</span><small style="color:var(--gold)">como?</small></div><p class="ios-h hidden" style="font-size:12.5px;color:var(--mute);margin:8px 0 0;line-height:1.5">No Safari: toque no botão <b>Compartilhar</b> (quadrado com seta ↑) → role e toque em <b>"Adicionar à Tela de Início"</b>. O Códice vira um app no seu celular.</p></div>';
+  } else { el.innerHTML=''; }
+}
+async function instalarApp(){
+  if(!_deferredPrompt) return;
+  _deferredPrompt.prompt();
+  await _deferredPrompt.userChoice;
+  _deferredPrompt=null; renderInstalar();
+}
+/* ===== Lembrete diário (notificação) ===== */
+async function ativarLembrete(){
+  if(!('Notification' in window)){ alert('Seu navegador não suporta notificações. Adicione o app à tela inicial pra ativar.'); return; }
+  let p=Notification.permission;
+  if(p!=='granted') p=await Notification.requestPermission();
+  if(p!=='granted'){ document.getElementById('cfgLembrete').textContent='Bloqueado'; return; }
+  S.lembreteOn=true; save();
+  document.getElementById('cfgLembrete').textContent='Ativado ✓';
+  /* agenda o lembrete local via service worker (melhor esforço) */
+  agendarLembrete();
+  /* confirma com uma notificação na hora */
+  try{ const reg=await navigator.serviceWorker.ready; reg.showNotification('Lembrete ativado 🔔', { body:'Todo dia eu te chamo pra fazer seu devocional. Um passo a mais, do escravo ao filho.', icon:'img/icon-192.png' }); }catch(e){}
+}
+function agendarLembrete(){
+  if(!S.lembreteOn) return;
+  const hora={manhã:7, almoço:12, noite:20}[S.lembrete] || 8;
+  navigator.serviceWorker?.ready.then(reg=>{
+    reg.active?.postMessage({ tipo:'agendar', hora, texto:'📖 Seu devocional de hoje te espera. Abra o Códice e dê mais um passo.' });
+  });
 }
 
 /* ================= CARTÃO DE COMPARTILHAMENTO ================= */
@@ -1344,6 +1393,11 @@ async function boot(){
 }
 /* morador entra rápido (sem splash longo); visitante vê o splash de marca */
 setTimeout(boot, souMorador() ? 200 : 1600);
+
+/* ===== PWA: registra service worker + re-agenda lembrete ===== */
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js').then(()=>{ if(S.lembreteOn) agendarLembrete(); }).catch(()=>{});
+}
 </script>
 </body>
 </html>

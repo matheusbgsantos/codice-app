@@ -1,0 +1,17 @@
+{
+  "name": "O Códice — Do escravo ao filho",
+  "short_name": "O Códice",
+  "description": "Devocional guiado de 60 dias. Reaprenda a ler a Bíblia como filho, não como escravo.",
+  "start_url": "./?app=1",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0B0A0C",
+  "theme_color": "#0B0A0C",
+  "orientation": "portrait",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
