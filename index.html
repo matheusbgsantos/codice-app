@@ -66,6 +66,13 @@ button{font-family:var(--sans);cursor:pointer}
 /* analisando (estilo Opal "Calculating") */
 .an-bar{width:210px;height:3px;background:var(--line);border-radius:2px;overflow:hidden;margin:22px 0 16px}
 .an-bar i{display:block;height:100%;background:var(--gold);width:0;transition:width 3.1s linear}
+
+/* abrindo — cerimônia de entrada no app */
+.abrindo-selo{filter:drop-shadow(0 0 30px rgba(220,180,106,.55));animation:abLift 4.5s ease-in-out infinite}
+.abrindo-selo .selo{border-radius:50%;animation:abGlow 2.2s ease-in-out infinite}
+@keyframes abGlow{0%,100%{opacity:.7;transform:scale(.97)}50%{opacity:1;transform:scale(1.03)}}
+@keyframes abLift{0%,100%{transform:translateY(4px)}50%{transform:translateY(-4px)}}
+.abrindo-txt{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--gold);margin-top:26px;letter-spacing:-0.01em;transition:opacity .4s}
 .qbody input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;color:var(--ink);font-family:var(--sans);font-size:17px;padding:15px 16px;outline:none}
 .qbody input[type=text]:focus{border-color:var(--gold)}
 .qfoot{padding:0 22px 26px}
@@ -285,6 +292,13 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
     <div class="facts glass" style="padding:11px 15px" id="revFacts"></div>
   </div>
   <div class="qfoot"><button class="btn gold" onclick="irPacto()">Quero começar</button></div>
+</section>
+
+<!-- ===== ABRINDO (cerimônia de entrada) ===== -->
+<section id="scr-abrindo" class="wrap hidden center">
+  <div class="abrindo-selo"><img class="selo" src="img/simbolo-2.jpg" width="120" height="120" alt="" onerror="this.style.display='none'"></div>
+  <p class="abrindo-txt" id="abrindoTxt">Abrindo o seu Códice...</p>
+  <div class="an-bar" style="margin-top:18px"><i id="abrFill"></i></div>
 </section>
 
 <!-- ===== CONTRATO ===== -->
@@ -616,7 +630,7 @@ function recalcStreak(){
 }
 
 /* ================= ROTEADOR ================= */
-const SCREENS=['scr-splash','scr-intro','scr-quiz','scr-analise','scr-diag','scr-revela','scr-pacto','scr-oferta','app'];
+const SCREENS=['scr-splash','scr-intro','scr-quiz','scr-analise','scr-diag','scr-revela','scr-pacto','scr-abrindo','scr-oferta','app'];
 function show(id){ SCREENS.forEach(s=>document.getElementById(s).classList.toggle('hidden', s!==id)); window.scrollTo(0,0); }
 
 /* ================= QUIZ (engine) ================= */
@@ -734,7 +748,15 @@ function irPacto(){
     `Eu, <b style="color:var(--gold)">${S.nome||'_____'}</b>, decido parar de ler a Bíblia como escravo e aprender a ler como filho.<br><br>Pelos próximos 60 dias, abro o Códice por ${min} minutos por dia.`;
   show('scr-pacto');
 }
-function assinarPacto(){ S.pacto=true; S.funil=true; save(); entrarApp(); vDia(1); } /* presente: entra direto no Dia 1, sem oferta */
+function assinarPacto(){
+  S.pacto=true; S.funil=true; save();
+  show('scr-abrindo');
+  const f=document.getElementById('abrFill'); if(f){ f.style.width='0'; requestAnimationFrame(()=>requestAnimationFrame(()=>f.style.width='100%')); }
+  const frases=['Abrindo o seu Códice...','Preparando o seu Dia 1...','Um passo mais perto do Pai.'];
+  let i=0; const el=document.getElementById('abrindoTxt'); el.textContent=frases[0];
+  const t=setInterval(()=>{ i++; if(i<frases.length){ el.style.opacity=0; setTimeout(()=>{ el.textContent=frases[i]; el.style.opacity=1; },300); } }, 1300);
+  setTimeout(()=>{ clearInterval(t); entrarApp(); vDia(1); }, 4000);
+}
 
 /* ================= OFERTA / COMPRA ================= */
 function abrirOferta(modo){
