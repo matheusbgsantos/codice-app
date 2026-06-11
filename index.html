@@ -855,7 +855,7 @@ function pick(j){
   else R[P.k]=j;
   save(); renderFluxo();
 }
-function iniciarQuiz(){ fi=0; show('scr-quiz'); renderFluxo(); }
+function iniciarQuiz(){ fi=0; show('scr-quiz'); renderFluxo(); logAcesso('quiz_comecou'); }
 document.getElementById('qNext').onclick=()=>{
   const P=FLUXO[fi];
   if(P.t==='nome'){ S.nome=document.getElementById('qIn').value.trim(); S.lembrete=['manhã','almoço','noite'][R.horario]||''; save(); iniciarAnalise(); return; }
@@ -1013,14 +1013,21 @@ function abrirOferta(modo){
   document.getElementById('pvEco').textContent = dores.length
     ? 'Seus primeiros 7 dias atacam exatamente '+dores.join(' e ')+'.'
     : 'Um dia de cada vez, do escravo ao herdeiro.';
-  show('scr-oferta');
+  show('scr-oferta'); logAcesso('oferta_viu');
 }
 function fecharOferta(){ S.funil=true; save(); entrarApp(); }
 function comprar(){
+  logAcesso('comprar_clicou');
   if(CONFIG.MODO_TESTE){ S.pago=true; S.funil=true; save(); entrarApp();
     alert('Compra simulada (MODO_TESTE).'); return; }
   S.funil=true; save();
   window.location.href = CONFIG.KIWIFY_URL; /* → webhook kiwify-webhook registra o comprador na tabela */
+}
+
+/* ===== ANALYTICS: registra etapas do funil no Supabase ===== */
+function logAcesso(etapa){
+  if(!CONFIG.SUPABASE_URL) return;
+  try{ fetch(CONFIG.SUPABASE_URL+'/rest/v1/rpc/log_acesso',{method:'POST',headers:{'apikey':CONFIG.SUPABASE_KEY,'Authorization':'Bearer '+CONFIG.SUPABASE_KEY,'Content-Type':'application/json'},body:JSON.stringify({p_etapa:etapa}),keepalive:true}); }catch(e){}
 }
 
 /* ===== GATE: verifica no servidor se o e-mail comprou (RPC verificar_acesso) ===== */
@@ -1389,7 +1396,7 @@ async function boot(){
     return;
   }
   if(souMorador()){ entrarApp(); }   /* morador nunca vê o funil */
-  else { show('scr-intro'); }
+  else { show('scr-intro'); logAcesso('funil_abriu'); }
 }
 /* morador entra rápido (sem splash longo); visitante vê o splash de marca */
 setTimeout(boot, souMorador() ? 200 : 1600);
