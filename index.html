@@ -226,9 +226,14 @@ button{font-family:var(--sans);cursor:pointer}
 .ref{font-size:12px;color:var(--mute);margin-top:8px}
 .ensino p{font-size:15.5px;color:#d8d5cc;line-height:1.7;margin:0 0 14px}
 .boxd{border:1px solid rgba(232,200,122,.45);background:rgba(232,200,122,.06);border-radius:14px;padding:16px 18px;font-size:15px;color:#e7dfc9;line-height:1.6}
-.leitura{padding:16px 18px}
+.leitura{padding:18px 20px}
 .leitura-ref{font-family:var(--serif);font-style:italic;font-size:22px;color:var(--gold-hi);letter-spacing:-0.01em}
-.leitura-instr{font-size:14.5px;color:var(--dim);line-height:1.55;margin:8px 0 14px}
+.leitura-instr{font-size:14px;color:var(--dim);line-height:1.55;margin:8px 0 14px}
+.biblia{border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);padding:16px 0;margin:0 0 14px;max-height:42vh;overflow-y:auto}
+.biblia p{font-family:var(--serif);font-size:18px;line-height:1.62;color:var(--ink);margin:0 0 10px;text-align:left}
+.biblia p:last-child{margin-bottom:0}
+.biblia sup{color:var(--gold);font-size:11px;font-weight:600;font-family:var(--sans);margin-right:5px;vertical-align:super}
+.biblia-fonte{font-size:11px;color:var(--faint);text-align:center;margin:0 0 14px;letter-spacing:.02em}
 .leitura-chk{display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--ink);cursor:pointer;user-select:none}
 .leitura-chk input{appearance:none;-webkit-appearance:none;width:22px;height:22px;border:1.5px solid var(--gold);border-radius:6px;flex:0 0 22px;cursor:pointer;position:relative;transition:.15s}
 .leitura-chk input:checked{background:var(--gold)}
@@ -742,7 +747,8 @@ const TEMAS = [
 ];
 const DIA1 = {
   leitura:'Romanos 8:1-17',
-  leituraInstr:'Pega a sua Bíblia — a de papel, se tiver. Abra em Romanos 8 e leia do versículo 1 ao 17, sem pressa, em voz alta. São 17 versículos: deixa Paulo te levar de "nenhuma condenação" (v.1) até "filho e herdeiro" (v.17). É a sua leitura de hoje, no seu próprio livro.',
+  leituraInstr:'Leia sem pressa, em voz alta. Deixa Paulo te levar de "nenhuma condenação" (v.1) até "filho e herdeiro" (v.17). Se tiver sua Bíblia de papel por perto, melhor ainda — mas o texto está aqui, é só ler.',
+  versos:[{n:1,t:'Portanto, agora nenhuma condenação há para os que estão em Cristo Jesus.'},{n:2,t:'Porque a lei do Espírito da vida, em Cristo Jesus, te livrou da lei do pecado e da morte.'},{n:3,t:'Porquanto o que era impossível à lei, visto que se achava fraca pela carne, Deus enviando o seu próprio Filho em semelhança da carne do pecado, e por causa do pecado, na carne condenou o pecado.'},{n:4,t:'para que a justa exigência da lei se cumprisse em nós, que não andamos segundo a carne, mas segundo o Espírito.'},{n:5,t:'Pois os que são segundo a carne inclinam-se para as coisas da carne; mas os que são segundo o Espírito para as coisas do Espírito.'},{n:6,t:'Porque a inclinação da carne é morte; mas a inclinação do Espírito é vida e paz.'},{n:7,t:'Porquanto a inclinação da carne é inimizade contra Deus, pois não é sujeita à lei de Deus, nem em verdade o pode ser;'},{n:8,t:'e os que estão na carne não podem agradar a Deus.'},{n:9,t:'Vós, porém, não estais na carne, mas no Espírito, se é que o Espírito de Deus habita em vós. Mas, se alguém não tem o Espírito de Cristo, esse tal não é dele.'},{n:10,t:'Ora, se Cristo está em vós, o corpo, na verdade, está morto por causa do pecado, mas o espírito vive por causa da justiça.'},{n:11,t:'E, se o Espírito daquele que dos mortos ressuscitou a Jesus habita em vós, aquele que dos mortos ressuscitou a Cristo Jesus há de vivificar também os vossos corpos mortais, pelo seu Espírito que em vós habita.'},{n:12,t:'Portanto, irmãos, somos devedores, não à carne para vivermos segundo a carne;'},{n:13,t:'porque se viverdes segundo a carne, haveis de morrer; mas, se pelo Espírito mortificardes as obras do corpo, vivereis.'},{n:14,t:'Pois todos os que são guiados pelo Espírito de Deus, esses são filhos de Deus.'},{n:15,t:'Porque não recebestes o espírito de escravidão, para outra vez estardes com temor, mas recebestes o espírito de adoção, pelo qual clamamos: Aba, Pai!'},{n:16,t:'O Espírito mesmo testifica com o nosso espírito que somos filhos de Deus;'},{n:17,t:'e, se filhos, também herdeiros, herdeiros de Deus e co-herdeiros de Cristo; se é certo que com ele padecemos, para que também com ele sejamos glorificados.'}],
   passagem:'Porque não recebestes o espírito de escravidão, para viverdes outra vez com medo, mas recebestes o espírito de adoção, pelo qual clamamos: Aba, Pai.',
   ref:'Romanos 8:15',
   ensino:[
@@ -1062,13 +1068,15 @@ function vDia(n){
       <p class="daytag" style="text-align:left">Dia ${n} de 60</p>
       <h2 style="font-family:var(--serif);font-style:italic;font-weight:500;font-size:27px;line-height:1.18;letter-spacing:-0.01em;margin:6px 0 0;color:var(--ink)">${TEMAS[n-1]}</h2>
       ${c?`
-      <p class="blocklab">📖 Abra a sua Bíblia</p>
+      <p class="blocklab">📖 A leitura de hoje</p>
       <div class="leitura glass">
         <div class="leitura-ref">${c.leitura||c.ref}</div>
-        <p class="leitura-instr">${c.leituraInstr||('Pega a sua Bíblia, abra em '+(c.leitura||c.ref)+' e leia, devagar, em voz alta.')}</p>
-        <label class="leitura-chk"><input type="checkbox" id="chkLeitura"> Li na minha Bíblia</label>
+        <p class="leitura-instr">${c.leituraInstr||'Leia sem pressa, em voz alta.'}</p>
+        ${c.versos?`<div class="biblia">${c.versos.map(v=>`<p><sup>${v.n}</sup>${v.t}</p>`).join('')}</div>
+        <p class="biblia-fonte">João Ferreira de Almeida · domínio público</p>`:''}
+        <label class="leitura-chk"><input type="checkbox" id="chkLeitura"> Terminei a leitura</label>
       </div>
-      <p class="blocklab">A passagem de hoje</p>
+      <p class="blocklab">O versículo-chave</p>
       <div class="passage">"${c.passagem}"</div><p class="ref">${c.ref}</p>
       <p class="blocklab">O ensino</p>
       <div class="ensino">${c.ensino.map(p=>`<p>${p}</p>`).join('')}</div>
@@ -1095,7 +1103,7 @@ function vDia(n){
 function tentarConcluir(n){
   const chk=document.getElementById('chkLeitura');
   if(chk && !chk.checked){
-    document.getElementById('concluirMsg').textContent='Marque que você leu na sua Bíblia primeiro 📖';
+    document.getElementById('concluirMsg').textContent='Termine a leitura de hoje primeiro 📖';
     const box=chk.closest('.leitura'); box.style.borderColor='var(--gold)'; box.scrollIntoView({behavior:'smooth',block:'center'});
     return;
   }
