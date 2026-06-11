@@ -1156,7 +1156,6 @@ function vConfig(){
     <div class="cfg"><span>Acesso</span><small>${S.pago?'Jornada completa ✓':'Gratuito (dia 1)'}</small></div>
     ${!S.pago?`<button class="btn gold" style="margin-top:18px" onclick="abrirOferta('padrao')">Destravar a jornada — ${CONFIG.PRECO}</button>`:''}
     <button class="ghost" style="margin-top:14px" onclick="abrirEntrar()">Restaurar compra (outro aparelho)</button>
-    <button class="ghost" onclick="if(confirm('Apagar todo o progresso deste aparelho?')){localStorage.removeItem(KEY);location.reload()}">Reiniciar tudo</button>
     <p class="legal" style="margin-top:20px">O Códice · ocodice.app · v1</p></div>`;
 }
 
@@ -1190,6 +1189,7 @@ async function compartilhar(){
    O app confere esse e-mail no servidor (verificar_acesso) antes de liberar — nada de destrave cego. */
 async function boot(){
   const qs=new URLSearchParams(location.search);
+  if(qs.get('reset')==='1'){ localStorage.removeItem(KEY); location.href=location.pathname; return; } /* saída de teste, invisível */
   const urlEmail=qs.get('email');
   if(urlEmail){
     history.replaceState(null,'',location.pathname);
