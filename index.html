@@ -234,6 +234,8 @@ button{font-family:var(--sans);cursor:pointer}
 .biblia p:last-child{margin-bottom:0}
 .biblia sup{color:var(--gold);font-size:11px;font-weight:600;font-family:var(--sans);margin-right:5px;vertical-align:super}
 .biblia-fonte{font-size:11px;color:var(--faint);text-align:center;margin:0 0 14px;letter-spacing:.02em}
+.biblia-cap{display:block;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin:14px 0 8px}
+.biblia-cap:first-child{margin-top:0}
 .leitura-chk{display:flex;align-items:center;gap:10px;font-size:14.5px;color:var(--ink);cursor:pointer;user-select:none}
 .leitura-chk input{appearance:none;-webkit-appearance:none;width:22px;height:22px;border:1.5px solid var(--gold);border-radius:6px;flex:0 0 22px;cursor:pointer;position:relative;transition:.15s}
 .leitura-chk input:checked{background:var(--gold)}
@@ -1021,7 +1023,22 @@ async function confirmarEntrar(){
 }
 
 /* ================= APP ================= */
-function entrarApp(){ recalcStreak(); show('app'); go('hoje'); }
+/* conteúdo dos dias 2-60 (vem do Supabase, gated por compra). Dia 1 é o DIA1 embutido (grátis). */
+let CONTEUDO = {};
+let conteudoCarregado = false;
+async function carregarConteudo(){
+  if(conteudoCarregado || !S.pago || !S.email || !CONFIG.SUPABASE_URL) return;
+  try{
+    const r = await fetch(CONFIG.SUPABASE_URL+'/rest/v1/rpc/get_dias',{
+      method:'POST',
+      headers:{'apikey':CONFIG.SUPABASE_KEY,'Authorization':'Bearer '+CONFIG.SUPABASE_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({p_email:S.email})
+    });
+    const arr = await r.json();
+    if(Array.isArray(arr)){ arr.forEach(d=>{ if(d&&d.numero) CONTEUDO[d.numero]=d; }); conteudoCarregado=true; }
+  }catch(e){}
+}
+function entrarApp(){ recalcStreak(); carregarConteudo(); show('app'); go('hoje'); }
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>go(b.dataset.v));
 function go(v){
   document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
@@ -1060,19 +1077,28 @@ function abrirDia(n){
   if(n>diaAtual()){ return; }
   vDia(n);
 }
-function vDia(n){
-  const c = n===1 ? DIA1 : null;
+async function vDia(n){
+  let c = n===1 ? DIA1 : CONTEUDO[n];
+  if(!c && n>1){ /* conteúdo ainda não chegou — tenta carregar */
+    document.getElementById('view').innerHTML=`<div class="dia-head"><button class="back" onclick="go('hoje')">‹ voltar</button><div style="text-align:center;padding:60px 0"><div class="pulse" style="margin:0 auto 18px"></div><p style="color:var(--mute)">Carregando o dia ${n}...</p></div></div>`;
+    conteudoCarregado=false; await carregarConteudo(); c=CONTEUDO[n];
+    if(!c){ document.getElementById('view').innerHTML=`<div class="dia-head"><button class="back" onclick="go('hoje')">‹ voltar</button><p class="wip" style="margin-top:40px">Não consegui carregar este dia. Confira sua conexão e tente de novo.</p></div>`; return; }
+  }
+  const versosHtml = c.versos ? c.versos.map((v,i)=>{
+    const novoCap = i===0 || v.c!==c.versos[i-1].c;
+    const capMark = (novoCap && c.versos.some(x=>x.c!==c.versos[0].c)) ? `<span class="biblia-cap">Capítulo ${v.c}</span>` : '';
+    return capMark + `<p><sup>${v.n}</sup>${v.t}</p>`;
+  }).join('') : '';
   document.getElementById('view').innerHTML=`
     <div class="dia-head">
       <button class="back" onclick="go('hoje')">‹ voltar</button>
       <p class="daytag" style="text-align:left">Dia ${n} de 60</p>
       <h2 style="font-family:var(--serif);font-style:italic;font-weight:500;font-size:27px;line-height:1.18;letter-spacing:-0.01em;margin:6px 0 0;color:var(--ink)">${TEMAS[n-1]}</h2>
-      ${c?`
       <p class="blocklab">📖 A leitura de hoje</p>
       <div class="leitura glass">
         <div class="leitura-ref">${c.leitura||c.ref}</div>
         <p class="leitura-instr">${c.leituraInstr||'Leia sem pressa, em voz alta.'}</p>
-        ${c.versos?`<div class="biblia">${c.versos.map(v=>`<p><sup>${v.n}</sup>${v.t}</p>`).join('')}</div>
+        ${c.versos?`<div class="biblia">${versosHtml}</div>
         <p class="biblia-fonte">João Ferreira de Almeida · domínio público</p>`:''}
         <label class="leitura-chk"><input type="checkbox" id="chkLeitura"> Terminei a leitura</label>
       </div>
@@ -1084,7 +1110,6 @@ function vDia(n){
       <div class="boxd">${c.desafio}</div>
       <p class="blocklab">Declare em voz alta</p>
       <div class="decl">"${c.declaracao}"</div>
-      `:`<p class="blocklab">Conteúdo</p><p class="wip">Este dia está em produção — no app final, todo o conteúdo é carregado da tabela <b>dias</b> do Supabase. Conclua para testar a progressão.</p>`}
       ${AUDIOS[n]?`
       <p class="blocklab">🎧 A oração de hoje</p>
       <div class="player glass">
