@@ -67,12 +67,31 @@ button{font-family:var(--sans);cursor:pointer}
 .an-bar{width:210px;height:3px;background:var(--line);border-radius:2px;overflow:hidden;margin:22px 0 16px}
 .an-bar i{display:block;height:100%;background:var(--gold);width:0;transition:width 3.1s linear}
 
+/* revelação do plano */
+.rev-stats{display:flex;justify-content:center;gap:24px;margin:18px 0 6px}
+.rev-stats>div{text-align:center}
+.rev-stats b{font-family:var(--serif);font-size:30px;font-weight:600;color:var(--gold);letter-spacing:-0.02em;display:block;line-height:1}
+.rev-stats span{font-size:11.5px;color:var(--mute);margin-top:3px;display:block}
+.fase{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line-soft);border-radius:18px;padding:16px;margin-top:12px}
+.fase .fimg{flex:0 0 44px}
+.fase .fimg img{width:44px;height:44px;border-radius:10px;object-fit:cover}
+.fase .ft{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.fase .ft b{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--ink)}
+.fase .ft span{font-size:11.5px;color:var(--gold);font-weight:600}
+.fase .fd{font-size:13.5px;color:var(--mute);margin-top:5px;line-height:1.45}
+.fase .fmuda{font-size:13px;color:var(--gold);margin-top:8px;line-height:1.45}
+.fase .fmuda b{color:var(--gold-hi);font-weight:600}
+.rev-eco{margin-top:18px;padding:16px 18px;text-align:center;font-size:14px;color:var(--dim);line-height:1.55}
+.rev-eco b{color:var(--ink)}
+
 /* abrindo — cerimônia de entrada no app */
 .abrindo-selo{filter:drop-shadow(0 0 30px rgba(220,180,106,.55));animation:abLift 4.5s ease-in-out infinite}
 .abrindo-selo .selo{border-radius:50%;animation:abGlow 2.2s ease-in-out infinite}
 @keyframes abGlow{0%,100%{opacity:.7;transform:scale(.97)}50%{opacity:1;transform:scale(1.03)}}
 @keyframes abLift{0%,100%{transform:translateY(4px)}50%{transform:translateY(-4px)}}
 .abrindo-txt{font-family:var(--serif);font-style:italic;font-size:20px;color:var(--gold);margin-top:26px;letter-spacing:-0.01em;transition:opacity .4s}
+.ring{position:relative;width:96px;height:96px}
+.ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--gold)}
 .qbody input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;color:var(--ink);font-family:var(--sans);font-size:17px;padding:15px 16px;outline:none}
 .qbody input[type=text]:focus{border-color:var(--gold)}
 .qfoot{padding:0 22px 26px}
@@ -84,8 +103,13 @@ button{font-family:var(--sans);cursor:pointer}
 .respiro-p{font-size:15.5px;color:var(--dim);line-height:1.65;max-width:300px;margin:0 auto}
 
 /* pacto */
-.pacto-box{border:1px solid rgba(232,200,122,.5);border-radius:16px;background:rgba(232,200,122,.05);padding:22px 20px;font-family:var(--serif);font-style:italic;font-size:19px;line-height:1.55;color:#f0e9d6;text-align:left;max-width:320px;margin-top:18px}
-.pacto-ref{margin-top:14px;font-size:12px;color:var(--mute);font-family:var(--sans);font-style:normal}
+.pacto-box{border:1px solid var(--line);border-radius:18px;background:var(--card);padding:22px 20px;font-family:var(--serif);font-style:italic;font-size:18px;line-height:1.6;color:var(--ink);text-align:left;max-width:330px;margin-top:18px}
+.assina{cursor:pointer;min-height:52px;display:flex;align-items:flex-end;margin-top:26px;padding-top:16px;border-top:1px solid var(--line)}
+.assina #assinaPlaceholder{font-family:var(--sans);font-style:normal;font-size:14px;color:var(--faint)}
+.assina #assinaNome{font-family:var(--serif);font-style:italic;font-size:34px;color:var(--gold-hi);line-height:1}
+.assina-line{height:1px;background:var(--line);margin-top:6px;transition:background .2s}
+.assina-line.on{background:var(--gold)}
+.assina-data{font-size:11px;color:var(--mute);margin-top:8px;letter-spacing:.08em;text-transform:uppercase;font-family:var(--sans);font-style:normal}
 
 /* oferta */
 #scr-oferta .center{justify-content:flex-start;padding-top:22px;overflow-y:auto}
@@ -264,11 +288,16 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
   <div class="qfoot"><button class="btn" id="qNext" disabled>Continuar</button></div>
 </section>
 
-<!-- ===== ANÁLISE ===== -->
+<!-- ===== ANÁLISE (círculo + %) ===== -->
 <section id="scr-analise" class="wrap hidden center">
-  <img class="selo" src="img/selo.jpg" width="88" height="88" alt="" onerror="this.outerHTML='<div class=pulse></div>'">
-  <div class="an-bar"><i id="anFill"></i></div>
-  <p id="analiseTxt">Lendo suas respostas...</p>
+  <div class="ring">
+    <svg width="96" height="96" style="transform:rotate(-90deg)">
+      <circle cx="48" cy="48" r="42" fill="none" stroke="var(--line-soft)" stroke-width="3"/>
+      <circle id="ringFg" cx="48" cy="48" r="42" fill="none" stroke="var(--gold)" stroke-width="3" stroke-linecap="round" stroke-dasharray="263.9" stroke-dashoffset="263.9"/>
+    </svg>
+    <div class="ring-pct" id="ringPct">0%</div>
+  </div>
+  <p class="abrindo-txt" id="analiseTxt" style="margin-top:28px">Lendo suas respostas...</p>
 </section>
 
 <!-- ===== DIAGNÓSTICO ===== -->
@@ -279,39 +308,61 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
     <h2 class="diag-h" id="diagH"></h2>
     <p class="diag-p" id="diagP" style="max-width:320px;text-align:left;font-size:15px"></p>
   </div>
-  <div class="qfoot"><button class="btn gold" onclick="show('scr-revela');renderRevela()">Ver meu plano →</button></div>
+  <div class="qfoot"><button class="btn gold" onclick="show('scr-revela');renderRevela()">Ver o que muda em 60 dias</button></div>
 </section>
 
-<!-- ===== REVELAÇÃO ===== -->
+<!-- ===== REVELAÇÃO DO PLANO ===== -->
 <section id="scr-revela" class="wrap hidden">
-  <div class="center">
-    <span class="mini" style="color:var(--gold)">Plano pronto</span>
-    <h2 class="diag-h" style="margin-top:8px" id="revTit">Plano do Herdeiro</h2>
-    <p class="diag-p" id="revCita" style="font-size:14px"></p>
-    <div class="tl" id="tlBox"></div>
-    <div class="facts glass" style="padding:11px 15px" id="revFacts"></div>
+  <div class="view" style="padding:14px 26px 0">
+    <div style="text-align:center">
+      <span class="mini">Seu plano está pronto</span>
+      <h2 class="diag-h" style="margin-top:12px" id="revTit">O Plano do Herdeiro</h2>
+      <p id="revPersonal" style="font-size:13.5px;color:var(--gold);font-style:italic;font-family:var(--serif);margin:10px auto 0;max-width:280px;line-height:1.5"></p>
+      <div class="rev-stats">
+        <div><b>60</b><span>dias</span></div>
+        <div><b id="revMin">10</b><span>min/dia</span></div>
+        <div><b>60</b><span>orações</span></div>
+      </div>
+    </div>
+    <div id="revFases"></div>
+    <div class="rev-eco glass" id="revEco"></div>
   </div>
-  <div class="qfoot"><button class="btn gold" onclick="irPacto()">Quero começar</button></div>
+  <div class="qfoot"><button class="btn gold" onclick="irPacto()">Quero esse plano</button></div>
 </section>
 
-<!-- ===== ABRINDO (cerimônia de entrada) ===== -->
+<!-- ===== ABRINDO (carregando plano) ===== -->
 <section id="scr-abrindo" class="wrap hidden center">
   <div class="abrindo-selo"><img class="selo" src="img/simbolo-2.jpg" width="120" height="120" alt="" onerror="this.style.display='none'"></div>
-  <p class="abrindo-txt" id="abrindoTxt">Abrindo o seu Códice...</p>
+  <p class="abrindo-txt" id="abrindoTxt" style="font-style:normal;font-family:var(--sans);font-size:16px;color:var(--ink)">Carregando seu plano...</p>
   <div class="an-bar" style="margin-top:18px"><i id="abrFill"></i></div>
 </section>
 
-<!-- ===== CONTRATO ===== -->
+<!-- ===== O PACTO (contrato assinável) ===== -->
 <section id="scr-pacto" class="wrap hidden">
   <div class="center">
-    <span class="mini" style="color:var(--gold)">Antes do seu plano</span>
-    <h2 class="diag-h" style="margin-top:8px">Assine o contrato.</h2>
-    <div class="pacto-box" id="pactoTxt"></div>
-    <p class="pacto-ref">"Recebestes o espírito de adoção" — Romanos 8:15</p>
-    <p class="diag-p" style="margin-top:18px">🎁 Assinou? Seu <b style="color:var(--gold)">Dia 1 já abre na hora</b> — passagem, ensino e a oração guiada em áudio. De graça, sem pedir nada em troca. Sua jornada começa agora.</p>
+    <span class="mini">O Pacto</span>
+    <h2 class="diag-h" style="margin-top:10px;text-align:center">Um compromisso entre você e a Palavra</h2>
+    <div class="pacto-box" style="margin-top:22px">
+      <span id="pactoTxt" style="display:block"></span>
+      <div class="assina" onclick="assinar()">
+        <span id="assinaPlaceholder">Toque para assinar ✍︎</span>
+        <span id="assinaNome" class="hidden"></span>
+      </div>
+      <div class="assina-line" id="assinaLine"></div>
+      <div class="assina-data" id="assinaData"></div>
+    </div>
   </div>
-  <div class="qfoot"><button class="btn gold" onclick="assinarPacto()">Assinar e abrir meu Dia 1 🎁</button></div>
+  <div class="qfoot"><button class="btn gold" id="pactoBtn" disabled onclick="selarPacto()">Selar e continuar</button></div>
 </section>
+
+<!-- ===== POPUP PRÊMIO ===== -->
+<div id="ovPremio" class="ov hidden"><div class="card">
+  <div style="font-size:40px">🎁</div>
+  <span class="mini" style="color:var(--gold);margin-top:8px">Você foi premiado(a)</span>
+  <h3 id="premioTit" style="margin-top:8px">Seu primeiro dia é por nossa conta.</h3>
+  <p id="premioSub">Por selar o pacto, você ganha o <b style="color:var(--gold-hi)">Dia 1 completo, de graça</b> — a passagem, o ensino e a oração guiada em áudio. Sem pagar nada. É o nosso jeito de te receber na casa.</p>
+  <button class="btn gold" onclick="receberPremio()">Receber meu prêmio 🎁</button>
+</div></div>
 
 <!-- ===== OFERTA ===== -->
 <section id="scr-oferta" class="wrap hidden" style="position:relative">
@@ -678,11 +729,19 @@ document.getElementById('qBack').onclick=()=>{ if(fi>0){ fi--; renderFluxo(); } 
 
 function iniciarAnalise(){
   show('scr-analise');
-  const f=document.getElementById('anFill'); if(f){ f.style.width='0'; requestAnimationFrame(()=>requestAnimationFrame(()=>f.style.width='100%')); }
-  const frases=['Lendo suas respostas...','Cruzando com a jornada...','Pronto, '+(S.nome||'amigo')+'.'];
-  let i=0; const el=document.getElementById('analiseTxt'); el.textContent=frases[0];
-  const t=setInterval(()=>{ i++; if(i<frases.length) el.textContent=frases[i];
-    else { clearInterval(t); renderDiag(); show('scr-diag'); } }, 1100);
+  const lines=['Lendo suas respostas…','Identificando o padrão…','Cruzando com a Escritura…','Montando seu diagnóstico…'];
+  const fg=document.getElementById('ringFg'), pct=document.getElementById('ringPct'), el=document.getElementById('analiseTxt');
+  const C=263.9; let p=0, last=-1;
+  const t0=performance.now();
+  function tick(now){
+    p=Math.min(1,(now-t0)/3200);
+    fg.style.strokeDashoffset=C*(1-p);
+    pct.textContent=Math.round(p*100)+'%';
+    const li=Math.min(lines.length-1,Math.floor(p*lines.length));
+    if(li!==last){ last=li; el.style.opacity=0; setTimeout(()=>{ el.textContent=lines[li]; el.style.opacity=1; },200); }
+    if(p<1) requestAnimationFrame(tick); else setTimeout(()=>{ renderDiag(); show('scr-diag'); },420);
+  }
+  requestAnimationFrame(tick);
 }
 
 /* ================= DIAGNÓSTICO A/B (tom escolhido no quiz) ================= */
@@ -720,42 +779,76 @@ function renderDiag(){
       `<br><br>Imagina a sua leitura daqui a 60 dias: sem ${dores[0]||'o peso'}, sem pressa, com voz. <b style="color:var(--gold)">É pra lá que a gente vai — começando hoje.</b>`;
   }
 }
+const FASES_REV=[
+  {nome:'Identidade',dias:'Dias 1–20',lvl:1,
+   desc:'Quem você é em Cristo — de escravo a filho.',
+   muda:'Você para de ler por medo. <b>Começa a se sentir esperado</b>, não cobrado.'},
+  {nome:'Acesso',dias:'Dias 21–40',lvl:2,
+   desc:'Intimidade e oração — falar como herdeiro.',
+   muda:'A oração vira conversa. <b>O peito afrouxa</b> — você fala com o Pai, não com um teto.'},
+  {nome:'Postura',dias:'Dias 41–60',lvl:4,
+   desc:'Viver e governar como quem recebeu a herança.',
+   muda:'Sem medo, com voz. <b>Você toma posse</b> da casa que sempre foi sua.'}
+];
 function renderRevela(){
   const n=S.nome||'';
-  document.getElementById('revTit').textContent='Plano do Herdeiro'+(n?' — 60 dias de '+n:'');
-  const alvos=(R.afasta||[]).slice(0,2).map(j=>L_AFASTA[j]);
-  document.getElementById('revCita').textContent = alvos.length
-    ? 'Seus primeiros 7 dias atacam exatamente o que você marcou: '+alvos.join(' e ')+'.'
-    : 'Um dia de cada vez, esse livro se abre pra você.';
-  const marcos=[['Dia 1 · As correntes','Você descobre o que te prende',1],
-    ['Dia 20 · Servo da Casa','As primeiras correntes caem',.7],
-    ['Dia 40 · Filho em Formação','O livro se abre pra você',.45],
-    ['Dia 60 · Herdeiro','Você toma posse',.3]];
-  document.getElementById('tlBox').innerHTML = marcos.map((m,i)=>`
-    <div class="row"><div class="dotcol">
-      <span class="dot" style="${i===0?'background:var(--gold)':'border:2px solid rgba(232,200,122,'+m[2]+');background:#000'}"></span>
-      ${i<3?'<span class="stem"></span>':''}</div>
-      <div><p class="tit">${m[0]}</p><p class="des">${m[1]}</p></div></div>`).join('');
+  document.getElementById('revTit').textContent='O Plano do Herdeiro'+(n?', '+n:'');
   const min=L_TEMPO[R.tempo??1]||10;
+  document.getElementById('revMin').textContent=min;
+  const dores=(R.afasta||[]).slice(0,2).map(j=>L_AFASTA[j]);
+  const sent=L_SENT[R.sentimento??0];
+  document.getElementById('revPersonal').textContent =
+    'Montado a partir das suas respostas. Não é um plano genérico — é o seu.';
+  document.getElementById('revFases').innerHTML = FASES_REV.map(f=>`
+    <div class="fase">
+      <div class="fimg"><img src="img/simbolo-${f.lvl+1}.jpg" alt="" onerror="this.style.display='none'"></div>
+      <div style="flex:1">
+        <div class="ft"><b>${f.nome}</b><span>${f.dias}</span></div>
+        <div class="fd">${f.desc}</div>
+        <div class="fmuda">↳ ${f.muda}</div>
+      </div>
+    </div>`).join('');
   const fim=new Date(Date.now()+59*864e5).toLocaleDateString('pt-BR',{day:'numeric',month:'long'});
-  document.getElementById('revFacts').innerHTML=`<span>${min} min/dia</span><span>dia 60: ${fim}</span>`;
+  document.getElementById('revEco').innerHTML = dores.length
+    ? `Seus primeiros 7 dias atacam exatamente <b>${dores.join(' e ')}</b> — porque foi isso que você marcou. Seu dia 60 cai em <b>${fim}</b>.`
+    : `Um dia de cada vez, do escravo ao herdeiro. Seu dia 60 cai em <b>${fim}</b>.`;
 }
 
 /* ================= PACTO ================= */
+let pactoAssinado=false;
 function irPacto(){
-  const min=L_TEMPO[R.tempo??1]||10;
+  const nome=S.nome||'_______';
   document.getElementById('pactoTxt').innerHTML=
-    `Eu, <b style="color:var(--gold)">${S.nome||'_____'}</b>, decido parar de ler a Bíblia como escravo e aprender a ler como filho.<br><br>Pelos próximos 60 dias, abro o Códice por ${min} minutos por dia.`;
+    `Eu, <b style="color:var(--gold-hi)">${nome}</b>, escolho caminhar 60 dias. Comprometo-me a abrir a Palavra todos os dias — não por obrigação, mas para aprender a ler como filho e herdeiro.`;
+  pactoAssinado=false;
+  document.getElementById('assinaPlaceholder').classList.remove('hidden');
+  document.getElementById('assinaNome').classList.add('hidden');
+  document.getElementById('assinaLine').classList.remove('on');
+  document.getElementById('assinaData').textContent='';
+  document.getElementById('pactoBtn').disabled=true;
   show('scr-pacto');
 }
-function assinarPacto(){
+function assinar(){
+  if(pactoAssinado) return;
+  pactoAssinado=true;
+  document.getElementById('assinaPlaceholder').classList.add('hidden');
+  const nm=document.getElementById('assinaNome'); nm.textContent=S.nome||'Assinado'; nm.classList.remove('hidden');
+  document.getElementById('assinaLine').classList.add('on');
+  document.getElementById('assinaData').textContent='Assinatura · '+new Date().toLocaleDateString('pt-BR');
+  document.getElementById('pactoBtn').disabled=false;
+}
+function selarPacto(){
+  if(!pactoAssinado) return;
   S.pacto=true; S.funil=true; save();
+  document.getElementById('ovPremio').classList.remove('hidden'); /* popup do prêmio */
+}
+function receberPremio(){
+  document.getElementById('ovPremio').classList.add('hidden');
   show('scr-abrindo');
-  const f=document.getElementById('abrFill'); if(f){ f.style.width='0'; requestAnimationFrame(()=>requestAnimationFrame(()=>f.style.width='100%')); }
-  const frases=['Abrindo o seu Códice...','Preparando o seu Dia 1...','Um passo mais perto do Pai.'];
-  let i=0; const el=document.getElementById('abrindoTxt'); el.textContent=frases[0];
-  const t=setInterval(()=>{ i++; if(i<frases.length){ el.style.opacity=0; setTimeout(()=>{ el.textContent=frases[i]; el.style.opacity=1; },300); } }, 1300);
-  setTimeout(()=>{ clearInterval(t); entrarApp(); vDia(1); }, 4000);
+  const f=document.getElementById('abrFill');
+  if(f){ f.style.transition='none'; f.style.width='0'; requestAnimationFrame(()=>requestAnimationFrame(()=>{ f.style.transition='width 3.4s linear'; f.style.width='100%'; })); }
+  document.getElementById('abrindoTxt').textContent='Carregando seu plano personalizado'+(S.nome?' para '+S.nome:'')+'...';
+  setTimeout(()=>{ entrarApp(); go('hoje'); }, 3600); /* entra na tela Hoje, NÃO no Dia 1 */
 }
 
 /* ================= OFERTA / COMPRA ================= */
