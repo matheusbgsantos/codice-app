@@ -266,6 +266,20 @@ button{font-family:var(--sans);cursor:pointer}
 .rrow .dd{font-size:12px;color:var(--mute);font-weight:600}
 .rrow.me{background:rgba(232,200,122,.07)}
 .rrow.me .pos,.rrow.me .dd{color:var(--gold)}
+/* pódio — top 3 com medalha + destaque */
+.rrow .pos .medal{font-size:20px;line-height:1}
+.rrow.podio{padding:14px 14px}
+.rrow.podio .pos{width:26px;text-align:center}
+.rrow.podio .nm p{font-size:15.5px;font-weight:600}
+.rrow.podio .dd{font-size:13.5px;color:var(--ink)}
+.rrow.podio .avr{width:40px;height:40px;flex:0 0 40px}
+.rrow.ouro{background:linear-gradient(90deg,rgba(242,215,154,.16),rgba(242,215,154,.03));box-shadow:inset 3px 0 0 #F2D79A}
+.rrow.ouro .avr{box-shadow:0 0 0 2px #F2D79A, 0 0 14px rgba(242,215,154,.5)}
+.rrow.ouro .dd{color:var(--gold-hi)}
+.rrow.prata{background:linear-gradient(90deg,rgba(220,224,230,.12),transparent);box-shadow:inset 3px 0 0 #cdd2da}
+.rrow.prata .avr{box-shadow:0 0 0 2px #cdd2da}
+.rrow.bronze{background:linear-gradient(90deg,rgba(205,140,90,.12),transparent);box-shadow:inset 3px 0 0 #cd8c5a}
+.rrow.bronze .avr{box-shadow:0 0 0 2px #cd8c5a}
 .cfg{display:flex;justify-content:space-between;align-items:center;padding:15px 4px;border-bottom:1px solid rgba(255,255,255,.05);font-size:15px}
 .cfg small{color:var(--mute)}
 h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
@@ -1139,9 +1153,11 @@ function vRanking(){
   const mock=[['Mariana',41,null,FOTO+'women/68.jpg'],['Pedro',28,null,FOTO+'men/32.jpg'],['Lívia',17,null,FOTO+'women/47.jpg'],['João',12,null,FOTO+'men/76.jpg'],['Rafa',9,null,FOTO+'men/15.jpg'],['Bia',5,null,FOTO+'women/26.jpg']];
   const all=[...mock,[S.nome||'Você',diasFeitos(),'me',null]].sort((a,b)=>b[1]-a[1]);
   const mes=new Date().toLocaleDateString('pt-BR',{month:'long'});
+  const medalha=['🥇','🥈','🥉'], cls=['ouro','prata','bronze'];
   document.getElementById('view').innerHTML=`<div class="pad"><h2 class="sec">Turma de ${mes}</h2>
     <div class="glass" style="overflow:hidden">${all.map((r,i)=>`
-      <div class="rrow ${r[2]?'me':''}"><span class="pos">${i+1}</span>
+      <div class="rrow ${i<3?'podio '+cls[i]:''} ${r[2]?'me':''}">
+        <span class="pos">${i<3?`<span class="medal">${medalha[i]}</span>`:(i+1)}</span>
         ${r[3]?`<span class="avr"><img src="${r[3]}" alt="" loading="lazy"></span>`
               :`<span class="avr" ${r[2]?'style="background:var(--gold);color:var(--gold-ink)"':''}>${(r[0]||'?').slice(0,2).toUpperCase()}</span>`}
         <div class="nm"><p>${r[2]?(S.nome||'Você'):r[0]}</p><small>${NIVEIS.slice().reverse().find(n=>r[1]>=n.em).t}</small></div>
