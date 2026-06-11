@@ -1279,7 +1279,7 @@ function vConfig(){
     <div class="cfg"><span>Acesso</span><small>${S.pago?'Jornada completa ✓':'Gratuito (dia 1)'}</small></div>
     ${!S.pago?`<button class="btn gold" style="margin-top:18px" onclick="abrirOferta('padrao')">Destravar a jornada — ${CONFIG.PRECO}</button>`:''}
     <button class="ghost" style="margin-top:14px" onclick="abrirEntrar()">Restaurar compra (outro aparelho)</button>
-    <p class="legal" style="margin-top:20px">O Códice · ocodice.app · v1</p></div>`;
+    <p class="legal" style="margin-top:20px">O Códice · arquivosoculto.com.br</p></div>`;
 }
 
 /* ================= CARTÃO DE COMPARTILHAMENTO ================= */
@@ -1310,7 +1310,7 @@ async function compartilhar(){
   x.fillStyle='#a39f93'; x.font='400 46px Schibsted Grotesk,sans-serif';
   x.fillText(nivel()+' · sequência de '+S.streak+' dias', 540, Math.max(endY+90, 1500));
   x.fillStyle='#55524a'; x.font='400 38px Schibsted Grotesk,sans-serif';
-  x.fillText('comece a sua jornada — O Códice', 540, 1800);
+  x.fillText('arquivosoculto.com.br', 540, 1800);
   cv.toBlob(async b=>{
     const file=new File([b],'codice-dia'+diasFeitos()+'.png',{type:'image/png'});
     try{
