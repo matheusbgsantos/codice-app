@@ -102,6 +102,9 @@ button{font-family:var(--sans);cursor:pointer}
 .ring{position:relative;width:96px;height:96px}
 .ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--gold)}
 .qbody input[type=text]{width:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;color:var(--ink);font-family:var(--sans);font-size:17px;padding:15px 16px;outline:none}
+.fld{width:100%;max-width:330px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;color:var(--ink);font-family:var(--sans);font-size:16px;padding:16px 18px;outline:none;text-align:center;transition:border-color .15s}
+.fld::placeholder{color:var(--faint)}
+.fld:focus{border-color:var(--gold)}
 .qbody input[type=text]:focus{border-color:var(--gold)}
 .qfoot{padding:0 22px 26px}
 .qhint{font-size:13.5px;color:var(--gold);line-height:1.5;margin:6px 0 0;min-height:21px}
@@ -348,12 +351,12 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
 <!-- ===== ENTRAR (gate por e-mail da compra) ===== -->
 <section id="scr-entrar" class="wrap hidden">
   <div class="center">
-    <img class="selo" src="img/simbolo-4.jpg" width="80" height="80" alt="" onerror="this.style.display='none'">
-    <span class="mini" style="color:var(--gold);margin-top:14px">Já é herdeiro?</span>
-    <h2 class="diag-h" style="margin-top:8px;text-align:center">Acesse sua jornada</h2>
-    <p class="diag-p" style="text-align:center">Coloque o e-mail que você usou na compra. Seu acesso volta em qualquer aparelho.</p>
-    <input type="text" id="entrarEmail" placeholder="seu e-mail da compra" inputmode="email" style="margin-top:18px;max-width:330px">
-    <p class="abrindo-txt" id="entrarMsg" style="font-style:normal;font-family:var(--sans);font-size:13.5px;color:var(--gold);margin-top:8px;min-height:18px"></p>
+    <div class="abrindo-selo"><img class="selo" src="img/simbolo-4.jpg" width="92" height="92" alt="" onerror="this.style.display='none'"></div>
+    <span class="mini" style="color:var(--gold);margin-top:18px">Bem-vindo de volta</span>
+    <h2 class="diag-h" style="margin-top:10px;text-align:center">Acesse sua jornada</h2>
+    <p class="diag-p" style="text-align:center;max-width:280px">Coloque o e-mail que você usou na compra. Seu acesso volta em qualquer aparelho.</p>
+    <input type="text" id="entrarEmail" class="fld" placeholder="seu@email.com" inputmode="email" autocomplete="email" style="margin-top:22px" onkeydown="if(event.key==='Enter')confirmarEntrar()">
+    <p id="entrarMsg" style="font-size:13.5px;color:var(--gold);margin-top:12px;min-height:18px;max-width:300px;text-align:center;line-height:1.4"></p>
   </div>
   <div class="qfoot">
     <button class="btn gold" id="entrarBtn" onclick="confirmarEntrar()">Liberar meu acesso</button>
@@ -1148,7 +1151,12 @@ async function boot(){
   const urlEmail=qs.get('email');
   if(urlEmail){
     history.replaceState(null,'',location.pathname);
+    /* veio da compra (Kiwify): tenta liberar; se falhar (webhook ainda processando), cai no LOGIN com o e-mail já preenchido */
     if(await verificarAcesso(urlEmail)){ S.pago=true; S.funil=true; S.email=urlEmail; save(); entrarApp(); return; }
+    abrirEntrar();
+    document.getElementById('entrarEmail').value=urlEmail;
+    document.getElementById('entrarMsg').textContent='Confirme seu acesso abaixo.';
+    return;
   }
   if(S.funil || diasFeitos()>0){ entrarApp(); }
   else { show('scr-intro'); }
