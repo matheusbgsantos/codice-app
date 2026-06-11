@@ -283,6 +283,7 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
   <div class="qfoot">
     <button class="btn gold" id="introBtn" onclick="iniciarQuiz()">Começar meu diagnóstico</button>
     <p class="legal">2 minutos · ninguém vê suas respostas</p>
+    <button class="ghost" style="font-size:13px" onclick="abrirEntrar()">já comprei — acessar minha jornada</button>
   </div>
 </section>
 
@@ -342,6 +343,22 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
     <div class="rev-eco glass" id="revEco"></div>
   </div>
   <div class="qfoot"><button class="btn gold" onclick="irPacto()">Quero esse plano</button></div>
+</section>
+
+<!-- ===== ENTRAR (gate por e-mail da compra) ===== -->
+<section id="scr-entrar" class="wrap hidden">
+  <div class="center">
+    <img class="selo" src="img/simbolo-4.jpg" width="80" height="80" alt="" onerror="this.style.display='none'">
+    <span class="mini" style="color:var(--gold);margin-top:14px">Já é herdeiro?</span>
+    <h2 class="diag-h" style="margin-top:8px;text-align:center">Acesse sua jornada</h2>
+    <p class="diag-p" style="text-align:center">Coloque o e-mail que você usou na compra. Seu acesso volta em qualquer aparelho.</p>
+    <input type="text" id="entrarEmail" placeholder="seu e-mail da compra" inputmode="email" style="margin-top:18px;max-width:330px">
+    <p class="abrindo-txt" id="entrarMsg" style="font-style:normal;font-family:var(--sans);font-size:13.5px;color:var(--gold);margin-top:8px;min-height:18px"></p>
+  </div>
+  <div class="qfoot">
+    <button class="btn gold" id="entrarBtn" onclick="confirmarEntrar()">Liberar meu acesso</button>
+    <button class="ghost" onclick="show(S.funil?'app':'scr-intro');if(S.funil)entrarApp()">Voltar</button>
+  </div>
 </section>
 
 <!-- ===== ABRINDO (carregando plano) ===== -->
@@ -494,8 +511,8 @@ h2.sec{font-size:19px;font-weight:600;margin:18px 0 10px}
 const CONFIG = {
   MODO_TESTE: false,         // false = botão de compra abre o checkout Kiwify real
   KIWIFY_URL: 'https://pay.kiwify.com.br/Xp3KAvZ',
-  SUPABASE_URL: '',          // preencha para ativar o backend (ver README)
-  SUPABASE_KEY: '',
+  SUPABASE_URL: 'https://nbizxbdugsmeoudkwtot.supabase.co',
+  SUPABASE_KEY: 'sb_publishable_MITJbApeJTSHm41YW8a50A_DnbYUWPI', // publishable — seguro expor; a tabela é invisível, só a RPC verificar_acesso responde true/false
   PRECO: 'R$ 27,90'
 };
 const TOTAL = 60, MARCOS = [1,20,40,60];
@@ -707,7 +724,7 @@ function recalcStreak(){
 }
 
 /* ================= ROTEADOR ================= */
-const SCREENS=['scr-splash','scr-intro','scr-quiz','scr-analise','scr-diag','scr-revela','scr-pacto','scr-abrindo','scr-oferta','app'];
+const SCREENS=['scr-splash','scr-intro','scr-quiz','scr-analise','scr-diag','scr-revela','scr-pacto','scr-entrar','scr-abrindo','scr-oferta','app'];
 function show(id){ SCREENS.forEach(s=>document.getElementById(s).classList.toggle('hidden', s!==id)); window.scrollTo(0,0); }
 
 /* ================= QUIZ (engine) ================= */
@@ -909,7 +926,31 @@ function comprar(){
   if(CONFIG.MODO_TESTE){ S.pago=true; S.funil=true; save(); entrarApp();
     alert('Compra simulada (MODO_TESTE).'); return; }
   S.funil=true; save();
-  window.location.href = CONFIG.KIWIFY_URL; /* → webhook kiwify-webhook já registra o comprador */
+  window.location.href = CONFIG.KIWIFY_URL; /* → webhook kiwify-webhook registra o comprador na tabela */
+}
+
+/* ===== GATE: verifica no servidor se o e-mail comprou (RPC verificar_acesso) ===== */
+async function verificarAcesso(email){
+  if(!CONFIG.SUPABASE_URL) return false;
+  try{
+    const r = await fetch(CONFIG.SUPABASE_URL+'/rest/v1/rpc/verificar_acesso',{
+      method:'POST',
+      headers:{'apikey':CONFIG.SUPABASE_KEY,'Authorization':'Bearer '+CONFIG.SUPABASE_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({p_email:email})
+    });
+    return (await r.json())===true;
+  }catch(e){ return false; }
+}
+function abrirEntrar(){ show('scr-entrar'); document.getElementById('entrarMsg').textContent=''; setTimeout(()=>document.getElementById('entrarEmail').focus(),150); }
+async function confirmarEntrar(){
+  const email=(document.getElementById('entrarEmail').value||'').trim();
+  const msg=document.getElementById('entrarMsg'), btn=document.getElementById('entrarBtn');
+  if(!email.includes('@')){ msg.textContent='Coloque o e-mail que você usou na compra.'; return; }
+  btn.disabled=true; btn.textContent='Verificando...'; msg.textContent='';
+  const ok=await verificarAcesso(email);
+  btn.disabled=false; btn.textContent='Liberar meu acesso';
+  if(ok){ S.pago=true; S.funil=true; S.email=email; save(); entrarApp(); }
+  else { msg.innerHTML='Não encontramos esse e-mail nas compras. Confere se digitou certo — ou se acabou de comprar, espera 1 min e tenta de novo.'; }
 }
 
 /* ================= APP ================= */
@@ -1069,7 +1110,7 @@ function vConfig(){
     <div class="cfg"><span>Lembrete diário</span><small>${S.lembrete||'—'}</small></div>
     <div class="cfg"><span>Acesso</span><small>${S.pago?'Jornada completa ✓':'Gratuito (dia 1)'}</small></div>
     ${!S.pago?`<button class="btn gold" style="margin-top:18px" onclick="abrirOferta('padrao')">Destravar a jornada — ${CONFIG.PRECO}</button>`:''}
-    <button class="ghost" style="margin-top:14px" onclick="alert('Na versão final: você entra com o e-mail da compra e o acesso volta em qualquer aparelho.')">Restaurar compra</button>
+    <button class="ghost" style="margin-top:14px" onclick="abrirEntrar()">Restaurar compra (outro aparelho)</button>
     <button class="ghost" onclick="if(confirm('Apagar todo o progresso deste aparelho?')){localStorage.removeItem(KEY);location.reload()}">Reiniciar tudo</button>
     <p class="legal" style="margin-top:20px">O Códice · ocodice.app · v1</p></div>`;
 }
@@ -1100,15 +1141,19 @@ async function compartilhar(){
 }
 
 /* ================= BOOT ================= */
-/* link de entrega da Kiwify: .../codice-app/?pago=1 (provisório até o gate via Supabase) */
-if(new URLSearchParams(location.search).get('pago')==='1'){
-  S.pago=true; S.funil=true; save();
-  history.replaceState(null,'',location.pathname);
-}
-setTimeout(()=>{
+/* Volta da compra: Kiwify manda pra .../codice-app/?email={{email}} (página de obrigado).
+   O app confere esse e-mail no servidor (verificar_acesso) antes de liberar — nada de destrave cego. */
+async function boot(){
+  const qs=new URLSearchParams(location.search);
+  const urlEmail=qs.get('email');
+  if(urlEmail){
+    history.replaceState(null,'',location.pathname);
+    if(await verificarAcesso(urlEmail)){ S.pago=true; S.funil=true; S.email=urlEmail; save(); entrarApp(); return; }
+  }
   if(S.funil || diasFeitos()>0){ entrarApp(); }
   else { show('scr-intro'); }
-},1600);
+}
+setTimeout(boot, 1600);
 </script>
 </body>
 </html>
