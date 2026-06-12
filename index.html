@@ -887,6 +887,7 @@ const L_ORA=['um servo pedindo favor ao patrão','um devedor prestando contas','
 const L_AFASTA=['a falta de tempo','a distração','a culpa','a sequidão','a ansiedade','o cansaço'];
 const L_TEMPO=[5,10,15];
 function renderDiag(){
+  logAcesso('2_diagnostico');
   document.getElementById('diagHero').innerHTML=codiceImg(0,150);
   const n=S.nome||'Amigo';
   const sent=L_SENT[R.sentimento??0], ora=L_ORA[R.oracao??0];
@@ -938,6 +939,7 @@ const FASES_REV=[
    muda:'Sem medo, com voz. <b>Você toma posse</b> da casa que sempre foi sua.'}
 ];
 function renderRevela(){
+  logAcesso('3_plano');
   const n=S.nome||'';
   document.getElementById('revTit').textContent='O Plano do Herdeiro'+(n?', '+n:'');
   const min=L_TEMPO[R.tempo??1]||10;
@@ -964,6 +966,7 @@ function renderRevela(){
 /* ================= PACTO ================= */
 let pactoAssinado=false;
 function irPacto(){
+  logAcesso('4_alianca');
   const nome=S.nome||'_______';
   document.getElementById('pactoTxt').innerHTML=
     `Eu, <b style="color:var(--gold-hi)">${nome}</b>, escolho começar. Pelos próximos 60 dias, vou me aproximar da Palavra um pouco a cada dia — não por cobrança, mas pra aprender a ler como filho.`;
@@ -990,6 +993,7 @@ function selarPacto(){
   document.getElementById('ovPremio').classList.remove('hidden'); /* popup do prêmio */
 }
 function receberPremio(){
+  logAcesso('5_entrou_app');
   document.getElementById('ovPremio').classList.add('hidden');
   show('scr-abrindo');
   const f=document.getElementById('abrFill');
@@ -1132,6 +1136,7 @@ async function vDia(n){
     if(!c){ document.getElementById('view').innerHTML=`<div class="dia-head"><button class="back" onclick="go('hoje')">‹ voltar</button><p class="wip" style="margin-top:40px">Não consegui carregar este dia. Confira sua conexão e tente de novo.</p></div>`; return; }
   }
   _diaConteudo = c; /* guarda p/ a mensagem única de conclusão */
+  if(n===1) logAcesso('6_dia1_abriu');
   const versosHtml = c.versos ? c.versos.map((v,i)=>{
     const novoCap = i===0 || v.c!==c.versos[i-1].c;
     const capMark = (novoCap && c.versos.some(x=>x.c!==c.versos[0].c)) ? `<span class="biblia-cap">Capítulo ${v.c}</span>` : '';
@@ -1207,6 +1212,7 @@ function concluir(n){
   S.streak = S.streak+1; S.lastDone=S.prog[n];
   save();
   _diaConcluido=n;
+  if(n===1) logAcesso('7_dia1_concluiu');
   const subiu = nivelIdx()>antes;
   /* 1) CELEBRAÇÃO — mensagem ÚNICA do dia (a declaração) = compartilhável */
   document.querySelector('#ovDone .mini').textContent='Dia concluído';
