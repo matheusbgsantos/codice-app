@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel — O Códice</title>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@1,500;1,600&family=Schibsted+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B0A0C;--ink:#F5EDDE;--dim:rgba(245,237,222,.6);--mute:rgba(245,237,222,.4);--gold:#DCB46A;--gold-hi:#F2D79A;--card:rgba(255,255,255,.045);--line:rgba(220,180,106,.22);--green:#5a8a68}
+*{box-sizing:border-box;margin:0}
+body{background:radial-gradient(135% 75% at 50% -10%,#43300F,#241A10 34%,#100D0C 64%,#09090B);min-height:100vh;color:var(--ink);font-family:'Schibsted Grotesk',sans-serif;padding:26px 18px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:560px;margin:0 auto}
+h1{font-family:'Newsreader',serif;font-style:italic;font-weight:600;font-size:30px;color:var(--gold);text-align:center}
+.sub{text-align:center;color:var(--mute);font-size:12px;letter-spacing:.18em;text-transform:uppercase;margin-top:4px}
+.login{max-width:300px;margin:60px auto;text-align:center}
+input{width:100%;background:var(--card);border:1.5px solid var(--line);border-radius:12px;color:var(--ink);font-size:16px;padding:14px 16px;outline:none;text-align:center;font-family:inherit}
+input:focus{border-color:var(--gold)}
+button{width:100%;background:linear-gradient(96deg,#EFC982,#D89B58);color:#1A1208;border:none;border-radius:12px;font-weight:700;font-size:16px;padding:14px;margin-top:12px;cursor:pointer;font-family:inherit}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;text-align:center}
+.kpi .v{font-family:'Newsreader',serif;font-weight:600;font-size:38px;color:var(--gold-hi);line-height:1}
+.kpi .l{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.08em;margin-top:6px}
+.sec{font-size:11px;color:var(--gold);font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin:26px 0 10px}
+.funil{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:8px 16px}
+.frow{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.frow:last-child{border-bottom:none}
+.frow .nome{flex:0 0 130px;font-size:13.5px;color:var(--dim)}
+.frow .bar{flex:1;height:22px;background:rgba(255,255,255,.05);border-radius:6px;overflow:hidden;position:relative}
+.frow .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold-deep,#B5894A),var(--gold-hi));border-radius:6px;transition:width .6s}
+.frow .n{flex:0 0 auto;font-size:14px;font-weight:600;min-width:40px;text-align:right}
+.frow .pct{flex:0 0 46px;font-size:12px;color:var(--gold);text-align:right}
+.dias{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:6px 16px}
+.drow{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:14px}
+.drow:last-child{border-bottom:none}
+.drow .d{color:var(--dim)}
+.drow .vv{color:var(--gold-hi);font-weight:600}
+.note{font-size:12px;color:var(--mute);text-align:center;margin-top:18px;line-height:1.5}
+.refresh{background:none;border:1px solid var(--line);color:var(--gold);width:auto;padding:8px 16px;font-size:12px;margin:18px auto 0;display:block;border-radius:20px}
+.hidden{display:none}
+.conv{background:linear-gradient(180deg,rgba(232,200,122,.1),transparent);border:1px solid var(--gold);border-radius:16px;padding:18px;text-align:center;margin-top:12px}
+.conv .v{font-family:'Newsreader',serif;font-weight:600;font-size:44px;color:var(--gold-hi);line-height:1}
+.conv .l{font-size:12px;color:var(--dim);margin-top:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Painel do Códice</h1>
+  <p class="sub">métricas em tempo real</p>
+
+  <div id="login" class="login">
+    <input type="password" id="senha" placeholder="senha" onkeydown="if(event.key==='Enter')entrar()">
+    <button onclick="entrar()">Entrar</button>
+    <p id="erro" style="color:#c66;font-size:13px;margin-top:10px"></p>
+  </div>
+
+  <div id="dash" class="hidden">
+    <div class="grid">
+      <div class="kpi"><div class="v" id="vTotal">–</div><div class="l">vendas total</div></div>
+      <div class="kpi"><div class="v" id="vHoje">–</div><div class="l">vendas hoje</div></div>
+    </div>
+
+    <div class="conv"><div class="v" id="convGeral">–</div><div class="l">conversão geral (compras ÷ acessos)</div></div>
+
+    <p class="sec">📊 Funil — total</p>
+    <div class="funil" id="funilTotal"></div>
+
+    <p class="sec">📊 Funil — hoje</p>
+    <div class="funil" id="funilHoje"></div>
+
+    <p class="sec">💰 Vendas por dia</p>
+    <div class="dias" id="diasBox"></div>
+
+    <button class="refresh" onclick="carregar()">↻ Atualizar</button>
+    <p class="note">Vendas = compras reais via Kiwify (webhook). Funil = etapas rastreadas no app desde 11/06.<br>ROAS aparece quando houver gasto em anúncio (Pixel).</p>
+  </div>
+</div>
+
+<script>
+const SB='https://nbizxbdugsmeoudkwtot.supabase.co';
+const KEY='sb_publishable_MITJbApeJTSHm41YW8a50A_DnbYUWPI';
+let SENHA='';
+async function entrar(){
+  SENHA=document.getElementById('senha').value.trim();
+  const ok=await carregar();
+  if(ok){ document.getElementById('login').classList.add('hidden'); document.getElementById('dash').classList.remove('hidden'); }
+  else document.getElementById('erro').textContent='Senha errada.';
+}
+async function carregar(){
+  try{
+    const r=await fetch(SB+'/rest/v1/rpc/painel',{method:'POST',headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'},body:JSON.stringify({p_senha:SENHA})});
+    const d=await r.json();
+    if(!d) return false;
+    render(d); return true;
+  }catch(e){ return false; }
+}
+const ETAPAS=[['funil_abriu','Abriu o funil'],['quiz_comecou','Começou o quiz'],['oferta_viu','Viu a oferta'],['comprar_clicou','Clicou comprar']];
+function funilHTML(f){
+  const base=f.funil_abriu||0;
+  return ETAPAS.map(([k,nome])=>{
+    const n=f[k]||0, pct=base?Math.round(n/base*100):0;
+    return `<div class="frow"><span class="nome">${nome}</span><span class="bar"><i style="width:${pct}%"></i></span><span class="n">${n}</span><span class="pct">${pct}%</span></div>`;
+  }).join('');
+}
+function render(d){
+  document.getElementById('vTotal').textContent=d.vendas_total;
+  document.getElementById('vHoje').textContent=d.vendas_hoje;
+  const ab=(d.funil_total.funil_abriu)||0;
+  const conv=ab?(d.vendas_total/ab*100):0;
+  document.getElementById('convGeral').textContent=conv.toFixed(1)+'%';
+  document.getElementById('funilTotal').innerHTML=funilHTML(d.funil_total);
+  document.getElementById('funilHoje').innerHTML=funilHTML(d.funil_hoje);
+  document.getElementById('diasBox').innerHTML=(d.vendas_7d||[]).map(x=>`<div class="drow"><span class="d">${new Date(x.dia+'T12:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'short',weekday:'short'})}</span><span class="vv">${x.n} ${x.n===1?'venda':'vendas'}</span></div>`).join('')||'<div class="drow"><span class="d">sem vendas ainda</span></div>';
+}
+</script>
+</body>
+</html>
